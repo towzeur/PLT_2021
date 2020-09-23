@@ -6,32 +6,12 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
 
+# Project PLT : 2020-2021
 
-
-<!-- PROJECT LOGO -->
-<br />
 <p align="center">
-  <a href="https://github.com/towzeur/PLT_2021">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
-  <h3 align="center">Project PLT : 2020-2021 </h3>
-
-  <p align="center">
-    <br />
-    <a href="https://github.com/towzeur/PLT_2021"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/towzeur/PLT_2021">View Demo</a>
-    ·
-    <a href="https://github.com/towzeur/PLT_2021/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/towzeur/PLT_2021/issues">Request Feature</a>
-  </p>
+    <img src="images/logo.png" width=100% alt="logo" align="center" /></br>
 </p>
-
 
 
 <!-- TABLE OF CONTENTS -->
@@ -48,7 +28,6 @@
 * [License](#license)
 * [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
-
 
 
 <!-- ABOUT THE PROJECT -->
@@ -127,7 +106,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
-LARUE Nicolas - @towzeur
 
 Project Link: [https://github.com/towzeur/PLT_2021](https://github.com/towzeur/PLT_2021)
 
@@ -135,3 +113,22 @@ Project Link: [https://github.com/towzeur/PLT_2021](https://github.com/towzeur/P
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/towzeur/PLT_2021.svg?style=flat-square
+[contributors-url]: https://github.com/towzeur/PLT_2021/graphs/contributors
+
+[forks-shield]: https://img.shields.io/github/forks/towzeur/PLT_2021.svg?style=flat-square
+[forks-url]: https://github.com/towzeur/PLT_2021/network/members
+
+[stars-shield]: https://img.shields.io/github/stars/towzeur/PLT_2021.svg?style=flat-square
+[stars-url]: https://github.com/towzeur/PLT_2021/stargazers
+
+[issues-shield]: https://img.shields.io/github/issues/towzeur/PLT_2021.svg?style=flat-square
+[issues-url]: https://github.com/towzeur/PLT_2021/issues
+
+[license-shield]: https://img.shields.io/github/license/towzeur/PLT_2021.svg?style=flat-square
+[license-url]: https://github.com/towzeur/PLT_2021/blob/master/LICENSE.txt
+
