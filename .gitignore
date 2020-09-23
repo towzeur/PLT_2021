@@ -1,0 +1,7 @@
+*~
+build
+bin
+nbproject
+src/*/*.h
+src/*/*/*.h
+.idea
