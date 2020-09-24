@@ -7,7 +7,7 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-# Project PLT : 2020-2021
+# ENSEA PLT Project 2020-2021: Slay
 
 <p align="center">
     <img src="images/logo.png" width=100% alt="logo" align="center" /></br>
@@ -36,6 +36,9 @@
 
 This third year project combines the tp of four modules :
 
+About the game: [Slay][1]  is a turn based hexagonal strategy game created by Sean O'Connor in 1995. The goal of the player is to conquer an island by buying men and using them to capture the enemies' hexagons.
+
+[1]: <http://www.windowsgames.co.uk/slay.html> "Original website"
 
 
 ### Built With
