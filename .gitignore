@@ -5,3 +5,5 @@ nbproject
 src/*/*.h
 src/*/*/*.h
 .idea
+test.md
+.DS_Store
