@@ -37,13 +37,11 @@
 
 ### Presentation
 
-[Slay][1]  is a turn based hexagonal strategy game created by Sean O'Connor in 1995. 
-The goal of the player is to conquer an island by buying men and using them to capture the enemies' hexagons.
-[1]: <http://www.windowsgames.co.uk/slay.html> "Original website"
+[Slay](http://www.windowsgames.co.uk/slay.html) is a turn based hexagonal strategy game created by Sean O'Connor in 1995. The goal of the player is to conquer an island by buying men and using them to capture the enemies' hexagons.
 
 ### Rules
 
-See `Rules  <docs/README_GAME.md>`.
+See [Full Rules](https://github.com/towzeur/PLT_2021/docs/README_GAME.md).
 
 ### Built With
 
@@ -100,8 +98,6 @@ Contributions are what make the open source community such an amazing place to b
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
-
 <!-- LICENSE -->
 ## License
 
@@ -111,10 +107,12 @@ Distributed under the MIT License. See `LICENSE` for more information.
 <!-- CONTACT -->
 ## Contact
 
+```
 UYGUN Kaan - knuyg - kaan.uygun@ensea.fr
 BOUABDALLAH Badisse - badisse.bouabdallah@ensea.fr
 LARUE Nicolas - towzeur - nicolas.larue@ensea.fr
 SDIRI Hicham - hichsdir - hicham.sdiri@ensea.fr
+```
 
 [Project Link](https://github.com/towzeur/PLT_2021)
 
