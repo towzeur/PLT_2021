@@ -39,9 +39,12 @@
 
 [Slay](http://www.windowsgames.co.uk/slay.html) is a turn based hexagonal strategy game created by Sean O'Connor in 1995. The goal of the player is to conquer an island by buying men and using them to capture the enemies' hexagons.
 
+* Genre : Turn-based strategy
+* players : 1 to 6 players
+
 ### Rules
 
-See [Full Rules](https://github.com/towzeur/PLT_2021/docs/README_GAME.md).
+See [all the rules](https://github.com/towzeur/PLT_2021/blob/master/docs/README_GAME.md).
 
 ### Built With
 
