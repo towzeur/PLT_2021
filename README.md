@@ -18,11 +18,13 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
-  * [Built With](#built-with)
+  * [Presentation](#Presentation)
+  * [Rules](#rules)
+  * [Built With](#built-With)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-* [Usage](#usage)
+  * [Usage](#usage)
 * [Roadmap](#roadmap)
 * [Contributing](#contributing)
 * [License](#license)
@@ -31,22 +33,23 @@
 
 
 <!-- ABOUT THE PROJECT -->
-## About The Project
+## About the game
 
+### Presentation
 
-This third year project combines the tp of four modules :
-
-About the game: [Slay][1]  is a turn based hexagonal strategy game created by Sean O'Connor in 1995. The goal of the player is to conquer an island by buying men and using them to capture the enemies' hexagons.
-
+[Slay][1]  is a turn based hexagonal strategy game created by Sean O'Connor in 1995. 
+The goal of the player is to conquer an island by buying men and using them to capture the enemies' hexagons.
 [1]: <http://www.windowsgames.co.uk/slay.html> "Original website"
 
+### Rules
+
+See `Rules  <docs/README_GAME.md>`.
 
 ### Built With
 
+* [SFML](https://github.com/SFML/SFML)
 * []()
 * []()
-* []()
-
 
 
 <!-- GETTING STARTED -->
@@ -69,7 +72,7 @@ git clone https://github.com/towzeur/PLT_2021
 ```
 
 <!-- USAGE EXAMPLES -->
-## Usage
+### Usage
 
 Usage desription:
 foo bar
@@ -105,13 +108,15 @@ Contributions are what make the open source community such an amazing place to b
 Distributed under the MIT License. See `LICENSE` for more information.
 
 
-
 <!-- CONTACT -->
 ## Contact
 
+UYGUN Kaan - knuyg - kaan.uygun@ensea.fr
+BOUABDALLAH Badisse - badisse.bouabdallah@ensea.fr
+LARUE Nicolas - towzeur - nicolas.larue@ensea.fr
+SDIRI Hicham - hichsdir - hicham.sdiri@ensea.fr
 
-Project Link: [https://github.com/towzeur/PLT_2021](https://github.com/towzeur/PLT_2021)
-
+[Project Link](https://github.com/towzeur/PLT_2021)
 
 
 <!-- ACKNOWLEDGEMENTS -->
@@ -133,5 +138,6 @@ Project Link: [https://github.com/towzeur/PLT_2021](https://github.com/towzeur/P
 [issues-url]: https://github.com/towzeur/PLT_2021/issues
 
 [license-shield]: https://img.shields.io/github/license/towzeur/PLT_2021.svg?style=flat-square
-[license-url]: https://github.com/towzeur/PLT_2021/blob/master/LICENSE.txt
+[license-url]: https://github.com/towzeur/PLT_2021/LICENSE
+
 
