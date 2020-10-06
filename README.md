@@ -104,7 +104,7 @@ Contributions are what make the open source community such an amazing place to b
 <!-- LICENSE -->
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the MIT License. See [LICENSE](license-url) for more information.
 
 
 <!-- CONTACT -->
@@ -139,6 +139,6 @@ SDIRI Hicham - hichsdir - hicham.sdiri@ensea.fr
 [issues-url]: https://github.com/towzeur/PLT_2021/issues
 
 [license-shield]: https://img.shields.io/github/license/towzeur/PLT_2021.svg?style=flat-square
-[license-url]: https://github.com/towzeur/PLT_2021/LICENSE
+[license-url]: https://github.com/towzeur/PLT_2021/blob/master/LICENSE
 
 
