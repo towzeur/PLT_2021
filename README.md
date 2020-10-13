@@ -60,6 +60,11 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
+* print
+```sh
+$ ./bin/client hello
+```
+
 * futur command
 ```sh
 futur command
