@@ -1,9 +1,14 @@
 *~
+.idea
+.DS_Store
+.vscode
+
 build
 bin
 nbproject
+
 src/*/*.h
 src/*/*/*.h
-.idea
+
 test.md
-.DS_Store
+
