@@ -7,12 +7,12 @@ namespace state {
   private:
     static int instanceCount;
     int uid;
-    int[2] capitalCoords;
+    int capitalCoords[2];
     int savings;
     int income;
     int wages;
     int balance;
-     size;
+    int size;
     // Operations
   public:
     Territory ();

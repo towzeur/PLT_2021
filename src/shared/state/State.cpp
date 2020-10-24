@@ -1,3 +1,4 @@
+
 #include <vector>
 
 namespace state {
@@ -18,7 +19,6 @@ namespace state {
   /// class State - 
   class State : public state::Observable {
     // Associations
-    state::Territory *;
     // Attributes
   private:
     bool gameOver;
@@ -33,16 +33,13 @@ namespace state {
     State ();
     State (const State& state1);
     ~State ();
-    operator= (const State& state1);
+    void operator= (const State& state1);
     State* const clone ();
     void setEnableCache (bool newEnableCache );
     void setEnableNotifications (bool newEnableNotifications);
     void flush ();
     // Setters and Getters
-    const Territory& get*() const{
-      
-    };
-    void set(const Territory& *);
   };
 
 };
+

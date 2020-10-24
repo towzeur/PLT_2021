@@ -26,6 +26,7 @@
   * [Installation](#installation)
   * [Usage](#usage)
 * [Roadmap](#roadmap)
+* [Release History](#release-history)
 * [Contributing](#contributing)
 * [License](#license)
 * [Contact](#contact)
@@ -80,9 +81,16 @@ git clone https://github.com/towzeur/PLT_2021
 <!-- USAGE EXAMPLES -->
 ### Usage
 
-Usage desription:
-foo bar
 
+Print a hello world message to stdout
+```sh
+./bin/client hello
+```
+
+Launch a series of very simple tests to verify the proper functioning of the state implementation and display an error message otherwise.
+```sh
+./bin/client state
+```
 
 <!-- ROADMAP -->
 ## Roadmap
@@ -94,6 +102,63 @@ See the [open issues](https://github.com/towzeur/PLT_2021/issues) for a list of 
 - [ ] Computational complexity
 - [ ] Multiplayer
 
+<!-- RELEASE HISTORY-->
+## Release History
+
+* 1.1
+    * Implement the code to print a message
+    * Report 1.1
+
+* 1.final
+    * State diagram 
+    * State implementation
+    * Test code coverage
+    * Report 1.final
+<!--
+* 2.1
+    * Report 2.1
+    * Render diagram
+    * Implemented code to print a rendering of state
+
+* 2.2
+    * Report 2.2
+    * Engine diagram
+    * Implemented code for the game engine
+    * Print different renderings of state by calling the game engine 
+
+* 2.final
+    * Report 2.final
+    * AI diagram
+    * Implemented code for the Random AI
+    * Player vs Random AI
+    * Random AI vs Random AI
+
+* 3.1
+    * Report 3.1
+    * AI diagram with Heuristic
+    * Implemented code for the Heuristic AI
+    * Player vs Heuristic AI
+    * Heuristic AI vs Heuristic AI
+
+* 3.final
+    * Report 3.final
+    * AI diagram with DeepAI
+    * Implemented code for the Deep AI
+    * Player vs Deep AI
+    * Deep AI vs Deep AI
+* 4.1
+    * Report 4.1
+    * Implemented the engine of the game in a different thread than the main thread
+    * Implemented command serialization in JSON
+
+* 4.2
+    * Report 4.2
+    * Implemented WEB API
+
+* 4.final
+    * Report 4.final
+    * Implemented the final feature to make our game online
+-->
 
 <!-- CONTRIBUTING -->
 ## Contributing

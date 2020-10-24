@@ -35,6 +35,7 @@ namespace state {
       Cell x =  new Cell();
       return &x;
       */
+      return 0;
     };
 
     void set (int r, int c, Cell* cell){

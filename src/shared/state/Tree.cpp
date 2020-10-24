@@ -6,6 +6,7 @@ namespace state {
 
 #include "Entity.h"
 #include "TreeTypeId.h"
+#include "CellTypeId.h"
 
 namespace state {
 

@@ -16,7 +16,7 @@ namespace state {
     EventStateId eventState;
     // Operations
   public:
-    EventState (EventStateId id);
+    EventState ();
     EventTypeId const getEventType ();
     Event* const clone ();
     // Setters and Getters
