@@ -7,24 +7,43 @@
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 
-# ENSEA PLT Project 2020-2021: Slay
+# ENSEA PLT Project 2020-2021: **SLAY**
 
 <p align="center">
-    <img src="images/logo.png" width=100% alt="logo" align="center" /></br>
+
+<img height="80" src="docs/logo.png" alt="logo"/>  
+
+<div align="center">
+
+[![c++ version][cpp-ver-shield]][cpp-ver]
+[![c++ version][version-shield]][cpp-ver]
+
+</div>
 </p>
 
+<!--
+<p align="center">
+  <img src="docs/demo.png"/>  
+  <p align="center">
+   Game render
+  </p>
+</p>
+-->
 
 <!-- TABLE OF CONTENTS -->
 ## Table of Contents
 
-* [About the Project](#about-the-project)
+* [Introduction](#Introduction)
+  * [PLT](#plt)
+  * [Built With](#built-With)
+* [About the Game](#about-the-game)
   * [Presentation](#Presentation)
   * [Rules](#rules)
-  * [Built With](#built-With)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-  * [Usage](#usage)
+* [Usage](#usage)
+  * [Basic Testing](#basic-testing)
 * [Roadmap](#roadmap)
 * [Release History](#release-history)
 * [Contributing](#contributing)
@@ -32,13 +51,47 @@
 * [Contact](#contact)
 * [Acknowledgements](#acknowledgements)
 
+<!-- Introduction -->
+## Introduction
+
+### PLT
+
+The [*PLT*] **P**rojet **L**ogiciel **T**ransversal (Transversal Software Project) is the third year project in specialization [*IS*] **I**nformatique et **S**ystèmes (computer science and system) at [ENSEA](https://www.ensea.fr/fr). 
+
+The objective is to make a video game from scratch in 112 hours of supervised practical work by following these steps : 
+- Design the game
+- Program it in c++
+- Optimise the game
+- Bring network services
+
+At the end, it should be a finished product with advanced functionalities while being robust and scalable.
+
+This cross-curricular project replaces and combines the labs of theses four class:
+- Software Engineering
+- Algorithmic
+- Parallel programming
+- Mobile Application and Web services
+
+From a video games perspective, this project allows to apprehend the following points:
+- Design / Graphical User Interface
+- Artificial Intelligence
+- Computational complexity
+- Multiplayer
+
+
+### Built With
+
+* [SFML](https://github.com/SFML/SFML)
+* [dia2code](http://dia2code.sourceforge.net/)
+* [libxml2](http://www.xmlsoft.org/)
+* [JsonCpp](https://github.com/open-source-parsers/jsoncpp)
 
 <!-- ABOUT THE PROJECT -->
 ## About the game
 
 ### Presentation
 
-[Slay](http://www.windowsgames.co.uk/slay.html) is a turn based hexagonal strategy game created by Sean O'Connor in 1995. The goal of the player is to conquer an island by buying men and using them to capture the enemies' hexagons.
+[Slay](http://www.windowsgames.co.uk/slay.html) is a turn based hexagonal strategy game created by Sean O'Connor in 1995. The goal is to conquer an island by buying men and using them to capture the enemies' hexagons.
 
 * Genre : Turn-based strategy
 * players : 1 to 6 players
@@ -46,12 +99,6 @@
 ### Rules
 
 See [all the rules](https://github.com/towzeur/PLT_2021/blob/master/docs/README_GAME.md).
-
-### Built With
-
-* [SFML](https://github.com/SFML/SFML)
-* []()
-* []()
 
 
 <!-- GETTING STARTED -->
@@ -61,14 +108,9 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
-* print
 ```sh
-$ ./bin/client hello
-```
-
-* futur command
-```sh
-futur command
+sudo apt install python python3 libmicrohttpd-dev lcov libsfml-dev gcc cmake make libxml2-dev dia lcov libboost-all-dev gcovr python-pip
+pip install gcovr
 ```
 
 ### Installation
@@ -76,11 +118,21 @@ futur command
 1. Clone the repo
 ```sh
 git clone https://github.com/towzeur/PLT_2021
+cd PLT_2021
 ```
 
-<!-- USAGE EXAMPLES -->
-### Usage
+2. Build it
 
+```sh
+mkdir build
+cd build
+cmake .. && make
+```
+
+<!-- USAGE -->
+## Usage
+
+## Basic Testing
 
 Print a hello world message to stdout
 ```sh
@@ -178,14 +230,12 @@ Distributed under the MIT License. See [LICENSE](license-url) for more informati
 
 
 <!-- CONTACT -->
-## Contact
+## Contact  
 
-```
-UYGUN Kaan - knuyg - kaan.uygun@ensea.fr
-BOUABDALLAH Badisse - badisse.bouabdallah@ensea.fr
-LARUE Nicolas - towzeur - nicolas.larue@ensea.fr
-SDIRI Hicham - hichsdir - hicham.sdiri@ensea.fr
-```
+* [**Kaan UYGUN**](https://github.com/knuyg)
+* [**Badisse BOUABDALLAH**](https://github.com/Badisse)
+* [**Nicolas LARUE**](https://github.com/towzeur)
+* [**Hicham SDIRI**](https://github.com/hichsdir)
 
 [Project Link](https://github.com/towzeur/PLT_2021)
 
@@ -211,4 +261,7 @@ SDIRI Hicham - hichsdir - hicham.sdiri@ensea.fr
 [license-shield]: https://img.shields.io/github/license/towzeur/PLT_2021.svg?style=flat-square
 [license-url]: https://github.com/towzeur/PLT_2021/blob/master/LICENSE
 
+[cpp-ver-shield]: https://img.shields.io/badge/C%2B%2B-11-blue.svg
+[cpp-ver]: https://en.wikipedia.org/wiki/C%2B%2B11
 
+[version-shield]: https://img.shields.io/badge/version-1.final-blue.svg?cacheSeconds=2592000

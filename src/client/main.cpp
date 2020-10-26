@@ -10,6 +10,8 @@ const char* HELP_MESSAGE = R"V0G0N(
 usage: client <command> [<args>]
 
     hello       Print a Hello World message to the console.
+
+    state       Test the State module
 )V0G0N";
 
 //const char* UNKNOWN_MESSAGE = "client: '?' is not a command. See 'command --help'."
@@ -34,6 +36,8 @@ int main(int argc, char* argv[]){
         }
         else if (arg1 == "state") {
             std::cout << "STATE" << std::endl;
+
+            state::State state0();
         }
         else {
             //std::cout << "Unknown command" << std::endl;
