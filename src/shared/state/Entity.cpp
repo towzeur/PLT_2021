@@ -1,29 +1,47 @@
+#include "Entity.h"
 
-namespace state {
+using namespace state;
 
-  /// class Entity - 
-  class Entity {
-    // Attributes
-  private:
-    static int instanceId;
-    int uid;
-  protected:
-    int attack;
-    int defense;
-    int income;
-    // Operations
-  public:
-    virtual bool const isEmpty ();
-    virtual bool const isTree ();
-    virtual bool const isFacility ();
-    virtual bool const isSoldier ();
-    // Setters and Getters
-    int getAttack() const;
-    void setAttack(int attack);
-    int getDefense() const;
-    void setDefense(int defense);
-    int getIncome() const;
-    void setIncome(int income);
-  };
+bool const Entity::isEmpty(){
+    
+}
 
-};
+bool const Entity::isTree(){
+    
+}
+
+bool const Entity::isFacility(){
+    
+}
+
+bool const Entity::isSoldier(){
+    
+}
+
+int Entity::getUid() {
+    
+}
+
+int Entity::getAttack() const {
+    
+}
+
+void Entity::setAttack(int attack) {
+    
+}
+
+int Entity::getDefense() const {
+    
+}
+
+void Entity::setDefense(int defense) {
+    
+}
+
+int Entity::getIncome() const {
+    
+}
+
+void Entity::setIncome(int income) {
+    
+}

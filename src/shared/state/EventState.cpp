@@ -1,27 +1,15 @@
+#include "EventState.h"
 
-namespace state {
-  class Event;
+using namespace state;
+
+EventState::EventState() {
+    
 }
 
-#include "EventStateId.h"
-#include "Event.h"
+EventTypeId const EventState::getEventType() {
+    
+}
 
-namespace state {
-
-  /// class EventState - 
-  class EventState : public state::Event {
-    // Associations
-    // Attributes
-  public:
-    EventStateId eventState;
-    // Operations
-  public:
-    EventState ();
-    EventTypeId const getEventType ();
-    Event* const clone ();
-    // Setters and Getters
-  };
-
-};
-
-
+Event* const EventState::clone() {
+    
+}

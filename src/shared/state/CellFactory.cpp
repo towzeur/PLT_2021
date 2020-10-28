@@ -1,29 +1,28 @@
-#include <map>
+#include "CellFactory.h"
 
-namespace state {
-  class ACellAlloc;
-  class CellFactory;
+using namespace state;
+
+CellFactory::CellFactory::~CellFactory() {
+    
 }
 
-#include "ACellAlloc.h"
+Cell* const CellFactory::CellFactory::newInstance(char id) {
 
-namespace state {
 
-  /// class CellFactory - 
-  class CellFactory {
-    // Associations
-    // Attributes
-  protected:
-    std::map<char,ACellAlloc*> list;
-    // Operations
-  public:
-    ~CellFactory ();
-    Cell* const newInstance (char id);
-    void registerType (char id, ACellAlloc* cell);
-    CellFactory* createDefault ();
-    // Setters and Getters
-    const std::map<char,ACellAlloc*>& getList() const;
-    void setList(const std::map<char,ACellAlloc*>& list);
-  };
+}
 
-};
+void CellFactory::CellFactory::registerType(char id, ACellAlloc* cell) {
+    
+}
+
+CellFactory* CellFactory::CellFactory::createDefault() {
+    
+}
+
+const std::map<char,ACellAlloc*>& CellFactory::CellFactory::getList() const {
+    
+}
+
+void CellFactory::CellFactory::setList(const std::map<char, ACellAlloc*>& list) {
+    
+}

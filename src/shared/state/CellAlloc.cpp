@@ -1,25 +1,21 @@
-namespace state {
-  class Cell;
-  class ACellAlloc;
+/*
+#include "CellAlloc.h"
+
+using namespace state;
+
+CellAlloc::CellAlloc(ID id) {
+    
 }
 
-#include "ACellAlloc.h"
+Cell* CellAlloc::newInstance() {
+    
+}
 
-namespace state {
+const ID& CellAlloc::getId() const {
+    
+}
 
-  /// class CellAlloc - 
-  template <  class E,   typename ID>
-  class CellAlloc : public state::ACellAlloc {
-    // Attributes
-  protected:
-    ID id;
-    // Operations
-  public:
-    CellAlloc (ID id);
-    Cell* newInstance ();
-    // Setters and Getters
-    const ID& getId() const;
-    void setId(const ID& id);
-  };
-
-};
+void CellAlloc::setId(const ID& id) {
+    
+}
+*/

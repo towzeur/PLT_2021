@@ -1,25 +1,23 @@
+#include "Empty.h"
 
-namespace state {
-  class Entity;
+using namespace state;
+
+Empty::Empty() {
+    
 }
 
-#include "Entity.h"
-#include "CellTypeId.h"
-#include "Cell.h"
+Empty::~Empty() {
+    
+}
 
-namespace state {
+CellTypeId const Empty::getTypeId() {
+    
+}
 
-  /// class Empty - 
-  class Empty : public state::Entity {
-    // Operations
-  public:
-    Empty ();
-    ~Empty ();
-    CellTypeId const getTypeId ();
-    bool const equals (const Cell& c1);
-    Cell* const clone ();
-    // Setters and Getters
-  };
+bool const Empty::equals(const Cell& c1) {
+    
+}
 
-};
-
+Cell* const Empty::clone() {
+    
+}

@@ -1,29 +1,39 @@
-namespace state {
-  class Entity;
-  class Cell;
+#include "AccessibleCell.h"
+
+using namespace state;
+
+int AccessibleCell::getPlayerId() {
+    
 }
 
-#include "Entity.h"
-#include "Cell.h"
+void AccessibleCell::setPlayerId(int playerId) {
+    
+}
 
-namespace state {
+int AccessibleCell::getTerritoryId() {
+    
+}
 
-  /// class AccessibleCell - 
-  class AccessibleCell : public state::Cell {
-    // Associations
-    // Attributes
-  private:
-    int playerId;
-    int territoryId;
-    Entity entity;
-    // Operations
-  public:
-    bool const isAccessible ();
-    bool const equals (const Cell& cell1);
-    Cell* const clone ();
-    // Setters and Getters
-  };
+void AccessibleCell::setTerritoryId(int territoryId) {
+    
+}
 
-};
+Entity AccessibleCell::getEntity() {
+    
+}
 
+void AccessibleCell::setEntity(Entity entity) {
+    
+}
 
+CellTypeId const AccessibleCell::getTypeId() {
+    
+}
+
+bool const AccessibleCell::equals(const Cell& cell1) {
+    
+}
+
+Cell* const AccessibleCell::clone() {
+    
+}

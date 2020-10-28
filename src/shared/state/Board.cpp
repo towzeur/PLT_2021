@@ -1,61 +1,55 @@
-#include <vector>
-#include <memory>
+#include "Board.h"
 
-namespace state {
-  class Cell;
+using namespace state;
+
+Board::Board() {
+    
 }
 
-#include "Cell.h"
+Board::Board(const Board& board1) {
+    
+}
 
-namespace state {
+Board::~Board() {
+    
+}
 
-  /// class Board - 
-  class Board {
-    // Associations
-    // Attributes
-  private:
-    int nCol;
-    int nRow;
-    std::vector<std::unique_ptr<Cell>> board;
-    // Operations
-  public:
-    Board (){
-      
+void Board::operator=(const Board& board1) {
+    
+}
 
-    };
+void Board::resize(int nRow, int nCol) {
+    
+}
 
+void Board::load(const std::string& file) {
+    
+}
 
-    ~Board (){
+Cell* const Board::get(int r, int c) {
+    
+}
 
+void Board::set(int r, int c, Cell* cell) {
+    
+}
 
-    };
+void Board::remove(int r, int c) {
+    
+}
 
-    Cell* const get (int r, int c){
-      /*
-      Cell x =  new Cell();
-      return &x;
-      */
-      return 0;
-    };
+int Board::getNCol() {
+    
+}
 
-    void set (int r, int c, Cell* cell){
+int Board::getNRow() {
+    
+}
 
+Board* const Board::clone() {
+    
+}
 
-    };
-
-    void remove (int r, int c){
-
-
-
-    };
-
-
-    Board* const clone (){
-
-
-      return this;
-    };
-    // Setters and Getters
-  };
-
-};
+bool const Board::equals(const Board& board1) {
+    
+}

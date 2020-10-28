@@ -1,22 +1,19 @@
+#include "InaccessibleCell.h"
 
-namespace state {
-  class Cell;
+using namespace state;
+
+bool const InaccessibleCell::isAccessible() {
+    
 }
 
-#include "Cell.h"
-#include "InaccessibleCellTypeId.h"
+CellTypeId const InaccessibleCell::getTypeId() {
+    
+}
 
-namespace state {
+bool const InaccessibleCell::equals(const Cell& cell1) {
+    
+}
 
-  /// class InaccessibleCell - 
-  class InaccessibleCell : public state::Cell {
-    // Operations
-  public:
-    bool const isAccessible ();
-    CellTypeId const getTypeId ();
-    bool const equals (const Cell& cell1);
-    Cell* const clone ();
-    // Setters and Getters
-  };
-
-};
+Cell* const InaccessibleCell::clone() {
+    
+}
