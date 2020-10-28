@@ -1,26 +1,23 @@
+#include "Tree.h"
 
-namespace state {
-  class Cell;
-  class Entity;
+using namespace state;
+
+Tree::Tree() {
+    
 }
 
-#include "Entity.h"
-#include "TreeTypeId.h"
-#include "CellTypeId.h"
+Tree::~Tree() {
+    
+}
 
-namespace state {
+CellTypeId const Tree::getTypeId() {
+    
+}
 
-  /// class Tree - 
-  class Tree : public state::Entity {
-    // Operations
-  public:
-    Tree ();
-    ~Tree ();
-    CellTypeId const getTypeId ();
-    bool const equals (const Cell& c1);
-    Cell* const clone ();
-    // Setters and Getters
-  };
+bool const Tree::equals(const Cell& c1) {
+    
+}
 
-};
-
+Cell* const Tree::clone() {
+    
+}

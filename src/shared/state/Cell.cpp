@@ -1,31 +1,35 @@
+#include "Cell.h"
 
-namespace state {
-  class Cell;
+using namespace state;
+
+Cell::Cell() {
+    
 }
 
-#include "CellTypeId.h"
+Cell::~Cell() {
+    
+}
 
-namespace state {
+bool const Cell::equals(const Cell& cell1) {
+    
+}
 
-  /// class Cell - 
-  class Cell {
-    // Attributes
-  protected:
-    int row;
-    int col;
-    // Operations
-  public:
-    Cell ();
-    ~Cell ();
-    virtual CellTypeId const getTypeId () = 0;
-    virtual bool const isAccessible () = 0;
-    bool const equals (const Cell& cell1);
-    Cell* const clone ();
-    // Setters and Getters
-    int getRow() const;
-    void setRow(int row);
-    int getCol() const;
-    void setCol(int col);
-  };
+Cell* const Cell::clone() {
+    
+}
 
-};
+int Cell::getRow() const {
+    
+}
+
+void Cell::setRow(int row) {
+    
+}
+
+int Cell::getCol() const {
+    
+}
+
+void Cell::setCol(int col) {
+    
+}

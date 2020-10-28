@@ -1,38 +1,43 @@
-#include <vector>
-#include <memory>
+#include "Observable.h"
 
-namespace state {
-  class Observer;
-  class Event;
+using namespace state;
+
+Observable::~Observable() {
+    
 }
 
-#include "Observer.h"
+void Observable::registerObserver(Observer* o) {
+    
+}
 
-namespace state {
+void Observable::unregisterObserver(Observer* o) {
+    
+}
 
-  /// class Observable - 
-  class Observable {
-    // Associations
-    // Attributes
-  private:
-    mutable std::vector <Observer*> observers;
-     mutable std::vector<std::unique_ptr<Event>> cache;
-  protected:
-    bool enableNotifications     = true;
-    bool enableCache     = false;
-    // Operations
-  public:
-    ~Observable ();
-    void registerObserver (Observer* o);
-    void unregisterObserver (Observer* o);
-    void unregisterAllObservers ();
-    void notify (const Event& e);
-    void flush ();
-    // Setters and Getters
-    bool getEnableNotifications() const;
-    void setEnableNotifications(bool enableNotifications);
-    bool getEnableCache() const;
-    void setEnableCache(bool enableCache);
-  };
+void Observable::unregisterAllObservers() {
+    
+}
 
-};
+void Observable::notify(const Event& e) {
+    
+}
+
+void Observable::flush() {
+    
+}
+
+bool Observable::getEnableNotifications() const {
+    
+}
+
+void Observable::setEnableNotifications(bool enableNotifications) {
+    
+}
+
+bool Observable::getEnableCache() const {
+    
+}
+
+void Observable::setEnableCache(bool enableCache) {
+    
+}

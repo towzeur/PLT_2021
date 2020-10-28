@@ -1,28 +1,31 @@
+#include "Soldier.h"
 
-namespace state {
-  class Cell;
-  class Entity;
+using namespace state;
+
+Soldier::Soldier() {
+    
 }
 
-#include "Entity.h"
-#include "SoldierTypeId.h"
-#include "CellTypeId.h"
+Soldier::~Soldier() {
+    
+}
 
-namespace state {
+CellTypeId const Soldier::getTypeId() {
+    
+}
 
-  /// class Soldier - 
-  class Soldier : public state::Entity {
-    // Attributes
-  private:
-     int PA;
-    // Operations
-  public:
-    Soldier ();
-    ~Soldier ();
-    CellTypeId const getTypeId ();
-    bool const equals (const Cell& c1);
-    Cell* const clone ();
-    // Setters and Getters
-  };
+bool const Soldier::equals(const Cell& c1) {
+    
+}
 
-};
+Cell* const Soldier::clone() {
+    
+}
+
+int Soldier::getPA() {
+    
+}
+
+void Soldier::setPA(int PA) {
+    
+}

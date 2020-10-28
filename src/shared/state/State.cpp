@@ -1,45 +1,91 @@
+#include "State.h"
 
-#include <vector>
+using namespace state;
 
-namespace state {
-  class Board;
-  class Territory;
-  class Player;
-  class State;
-  class Observable;
+State::State(const State& state1) {
+    
 }
 
-#include "Board.h"
-#include "Territory.h"
-#include "Player.h"
-#include "Observable.h"
+State::~State() {
+    
+}
 
-namespace state {
+void State::operator=(const State& state1) {
+    
+}
 
-  /// class State - 
-  class State : public state::Observable {
-    // Associations
-    // Attributes
-  private:
-    bool gameOver;
-    unsigned int turn;
-    int currentPlayerId;
-    int nbPlayers;
-    Board board;
-    std::vector<Territory> territories;
-    std::vector<Player> players;
-    // Operations
-  public:
-    State ();
-    State (const State& state1);
-    ~State ();
-    void operator= (const State& state1);
-    State* const clone ();
-    void setEnableCache (bool newEnableCache );
-    void setEnableNotifications (bool newEnableNotifications);
-    void flush ();
-    // Setters and Getters
-  };
+void State::setEnableCache(bool ec) {
+    
+}
 
-};
+void State::setEnableNotifications(bool en) {
+    
+}
 
+void State::flush() {
+    
+}
+
+bool State::getGameOver() {
+    
+}
+
+void State::setGameOver(bool go) {
+    
+}
+
+int State::getTurn() {
+    
+}
+
+void State::setTurn(int turn) {
+    
+}
+
+int State::nextTurn() {
+    
+}
+
+int State::getCurrentPlayerId() {
+    
+}
+
+void State::setCurrentPlayerId(int cpi) {
+    
+}
+
+int State::getNbPlayers() {
+    
+}
+
+void State::setNbPlayers(int np) {
+    
+}
+
+Board& State::getBoard() {
+    
+}
+
+std::vector<Territory>& State::getTerritories() {
+    
+}
+
+size_t State::addTerritory(Territory* t) {
+    
+}
+
+std::vector<Player>& State::getPlayers() {
+    
+}
+
+size_t State::addPlayer(Player* p) {
+    
+}
+
+State* const State::clone() {
+    
+}
+
+bool const State::equals(const State& state1) {
+    
+}

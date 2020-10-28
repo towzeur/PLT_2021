@@ -1,26 +1,43 @@
-#include "PlayerStatus.h"
-#include <string>
-#include <iostream>
+#include "Player.h"
 
-namespace state {
+using namespace state;
 
-  /// class Player - 
-  class Player {
-    // Attributes
-  private:
-    static int instanceCount;
-    int uid;
-    std::string name;
-    bool playing;
-    PlayerStatus status;
-    // Operations
-  public:
-    Player ();
-    ~Player ();
-    Player* const clone ();
-    // Setters and Getters
-  };
+Player::Player() {
+    
+}
 
-};
+Player::~Player() {
+    
+}
 
+int Player::getUid() {
+    
+}
 
+std::string Player::getName() {
+    return "this is a string name";
+}
+
+void Player::setName(std::string name) {
+    
+}
+
+bool Player::getPlaying() {
+    
+}
+
+void Player::setPlaying(bool playing) {
+    
+}
+
+PlayerStatus Player::getStatus() {
+    
+}
+
+void Player::setStatus(PlayerStatus status) {
+    
+}
+
+Player* const Player::clone() {
+    
+}
