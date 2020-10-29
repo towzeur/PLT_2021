@@ -3,10 +3,7 @@
 namespace client {
 
 void Exemple::setX (int x) {
-    // Create an object from "shared" library
-    state::Exemple y {};
-    y.setX(x);
-
+    // Create an object frome client folder
     this->x = x;
 }
 
