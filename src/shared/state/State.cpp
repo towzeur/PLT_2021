@@ -2,90 +2,48 @@
 
 using namespace state;
 
-State::State(const State& state1) {
-    
-}
+State::State() {}
 
-State::~State() {
-    
-}
+State::State(const State &state1) {}
 
-void State::operator=(const State& state1) {
-    
-}
+State::~State() {}
 
-void State::setEnableCache(bool ec) {
-    
-}
+void State::operator=(const State &state1) {}
 
-void State::setEnableNotifications(bool en) {
-    
-}
+void State::setEnableCache(bool ec) {}
 
-void State::flush() {
-    
-}
+void State::setEnableNotifications(bool en) {}
 
-bool State::getGameOver() {
-    
-}
+void State::flush() {}
 
-void State::setGameOver(bool go) {
-    
-}
+bool State::getGameOver() { return gameOver; }
 
-int State::getTurn() {
-    
-}
+void State::setGameOver(bool go) { gameOver = go; }
 
-void State::setTurn(int turn) {
-    
-}
+int State::getTurn() { return turn; }
 
-int State::nextTurn() {
-    
-}
+void State::setTurn(int turn) { this->turn = turn; }
 
-int State::getCurrentPlayerId() {
-    
-}
+int State::nextTurn() {}
 
-void State::setCurrentPlayerId(int cpi) {
-    
-}
+int State::getCurrentPlayerId() { return currentPlayerId; }
 
-int State::getNbPlayers() {
-    
-}
+void State::setCurrentPlayerId(int cpi) { currentPlayerId = cpi; }
 
-void State::setNbPlayers(int np) {
-    
-}
+int State::getNbPlayers() { return nbPlayers; }
 
-Board& State::getBoard() {
-    
-}
+void State::setNbPlayers(int np) { nbPlayers = np; }
 
-std::vector<Territory>& State::getTerritories() {
-    
-}
+Board &State::getBoard() {}
 
-size_t State::addTerritory(Territory* t) {
-    
-}
+std::vector<Territory> &State::getTerritories() {}
 
-std::vector<Player>& State::getPlayers() {
-    
-}
+size_t State::addTerritory(Territory *t) {}
 
-size_t State::addPlayer(Player* p) {
-    
-}
+std::vector<Player> &State::getPlayers() {}
 
-State* const State::clone() {
-    
-}
+size_t State::addPlayer(Player *p) {}
 
-bool const State::equals(const State& state1) {
-    
-}
+State *const State::clone() {}
+
+bool const State::equals(const State &state1) {}
