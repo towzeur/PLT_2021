@@ -24,7 +24,7 @@ int State::getTurn() { return turn; }
 
 void State::setTurn(int turn) { this->turn = turn; }
 
-int State::nextTurn() {}
+int State::nextTurn() { return this->turn + 1; }
 
 int State::getCurrentPlayerId() { return currentPlayerId; }
 
@@ -34,15 +34,21 @@ int State::getNbPlayers() { return nbPlayers; }
 
 void State::setNbPlayers(int np) { nbPlayers = np; }
 
-Board &State::getBoard() {}
+Board &State::getBoard() { return board; }
 
-std::vector<Territory> &State::getTerritories() {}
+std::vector<Territory> &State::getTerritories() { return territories; }
 
-size_t State::addTerritory(Territory *t) {}
+size_t State::addTerritory(Territory *t) {
+  territories.push_back(*t);
+  return territories.size();
+}
 
-std::vector<Player> &State::getPlayers() {}
+std::vector<Player> &State::getPlayers() { return players; }
 
-size_t State::addPlayer(Player *p) {}
+size_t State::addPlayer(Player *p) {
+  players.push_back(*p);
+  return players.size();
+}
 
 State *const State::clone() {}
 
