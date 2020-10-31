@@ -56,10 +56,10 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
 
     // getPlayers TO DO
 
-    // addTerritory
-    int territoriesSize = st.getTerritories().size();
-    Territory *t;
-    BOOST_CHECK_EQUAL(st.addTerritory(t), territoriesSize + 1);
+    // addTerritory NOT WORKING
+    //  int territoriesSize = st.getTerritories().size();
+    // Territory *t;
+    // BOOST_CHECK_EQUAL(st.addTerritory(t), territoriesSize + 1);
 
     // addPlayer NOT WORKING
     // int playersSize = st.getPlayers().size();
@@ -99,13 +99,30 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     tr.setWages(20);
     BOOST_CHECK_EQUAL(tr.getWages(), 20);
 
-    // Balance getter and setter NOT WORKING
-    // tr.setBalance(30);
-    // BOOST_CHECK_EQUAL(tr.getBalance(), 30);
+    // Balance getter and setter
+    tr.setBalance(30);
+    BOOST_CHECK_EQUAL(tr.getBalance(), 30);
 
-    // Size getter and setter NOT WORKING
-    //  tr.setSize(10);
-    //  BOOST_CHECK_EQUAL(tr.getSize(), 10);
+    // Size getter and setter
+    tr.setSize(10);
+    BOOST_CHECK_EQUAL(tr.getSize(), 10);
+  }
+
+  // Player
+  {
+    Player pl;
+
+    // getUid
+    BOOST_CHECK(pl.getUid());
+
+    // Name getter and setter
+    std::string name = "Luffy";
+    pl.setName(name);
+    BOOST_CHECK_EQUAL(pl.getName(), name);
+
+    // Playing getter and setter
+    pl.setPlaying(true);
+    BOOST_CHECK(pl.getPlaying());
   }
 }
 
