@@ -2,7 +2,7 @@
 
 using namespace state;
 
-Territory::Territory() {}
+Territory::Territory() : savings(0) {}
 
 Territory::~Territory() {}
 

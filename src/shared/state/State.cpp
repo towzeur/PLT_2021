@@ -2,7 +2,7 @@
 
 using namespace state;
 
-State::State() {}
+State::State() : gameOver(false), turn(0), currentPlayerId(0), nbPlayers(0) {}
 
 State::State(const State &state1) {}
 

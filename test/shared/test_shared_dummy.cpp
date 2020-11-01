@@ -1,5 +1,6 @@
 #include "../../src/shared/state.h"
 #include <boost/test/unit_test.hpp>
+#include <iostream>
 
 using namespace state;
 
@@ -7,42 +8,37 @@ BOOST_AUTO_TEST_CASE(TestStaticAssert) { BOOST_CHECK(1); }
 
 BOOST_AUTO_TEST_CASE(TestExemple) {
 
-  {
-    State st();
-    BOOST_CHECK_EQUAL(0, 0);
-
-    Player p();
-    BOOST_CHECK_EQUAL(0, 0);
-  }
-
-  {
-    BOOST_CHECK_EQUAL(21, 21);
-
-    // BOOST_CHECK_LE(ex.x, 32); // Less than equal
-    // BOOST_CHECK_GT(ex.x, 11); // Greater than equl
-  }
-
   // State
   {
     State st;
 
-    // gameOver getter/setter
-    bool go = true;
+    // State() constructor and gameOver, turn, currentPlayerId, nbPlayer getter
+    bool go = st.getGameOver();
+    int turn = st.getTurn();
+    int cpi = st.getCurrentPlayerId();
+    int np = st.getNbPlayers();
+    BOOST_CHECK_EQUAL(go, false);
+    BOOST_CHECK_EQUAL(turn, 0);
+    BOOST_CHECK_EQUAL(cpi, 0);
+    BOOST_CHECK_EQUAL(np, 0);
+
+    // gameOver setter
+    go = true;
     st.setGameOver(go);
     BOOST_CHECK_EQUAL(st.getGameOver(), go);
 
-    // turn getter/setter
-    int turn = 1;
+    // turn setter
+    turn = 1;
     st.setTurn(turn);
     BOOST_CHECK_EQUAL(st.getTurn(), turn);
 
-    // currentPlayer getter/setter
-    int cpi = 1;
+    // currentPlayer setter
+    cpi = 1;
     st.setCurrentPlayerId(cpi);
     BOOST_CHECK_EQUAL(st.getCurrentPlayerId(), cpi);
 
-    // nbPlayers getter/setter
-    int np = 2;
+    // nbPlayers setter
+    np = 2;
     st.setNbPlayers(np);
     BOOST_CHECK_EQUAL(st.getNbPlayers(), np);
 
@@ -52,19 +48,15 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
 
     // getBoard TO DO
 
-    // getTerritories TO DO
+    // getTerritoties and addTerritory
+    int territoriesSize = st.getTerritories().size();
+    Territory t;
+    BOOST_CHECK_EQUAL(st.addTerritory(&t), territoriesSize + 1);
 
-    // getPlayers TO DO
-
-    // addTerritory NOT WORKING
-    //  int territoriesSize = st.getTerritories().size();
-    // Territory *t;
-    // BOOST_CHECK_EQUAL(st.addTerritory(t), territoriesSize + 1);
-
-    // addPlayer NOT WORKING
-    // int playersSize = st.getPlayers().size();
-    // Player *p;
-    // BOOST_CHECK_EQUAL(st.addPlayer(p), playersSize + 1);
+    // getPlayer and addPlayer
+    int playersSize = st.getPlayers().size();
+    Player p;
+    BOOST_CHECK_EQUAL(st.addPlayer(&p), playersSize + 1);
   }
 
   // Territory
@@ -123,6 +115,24 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     // Playing getter and setter
     pl.setPlaying(true);
     BOOST_CHECK(pl.getPlaying());
+
+    // Status TO DO
+  }
+
+  // Board
+  {
+    Board bd;
+
+    // Board() constructor and getNCol, getNRow
+    int nc = bd.getNCol();
+    int nr = bd.getNRow();
+    BOOST_CHECK_EQUAL(nc, 50);
+    BOOST_CHECK_EQUAL(nr, 50);
+
+    // resize
+    bd.resize(30, 30);
+    BOOST_CHECK_EQUAL(bd.getNCol(), 30);
+    BOOST_CHECK_EQUAL(bd.getNRow(), 30);
   }
 }
 
