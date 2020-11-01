@@ -2,82 +2,45 @@
 
 using namespace state;
 
-Territory::Territory() {
-    
-}
+Territory::Territory() : savings(0) {}
 
-Territory::~Territory() {
-    
-}
+Territory::~Territory() {}
 
-int Territory::getUid() {
-    
-}
+int Territory::getUid() { return uid; }
 
-int Territory::getCapitalRow() {
-    
-}
+int Territory::getCapitalRow() { return capitalRow; }
 
-void Territory::setCapitalRow(int r) {
-    
-}
+void Territory::setCapitalRow(int r) { capitalRow = r; }
 
-int Territory::getCapitalCol() {
-    
-}
+int Territory::getCapitalCol() { return capitalCol; }
 
-void Territory::setCapitalCol(int c) {
-    
-}
+void Territory::setCapitalCol(int c) { capitalCol = c; }
 
 void Territory::setCapitalCoords(int cRow, int cCol) {
-    
+  capitalCol = cCol;
+  capitalRow = cRow;
 }
 
-int Territory::getSavings() {
-    
-}
+int Territory::getSavings() { return savings; }
 
-void Territory::setSavings(int savings) {
-    
-}
+void Territory::setSavings(int savings) { this->savings = savings; }
 
-int Territory::getIncome() {
-    
-}
+int Territory::getIncome() { return income; }
 
-void Territory::setIncome(int income) {
-    
-}
+void Territory::setIncome(int income) { this->income = income; }
 
-int Territory::getWages() {
-    
-}
+int Territory::getWages() { return wages; }
 
-void Territory::setWages(int wages) {
-    
-}
+void Territory::setWages(int wages) { this->wages = wages; }
 
-int Territory::getBalance() {
-    
-}
+int Territory::getBalance() { return balance; }
 
-void Territory::setBalance(int balance) {
-    
-}
+void Territory::setBalance(int balance) { this->balance = balance; }
 
-int Territory::getSize() {
-    
-}
+int Territory::getSize() { return size; }
 
-void Territory::setSize(int size) {
-    
-}
+void Territory::setSize(int size) { this->size = size; }
 
-Territory* const Territory::clone() {
-    
-}
+Territory *const Territory::clone() {}
 
-bool const Territory::equals(const Territory& t1) {
-    
-}
+bool const Territory::equals(const Territory &t1) {}

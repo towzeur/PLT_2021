@@ -2,90 +2,54 @@
 
 using namespace state;
 
-State::State(const State& state1) {
-    
+State::State() : gameOver(false), turn(0), currentPlayerId(0), nbPlayers(0) {}
+
+State::State(const State &state1) {}
+
+State::~State() {}
+
+void State::operator=(const State &state1) {}
+
+void State::setEnableCache(bool ec) {}
+
+void State::setEnableNotifications(bool en) {}
+
+void State::flush() {}
+
+bool State::getGameOver() { return gameOver; }
+
+void State::setGameOver(bool go) { gameOver = go; }
+
+int State::getTurn() { return turn; }
+
+void State::setTurn(int turn) { this->turn = turn; }
+
+int State::nextTurn() { return this->turn + 1; }
+
+int State::getCurrentPlayerId() { return currentPlayerId; }
+
+void State::setCurrentPlayerId(int cpi) { currentPlayerId = cpi; }
+
+int State::getNbPlayers() { return nbPlayers; }
+
+void State::setNbPlayers(int np) { nbPlayers = np; }
+
+Board &State::getBoard() { return board; }
+
+std::vector<Territory> &State::getTerritories() { return territories; }
+
+size_t State::addTerritory(Territory *t) {
+  territories.push_back(*t);
+  return territories.size();
 }
 
-State::~State() {
-    
+std::vector<Player> &State::getPlayers() { return players; }
+
+size_t State::addPlayer(Player *p) {
+  players.push_back(*p);
+  return players.size();
 }
 
-void State::operator=(const State& state1) {
-    
-}
+State *const State::clone() {}
 
-void State::setEnableCache(bool ec) {
-    
-}
-
-void State::setEnableNotifications(bool en) {
-    
-}
-
-void State::flush() {
-    
-}
-
-bool State::getGameOver() {
-    
-}
-
-void State::setGameOver(bool go) {
-    
-}
-
-int State::getTurn() {
-    
-}
-
-void State::setTurn(int turn) {
-    
-}
-
-int State::nextTurn() {
-    
-}
-
-int State::getCurrentPlayerId() {
-    
-}
-
-void State::setCurrentPlayerId(int cpi) {
-    
-}
-
-int State::getNbPlayers() {
-    
-}
-
-void State::setNbPlayers(int np) {
-    
-}
-
-Board& State::getBoard() {
-    
-}
-
-std::vector<Territory>& State::getTerritories() {
-    
-}
-
-size_t State::addTerritory(Territory* t) {
-    
-}
-
-std::vector<Player>& State::getPlayers() {
-    
-}
-
-size_t State::addPlayer(Player* p) {
-    
-}
-
-State* const State::clone() {
-    
-}
-
-bool const State::equals(const State& state1) {
-    
-}
+bool const State::equals(const State &state1) {}
