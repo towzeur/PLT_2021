@@ -6,8 +6,8 @@ Facility::Facility() {}
 
 Facility::~Facility() {}
 
-CellTypeId const Facility::getTypeId() {}
+EntityTypeId const Facility::getTypeId() {}
 
 bool const Facility::equals(const Entity &e) {}
 
-Cell *const Facility::clone() {}
+Entity *const Facility::clone() {}

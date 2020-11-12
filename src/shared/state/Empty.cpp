@@ -6,8 +6,8 @@ Empty::Empty() {}
 
 Empty::~Empty() {}
 
-CellTypeId const Empty::getTypeId() {}
+EntityTypeId const Empty::getTypeId() {}
 
 bool const Empty::equals(const Entity &e) {}
 
-Cell *const Empty::clone() {}
+Entity *const Empty::clone() {}

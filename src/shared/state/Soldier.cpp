@@ -6,11 +6,11 @@ Soldier::Soldier() {}
 
 Soldier::~Soldier() {}
 
-CellTypeId const Soldier::getTypeId() {}
+EntityTypeId const Soldier::getTypeId() {}
 
 bool const Soldier::equals(const Entity &e) {}
 
-Cell *const Soldier::clone() {}
+Entity *const Soldier::clone() {}
 
 int Soldier::getPA() {}
 
