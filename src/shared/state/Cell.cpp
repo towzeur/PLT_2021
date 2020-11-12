@@ -2,34 +2,18 @@
 
 using namespace state;
 
-Cell::Cell() {
-    
-}
+Cell::Cell() {}
 
-Cell::~Cell() {
-    
-}
+Cell::~Cell() {}
 
-bool const Cell::equals(const Cell& cell1) {
-    
-}
+bool const Cell::equals(const Cell &cell1) {}
 
-Cell* const Cell::clone() {
-    
-}
+Cell *const Cell::clone() {}
 
-int Cell::getRow() const {
-    
-}
+int Cell::getRow() {}
 
-void Cell::setRow(int row) {
-    
-}
+void Cell::setRow(int row) {}
 
-int Cell::getCol() const {
-    
-}
+int Cell::getCol() {}
 
-void Cell::setCol(int col) {
-    
-}
+void Cell::setCol(int col) {}

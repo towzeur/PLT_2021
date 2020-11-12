@@ -2,22 +2,12 @@
 
 using namespace state;
 
-Empty::Empty() {
-    
-}
+Empty::Empty() {}
 
-Empty::~Empty() {
-    
-}
+Empty::~Empty() {}
 
-CellTypeId const Empty::getTypeId() {
-    
-}
+CellTypeId const Empty::getTypeId() {}
 
-bool const Empty::equals(const Cell& c1) {
-    
-}
+bool const Empty::equals(const Entity &e) {}
 
-Cell* const Empty::clone() {
-    
-}
+Cell *const Empty::clone() {}

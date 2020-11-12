@@ -8,6 +8,6 @@ Tree::~Tree() {}
 
 CellTypeId const Tree::getTypeId() {}
 
-bool const Tree::equals(const Cell &c1) {}
+bool const Tree::equals(const Entity &e) {}
 
 Cell *const Tree::clone() {}

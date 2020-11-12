@@ -2,22 +2,12 @@
 
 using namespace state;
 
-Facility::Facility() {
-    
-}
+Facility::Facility() {}
 
-Facility::~Facility() {
-    
-}
+Facility::~Facility() {}
 
-CellTypeId const Facility::getTypeId() {
-    
-}
+CellTypeId const Facility::getTypeId() {}
 
-bool const Facility::equals(const Cell& c1) {
-    
-}
+bool const Facility::equals(const Entity &e) {}
 
-Cell* const Facility::clone() {
-    
-}
+Cell *const Facility::clone() {}
