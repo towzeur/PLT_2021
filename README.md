@@ -166,12 +166,12 @@ See the [open issues](https://github.com/towzeur/PLT_2021/issues) for a list of 
     * State implementation
     * Test code coverage
     * Report 1.final
-<!--
+
 * 2.1
     * Report 2.1
     * Render diagram
     * Implemented code to print a rendering of state
-
+<!--
 * 2.2
     * Report 2.2
     * Engine diagram
