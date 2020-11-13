@@ -1,7 +1,7 @@
 
 
 dia2code:
-	@cd dia2code && ./build.sh
+	@cd dia2code && chmod a+x build.sh && ./build.sh
 
 clean:
 	@rm -rf dia2code/build
