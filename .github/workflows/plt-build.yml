@@ -38,5 +38,10 @@ jobs:
       #working-directory: ${{runner.workspace}}/build
       shell: bash
       run: |
+<<<<<<< HEAD
         chmod a+x build/run_test.sh
         build/run_test.sh
+=======
+        build/run_test.sh
+        
+>>>>>>> 24f88204de455a7caa6b665a43654cffdd5fcc7b

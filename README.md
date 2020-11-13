@@ -265,7 +265,10 @@ Distributed under the MIT License. See [LICENSE](license-url) for more informati
 [cpp-ver-shield]: https://img.shields.io/badge/C%2B%2B-11-blue.svg
 [cpp-ver]: https://en.wikipedia.org/wiki/C%2B%2B11
 
+<<<<<<< HEAD
 [build-status-shield]: https://github.com/towzeur/PLT_2021/workflows/PLT%20CI%20build%20and%20test/badge.svg
 [build-status]: https://github.com/towzeur/PLT_2021/actions
 
+=======
+>>>>>>> 24f88204de455a7caa6b665a43654cffdd5fcc7b
 [version-shield]: https://img.shields.io/badge/version-1.final-blue.svg?cacheSeconds=2592000

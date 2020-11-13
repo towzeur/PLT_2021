@@ -2,22 +2,12 @@
 
 using namespace state;
 
-Tree::Tree() {
-    
-}
+Tree::Tree() {}
 
-Tree::~Tree() {
-    
-}
+Tree::~Tree() {}
 
-CellTypeId const Tree::getTypeId() {
-    
-}
+EntityTypeId const Tree::getTypeId() {}
 
-bool const Tree::equals(const Cell& c1) {
-    
-}
+bool const Tree::equals(const Entity &e) {}
 
-Cell* const Tree::clone() {
-    
-}
+Entity *const Tree::clone() {}
