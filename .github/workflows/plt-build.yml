@@ -1,4 +1,4 @@
-name: PLT ci
+name: PLT CI build and test
 
 on:
   workflow_dispatch:
@@ -38,5 +38,6 @@ jobs:
       #working-directory: ${{runner.workspace}}/build
       shell: bash
       run: |
+        chmod a+x build/run_test.sh
         build/run_test.sh
         
