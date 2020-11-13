@@ -39,3 +39,4 @@ jobs:
       shell: bash
       run: |
         build/run_test.sh
+        

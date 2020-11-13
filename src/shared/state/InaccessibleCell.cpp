@@ -2,18 +2,8 @@
 
 using namespace state;
 
-bool const InaccessibleCell::isAccessible() {
-    
-}
+bool const InaccessibleCell::isAccessible() {}
 
-CellTypeId const InaccessibleCell::getTypeId() {
-    
-}
+bool const InaccessibleCell::equals(const Cell &cell1) {}
 
-bool const InaccessibleCell::equals(const Cell& cell1) {
-    
-}
-
-Cell* const InaccessibleCell::clone() {
-    
-}
+Cell *const InaccessibleCell::clone() {}
