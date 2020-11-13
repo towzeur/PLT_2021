@@ -2,38 +2,18 @@
 
 using namespace state;
 
-int AccessibleCell::getPlayerId() {
-    
-}
+int AccessibleCell::getPlayerId() {}
 
-void AccessibleCell::setPlayerId(int playerId) {
-    
-}
+void AccessibleCell::setPlayerId(int playerId) {}
 
-int AccessibleCell::getTerritoryId() {
-    
-}
+int AccessibleCell::getTerritoryId() {}
 
-void AccessibleCell::setTerritoryId(int territoryId) {
-    
-}
+void AccessibleCell::setTerritoryId(int territoryId) {}
 
-Entity AccessibleCell::getEntity() {
-    
-}
+Entity AccessibleCell::getEntity() {}
 
-void AccessibleCell::setEntity(Entity entity) {
-    
-}
+void AccessibleCell::setEntity(Entity entity) {}
 
-CellTypeId const AccessibleCell::getTypeId() {
-    
-}
+bool const AccessibleCell::equals(const Cell &cell1) {}
 
-bool const AccessibleCell::equals(const Cell& cell1) {
-    
-}
-
-Cell* const AccessibleCell::clone() {
-    
-}
+Cell *const AccessibleCell::clone() {}
