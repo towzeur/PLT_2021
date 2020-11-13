@@ -8,10 +8,10 @@ on:
         default: 'warning'
 
   push:
-    #branches: [ master ]
+    branches: [ master ]
 
   pull_request:
-    #branches: [ master ]
+    branches: [ master ]
   
 jobs:
   build_and_test:
@@ -34,7 +34,7 @@ jobs:
         make all
 
     - name: Test
-      working-directory: ${{runner.workspace}}/build
+      #working-directory: ${{runner.workspace}}/build
       shell: bash
       run: |
-        ./run_test.sh
+        build/run_test.sh
