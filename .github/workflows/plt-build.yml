@@ -1,3 +1,4 @@
+name: PLT ci
 
 on:
   workflow_dispatch:
