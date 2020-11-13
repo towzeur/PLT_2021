@@ -1,8 +1,10 @@
+#include "render.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <state.h>
 #include <string.h>
 
+using namespace render;
 
 /* ----------------------------------------------------------------------------
                                 GLOBAL VARIABLE
@@ -42,7 +44,22 @@ int main(int argc, char *argv[]) {
     } else if (arg1 == "render") {
       std::cout << "RENDER" << std::endl;
 
-      // create a render
+      state::State state;
+      sf::RenderWindow window(
+          sf::VideoMode(state.getBoard().getNCol() * 32 + 256,
+                        state.getBoard().getNRow() * 32 + 32, 32),
+          "map");
+      StateLayer layer(state, window);
+      layer.initSurfaces(state);
+      while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+          if (event.type == sf::Event::Closed)
+            window.close();
+        }
+        // render
+        layer.draw(window);
+      }
     } else {
       // std::cout << "Unknown command" << std::endl;
     }
