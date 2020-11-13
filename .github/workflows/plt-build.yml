@@ -1,0 +1,49 @@
+name: plt-build
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+
+  #push:
+  #  branches: [ master ]
+
+  #pull_request:
+  #  branches: [ master ]
+  
+env:
+  BUILD_TYPE: Release
+
+jobs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup environment 
+    # sudo apt install gcc cmake make
+      run: |
+        sudo apt install build-essential 
+        sudo apt install dia
+        sudo apt install libsfml-dev libxml2-dev libmicrohttpd-dev libboost-all-dev
+        sudo apt install python3 python3-pip
+        sudo apt install lcov gcovr
+
+    #- name: Create Build Environment
+    #  run: |
+    #    cmake -E make_directory ${{runner.workspace}}/build
+
+    - name: Build
+      working-directory: ${{runner.workspace}}
+      shell: bash
+      run: |
+        make
+
+    - name: Test
+      working-directory: ${{runner.workspace}}/build
+      shell: bash
+      run: |
+        ./run_test.sh
