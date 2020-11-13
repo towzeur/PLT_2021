@@ -40,4 +40,3 @@ jobs:
       run: |
         chmod a+x build/run_test.sh
         build/run_test.sh
-        

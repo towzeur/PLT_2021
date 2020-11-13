@@ -16,7 +16,8 @@
 <div align="center">
 
 [![c++ version][cpp-ver-shield]][cpp-ver]
-[![c++ version][version-shield]][cpp-ver]
+[![software version][version-shield]][cpp-ver]
+[![build status][build-status-shield]][build-status]
 
 </div>
 </p>
@@ -263,5 +264,8 @@ Distributed under the MIT License. See [LICENSE](license-url) for more informati
 
 [cpp-ver-shield]: https://img.shields.io/badge/C%2B%2B-11-blue.svg
 [cpp-ver]: https://en.wikipedia.org/wiki/C%2B%2B11
+
+[build-status-shield]: https://github.com/towzeur/PLT_2021/workflows/PLT%20CI%20build%20and%20test/badge.svg
+[build-status]: https://github.com/towzeur/PLT_2021/actions
 
 [version-shield]: https://img.shields.io/badge/version-1.final-blue.svg?cacheSeconds=2592000
