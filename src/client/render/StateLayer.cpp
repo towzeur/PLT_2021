@@ -12,24 +12,6 @@ using namespace render;
 using namespace std;
 using namespace state;
 
-// define tile dimension A METTRE DANS LE DIA ?
-const int tileWidth = 72;
-const int tileHeight = 84;
-
-// define map dimension A METTRE DANS LE DIA ?
-const int mapWidth = 10;
-const int mapHeight = 10;
-
-// define tileset path A METTRE DANS LE DIA ?
-const std::string pathTextureMap = "res/texture/tilesetMap.png";
-const std::string pathTextureEntity = "res/texture/tilesetFacilities.png";
-
-// define map A METTRE DANS UN FICHIER QU'ON VA INTERPRETER OU A CODER EN DUR
-// AILLEUR ?
-
-// unsigned int levelMap[mapWidth*mapHeight];
-// unsigned int levelEntity[mapWidth*mapHeight];
-
 unsigned int levelMap[] = {
     0, 1, 1, 2, 2, 2, 1, 0, 0, 0, //-----------------------------------------
     1, 1, 1, 1, 2, 0, 1, 1, 0, 0, //-----------------------------------------
@@ -63,13 +45,6 @@ StateLayer::StateLayer(state::State &state, sf::RenderWindow &window,
 
   // load a font file (ttf)
   font.loadFromFile("res/fonts/BalsamiqSans-Bold.ttf");
-
-  // create a tileset for each surface and add it to tilesets vector
-  std::unique_ptr<TileSet> tilesetMap(new TileSet(TileSetID::MAP, env));
-  tilesets.push_back(move(tilesetMap));
-
-  std::unique_ptr<TileSet> tilesetEntity(new TileSet(TileSetID::ENTITY, env));
-  tilesets.push_back(move(tilesetMap));
 }
 
 // Load a string in alertMessage
@@ -110,12 +85,6 @@ void StateLayer::showAlertMessage(time_t epoch) {
     window.draw(message);
     window.display();
   }
-}
-
-// Get a vector which contain all the tilesets
-std::vector<std::unique_ptr<TileSet>> &StateLayer::getTilesets() {
-  std::vector<std::unique_ptr<TileSet>> &refTileSets = tilesets;
-  return refTileSets;
 }
 
 // Get a vector which contain all the surfaces
