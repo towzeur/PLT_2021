@@ -48,9 +48,21 @@ int main(int argc, char *argv[]) {
       sf::RenderWindow window(
           sf::VideoMode(state.getBoard().getNCol() * 32 + 256,
                         state.getBoard().getNRow() * 32 + 32, 32),
-          "map");
+          "SLAY - RENDER");
       StateLayer layer(state, window);
       layer.initSurfaces(state);
+      state::Player player1;
+      player1.setName("Badisse");
+      state.addPlayer(&player1);
+      state::Player player2;
+      player2.setName("Nico");
+      state.addPlayer(&player2);
+      state::Player player3;
+      player3.setName("Hicham");
+      state.addPlayer(&player3);
+      state::Player player4;
+      player4.setName("Kaan");
+      state.addPlayer(&player4);
       while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -58,7 +70,7 @@ int main(int argc, char *argv[]) {
             window.close();
         }
         // render
-        layer.draw(window);
+        layer.draw(window, state);
       }
     } else {
       // std::cout << "Unknown command" << std::endl;

@@ -50,6 +50,8 @@ size_t State::addPlayer(Player *p) {
   return players.size();
 }
 
+Territory getTerritorySelected() {}
+
 State *const State::clone() {}
 
 bool const State::equals(const State &state1) {}
