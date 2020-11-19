@@ -687,7 +687,7 @@ umlclasslist parse_diagram(char *diafile) {
                     xmlNodePtr child = attribute->xmlChildrenNode;
                     if ( eq("direction", attrtype) ) {
                         xmlChar *tmptype = xmlGetProp(child, "val");
-                        if ( eq(tmptype, "0") ) {
+                        if ( eq(tmptype, "2") ) {
                             direction = 1;
                         }
                         else {
