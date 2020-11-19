@@ -18,6 +18,10 @@
 #include "dia2code.h"
 #include <errno.h>
 
+int indent_count;
+int indent_open_brace_on_newline;
+int generate_backup;
+
 char * d2c_indentstring = "   ";
 int d2c_indentposition = 0;
 
