@@ -10,13 +10,13 @@ bool const Cell::equals(const Cell &cell1) {}
 
 Cell *const Cell::clone() {}
 
-int Cell::getRow() {return row;}
+int Cell::getRow() { return this->row; }
 
-void Cell::setRow(int row) {this->row = row;}
+void Cell::setRow(int row) { this->row = row; }
 
-int Cell::getCol() {return col;}
+int Cell::getCol() { return this->col; }
 
-void Cell::setCol(int col) {this->col = col;}
+void Cell::setCol(int col) { this->col = col; }
 
 bool const Cell::isAccessible() {}
 

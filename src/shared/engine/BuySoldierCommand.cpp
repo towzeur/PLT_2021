@@ -1,14 +1,11 @@
 #include "BuySoldierCommand.h"
-#include "Engine.h"
-#include "State.h"
-#include "Soldier.h"
 #include <iostream>
 
 using namespace state;
 using namespace engine;
 using namespace std;
 
-BuySoldierCommand::BuySoldierCommand(Territory territory){
+BuySoldierCommand::BuySoldierCommand(state::Soldier& target,Territory territory){
     int savings = territory.getSavings();
     int soldierPrice = Soldier.getPrice();
 

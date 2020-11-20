@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     Territory tr;
 
     // getUid
-    // BOOST_CHECK(tr.getUid());
+    BOOST_CHECK_EQUAL(tr.getUid(), 1); // Second territory created: uid = 1
 
     // CapitalRow getter and setter
     tr.setCapitalRow(5);
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     Player pl;
 
     // getUid
-    //  BOOST_CHECK(pl.getUid());
+    BOOST_CHECK_EQUAL(pl.getUid(), 1); // Second player created: uid = 1
 
     // Name getter and setter
     std::string name = "Luffy";
@@ -133,6 +133,63 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     bd.resize(30, 30);
     BOOST_CHECK_EQUAL(bd.getNCol(), 30);
     BOOST_CHECK_EQUAL(bd.getNRow(), 30);
+  }
+
+  // AccessibleCell
+  {
+    AccessibleCell aCell;
+
+    aCell.setPlayerId(1);
+    BOOST_CHECK_EQUAL(aCell.getPlayerId(), 1);
+
+    aCell.setTerritoryId(2);
+    BOOST_CHECK_EQUAL(aCell.getTerritoryId(), 2);
+  }
+
+  // Cell
+  {
+    Cell cell;
+    cell.setRow(4);
+    BOOST_CHECK_EQUAL(cell.getRow(), 4);
+
+    cell.setCol(8);
+    BOOST_CHECK_EQUAL(cell.getCol(), 8);
+  }
+
+  // Entity
+  {
+    Entity e;
+
+    BOOST_CHECK(!e.isEmpty());
+    BOOST_CHECK(!e.isFacility());
+    BOOST_CHECK(!e.isSoldier());
+    BOOST_CHECK(!e.isTree());
+
+    BOOST_CHECK_EQUAL(e.getUid(), 1);
+
+    e.setAttack(1);
+    BOOST_CHECK_EQUAL(e.getAttack(), 1);
+
+    e.setDefense(2);
+    BOOST_CHECK_EQUAL(e.getDefense(), 2);
+
+    e.setIncome(0);
+    BOOST_CHECK_EQUAL(e.getIncome(), 0);
+  }
+
+  // InnaccessibleCell
+  {
+    InaccessibleCell iCell;
+
+    BOOST_CHECK(!iCell.isAccessible());
+  }
+
+  // Soldier
+  {
+    Soldier sld;
+
+    sld.setPA(1);
+    BOOST_CHECK_EQUAL(sld.getPA(), 1);
   }
 }
 

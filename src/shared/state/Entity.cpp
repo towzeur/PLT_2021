@@ -2,27 +2,57 @@
 
 using namespace state;
 
-bool const Entity::isEmpty() {}
+int Entity::instanceCount = 0;
 
-bool const Entity::isTree() {}
+Entity::Entity() { this->uid = instanceCount++; }
 
-bool const Entity::isFacility() {}
+Entity::~Entity() {}
 
-bool const Entity::isSoldier() {}
+bool const Entity::isEmpty() {
+  if (this->entityTypeId == EMPTY) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
-int Entity::getUid() {}
+bool const Entity::isTree() {
+  if (this->entityTypeId == TREE) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
-int Entity::getAttack() const {return attack;}
+bool const Entity::isFacility() {
+  if (this->entityTypeId == FACILITY) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
-void Entity::setAttack(int attack) {this->attack = attack;}
+bool const Entity::isSoldier() {
+  if (this->entityTypeId == SOLDIER) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
-int Entity::getDefense() const {return defense;}
+int Entity::getUid() { return this->uid; }
 
-void Entity::setDefense(int defense) {this->defense = defense;}
+int Entity::getAttack() const { return this->attack; }
 
-int Entity::getIncome() const {return income;}
+void Entity::setAttack(int attack) { this->attack = attack; }
 
-void Entity::setIncome(int income) {this->income = income;}
+int Entity::getDefense() const { return this->defense; }
+
+void Entity::setDefense(int defense) { this->defense = defense; }
+
+int Entity::getIncome() const { return this->income; }
+
+void Entity::setIncome(int income) { this->income = income; }
 
 int Entity::getSubTypeId() {}
 
