@@ -26,7 +26,7 @@ void Entity::setIncome(int income) {}
 
 int Entity::getSubTypeId() {}
 
-EntityTypeId const Entity::getEntityTypeId() {}
+EntityTypeId const Entity::getEntityTypeId() { return this->entityTypeId; }
 
 bool const Entity::equals(const Entity &e) {}
 
