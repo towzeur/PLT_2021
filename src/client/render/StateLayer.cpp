@@ -50,7 +50,7 @@ StateLayer::StateLayer(state::State &state, sf::RenderWindow &window,
 // Load a string in alertMessage
 void StateLayer::registerAlertMessage(std::string message) {
   // wrap text
-  int n = message.rfind(' ', 30);
+  unsigned int n = message.rfind(' ', 30);
   if (n != std::string::npos) {
     message.at(n) = '\n';
   }
@@ -169,7 +169,7 @@ bool StateLayer::printText(state::State &state) {
   std::queue<sf::Text> texts;
 
   // add text for players
-  for (int i = 0; i < state.getPlayers().size(); i++) {
+  for (unsigned int i = 0; i < state.getPlayers().size(); i++) {
     sf::Text player;
     player.setPosition(window.getSize().x - 200.f, i * 200.f);
     player.setFont(font);
