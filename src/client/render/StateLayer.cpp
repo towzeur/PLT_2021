@@ -73,7 +73,6 @@ void StateLayer::initSurfaces(state::State &state) {
   Surface map;
   map.load(pathTextureMap, sf::Vector2u(tileWidth, tileHeight),
            state.getBoard(), mapWidth, mapHeight, 0);
-
   Surface entity;
   entity.load(pathTextureEntity, sf::Vector2u(tileWidth, tileHeight),
               state.getBoard(), mapWidth, mapHeight, 1);
