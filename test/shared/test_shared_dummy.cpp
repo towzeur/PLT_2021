@@ -134,6 +134,17 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     BOOST_CHECK_EQUAL(bd.getNCol(), 30);
     BOOST_CHECK_EQUAL(bd.getNRow(), 30);
   }
+
+  // AccessibleCell
+  {
+    AccessibleCell aCell;
+
+    aCell.setPlayerId(1);
+    BOOST_CHECK_EQUAL(aCell.getPlayerId(), 1);
+
+    aCell.setTerritoryId(2);
+    BOOST_CHECK_EQUAL(aCell.getTerritoryId(), 2);
+  }
 }
 
 /* vim: set sw=2 sts=2 et : */
