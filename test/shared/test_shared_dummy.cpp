@@ -145,6 +145,16 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     aCell.setTerritoryId(2);
     BOOST_CHECK_EQUAL(aCell.getTerritoryId(), 2);
   }
+
+  // Cell
+  {
+    Cell cell;
+    cell.setRow(4);
+    BOOST_CHECK_EQUAL(cell.getRow(), 4);
+
+    cell.setCol(8);
+    BOOST_CHECK_EQUAL(cell.getCol(), 8);
+  }
 }
 
 /* vim: set sw=2 sts=2 et : */
