@@ -16,6 +16,8 @@ usage: client <command> [<args>]
     state       Test the State module
 
     render      Display state render
+
+    render2     Display state render v2
 )V0G0N";
 
 /* -------------------------------------------------------------------------- */
