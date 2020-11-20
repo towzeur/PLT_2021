@@ -6,7 +6,7 @@ Empty::Empty() {}
 
 Empty::~Empty() {}
 
-int Empty::getSubTypeId() {}
+int Empty::getSubTypeId() { return this->subEntityTypeId; }
 
 bool const Empty::equals(const Entity &e) {}
 
