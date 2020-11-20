@@ -2,7 +2,7 @@
 
 using namespace state;
 
-int AccessibleCell::getPlayerId() {}
+int AccessibleCell::getPlayerId() { return this->playerId; }
 
 void AccessibleCell::setPlayerId(int playerId) {}
 
