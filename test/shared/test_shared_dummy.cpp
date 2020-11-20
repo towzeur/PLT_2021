@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     Territory tr;
 
     // getUid
-    // BOOST_CHECK(tr.getUid());
+    BOOST_CHECK_EQUAL(tr.getUid(), 1); // Second territory created: uid = 1
 
     // CapitalRow getter and setter
     tr.setCapitalRow(5);
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     Player pl;
 
     // getUid
-    //  BOOST_CHECK(pl.getUid());
+    BOOST_CHECK_EQUAL(pl.getUid(), 1); // Second player created: uid = 1
 
     // Name getter and setter
     std::string name = "Luffy";
@@ -133,6 +133,17 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     bd.resize(30, 30);
     BOOST_CHECK_EQUAL(bd.getNCol(), 30);
     BOOST_CHECK_EQUAL(bd.getNRow(), 30);
+  }
+
+  // AccessibleCell
+  {
+    AccessibleCell aCell;
+
+    aCell.setPlayerId(1);
+    BOOST_CHECK_EQUAL(aCell.getPlayerId(), 1);
+
+    aCell.setTerritoryId(2);
+    BOOST_CHECK_EQUAL(aCell.getTerritoryId(), 2);
   }
 }
 

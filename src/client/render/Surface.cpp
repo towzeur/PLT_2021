@@ -33,6 +33,11 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
 
     for (unsigned int j = 0; j < nb_col; ++j) {
       // get the current tile type
+      if (sizeof(cells) != nb_col * nb_row * sizeof(state::Cell)) {
+        std::cout << "sizeof(cells) != nb_col * nb_row * sizeof(state::Cell)"
+                  << std::endl;
+        exit(EXIT_FAILURE);
+      }
       state::Cell cell = cells[i * nb_row + j];
       if (surfaceNb == 0) {
         if (!cell.isAccessible()) {

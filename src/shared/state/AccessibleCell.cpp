@@ -4,15 +4,17 @@ using namespace state;
 
 int AccessibleCell::getPlayerId() { return this->playerId; }
 
-void AccessibleCell::setPlayerId(int playerId) {}
+void AccessibleCell::setPlayerId(int playerId) { this->playerId = playerId; }
 
-int AccessibleCell::getTerritoryId() {}
+int AccessibleCell::getTerritoryId() { return this->territoryId; }
 
-void AccessibleCell::setTerritoryId(int territoryId) {}
+void AccessibleCell::setTerritoryId(int territoryId) {
+  this->territoryId = territoryId;
+}
 
-Entity AccessibleCell::getEntity() {}
+Entity AccessibleCell::getEntity() { return this->entity; }
 
-void AccessibleCell::setEntity(Entity entity) {}
+void AccessibleCell::setEntity(Entity entity) { this->entity = entity; }
 
 bool const AccessibleCell::equals(const Cell &cell1) {}
 
