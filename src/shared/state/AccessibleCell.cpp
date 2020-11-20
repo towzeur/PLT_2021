@@ -17,3 +17,5 @@ void AccessibleCell::setEntity(Entity entity) {}
 bool const AccessibleCell::equals(const Cell &cell1) {}
 
 Cell *const AccessibleCell::clone() {}
+
+bool const AccessibleCell::isAccessible() { return true; }
