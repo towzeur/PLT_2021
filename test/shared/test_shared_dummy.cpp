@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     Territory tr;
 
     // getUid
-    BOOST_CHECK_EQUAL(tr.getUid(), 0);
+    BOOST_CHECK_EQUAL(tr.getUid(), 1); // Second territory created: uid = 1
 
     // CapitalRow getter and setter
     tr.setCapitalRow(5);
@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     Player pl;
 
     // getUid
-    BOOST_CHECK_EQUAL(pl.getUid(), 0);
+    BOOST_CHECK_EQUAL(pl.getUid(), 1); // Second player created: uid = 1
 
     // Name getter and setter
     std::string name = "Luffy";
