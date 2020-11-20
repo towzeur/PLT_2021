@@ -155,6 +155,27 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     cell.setCol(8);
     BOOST_CHECK_EQUAL(cell.getCol(), 8);
   }
+
+  // Entity
+  {
+    Entity e;
+
+    BOOST_CHECK(!e.isEmpty());
+    BOOST_CHECK(!e.isFacility());
+    BOOST_CHECK(!e.isSoldier());
+    BOOST_CHECK(!e.isTree());
+
+    BOOST_CHECK_EQUAL(e.getUid(), 1);
+
+    e.setAttack(1);
+    BOOST_CHECK_EQUAL(e.getAttack(), 1);
+
+    e.setDefense(2);
+    BOOST_CHECK_EQUAL(e.getDefense(), 2);
+
+    e.setIncome(0);
+    BOOST_CHECK_EQUAL(e.getIncome(), 0);
+  }
 }
 
 /* vim: set sw=2 sts=2 et : */
