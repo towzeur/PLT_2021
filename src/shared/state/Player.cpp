@@ -2,6 +2,8 @@
 
 using namespace state;
 
+int Player::instanceCount = 0;
+
 Player::Player() { this->uid = instanceCount++; }
 
 Player::~Player() {}
