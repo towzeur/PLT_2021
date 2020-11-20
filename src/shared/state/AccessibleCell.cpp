@@ -2,7 +2,7 @@
 
 using namespace state;
 
-int AccessibleCell::getPlayerId() {}
+int AccessibleCell::getPlayerId() { return this->playerId; }
 
 void AccessibleCell::setPlayerId(int playerId) {}
 
@@ -17,3 +17,5 @@ void AccessibleCell::setEntity(Entity entity) {}
 bool const AccessibleCell::equals(const Cell &cell1) {}
 
 Cell *const AccessibleCell::clone() {}
+
+bool const AccessibleCell::isAccessible() { return true; }

@@ -17,3 +17,9 @@ void Cell::setRow(int row) {this->row = row;}
 int Cell::getCol() {return col;}
 
 void Cell::setCol(int col) {this->col = col;}
+
+bool const Cell::isAccessible() {}
+
+int Cell::getPlayerId() {}
+
+Entity Cell::getEntity() {}

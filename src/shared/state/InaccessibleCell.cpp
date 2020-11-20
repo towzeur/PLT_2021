@@ -2,7 +2,7 @@
 
 using namespace state;
 
-bool const InaccessibleCell::isAccessible() {}
+bool const InaccessibleCell::isAccessible() { return false; }
 
 bool const InaccessibleCell::equals(const Cell &cell1) {}
 

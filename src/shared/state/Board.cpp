@@ -27,6 +27,8 @@ int Board::getNCol() { return nCol; }
 
 int Board::getNRow() { return nRow; }
 
+std::vector<Cell> Board::getCells() { return this->cells; }
+
 Board *const Board::clone() {}
 
 bool const Board::equals(const Board &board1) {}
