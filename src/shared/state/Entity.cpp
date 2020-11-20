@@ -2,46 +2,32 @@
 
 using namespace state;
 
-bool const Entity::isEmpty(){
-    
-}
+bool const Entity::isEmpty() {}
 
-bool const Entity::isTree(){
-    
-}
+bool const Entity::isTree() {}
 
-bool const Entity::isFacility(){
-    
-}
+bool const Entity::isFacility() {}
 
-bool const Entity::isSoldier(){
-    
-}
+bool const Entity::isSoldier() {}
 
-int Entity::getUid() {
-    
-}
+int Entity::getUid() {}
 
-int Entity::getAttack() const {
-    
-}
+int Entity::getAttack() const {}
 
-void Entity::setAttack(int attack) {
-    
-}
+void Entity::setAttack(int attack) {}
 
-int Entity::getDefense() const {
-    
-}
+int Entity::getDefense() const {}
 
-void Entity::setDefense(int defense) {
-    
-}
+void Entity::setDefense(int defense) {}
 
-int Entity::getIncome() const {
-    
-}
+int Entity::getIncome() const {}
 
-void Entity::setIncome(int income) {
-    
-}
+void Entity::setIncome(int income) {}
+
+int Entity::getSubTypeId() {}
+
+EntityTypeId const Entity::getEntityTypeId() {}
+
+bool const Entity::equals(const Entity &e) {}
+
+Entity *const Entity::clone() {}

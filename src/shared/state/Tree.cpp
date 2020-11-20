@@ -6,7 +6,7 @@ Tree::Tree() {}
 
 Tree::~Tree() {}
 
-EntityTypeId const Tree::getTypeId() {}
+int Tree::getSubTypeId() {}
 
 bool const Tree::equals(const Entity &e) {}
 

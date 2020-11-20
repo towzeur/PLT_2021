@@ -6,7 +6,7 @@ Soldier::Soldier() {}
 
 Soldier::~Soldier() {}
 
-EntityTypeId const Soldier::getTypeId() {}
+int Soldier::getSubTypeId() {}
 
 bool const Soldier::equals(const Entity &e) {}
 
