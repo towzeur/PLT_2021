@@ -1,4 +1,4 @@
-#include BuySoldierCommand.h
+#include "BuySoldierCommand.h"
 #include <iostream>
 
 using namespace state;
