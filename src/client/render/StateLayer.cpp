@@ -12,32 +12,6 @@ using namespace render;
 using namespace std;
 using namespace state;
 
-unsigned int levelMap[] = {
-    0, 1, 1, 2, 2, 2, 1, 0, 0, 0, //-----------------------------------------
-    1, 1, 1, 1, 2, 0, 1, 1, 0, 0, //-----------------------------------------
-    0, 0, 1, 1, 1, 1, 1, 1, 1, 0, //-----------------------------------------
-    0, 0, 1, 1, 1, 1, 0, 1, 1, 0, //-----------------------------------------
-    0, 3, 3, 3, 0, 1, 1, 5, 5, 0, //-----------------------------------------
-    0, 0, 3, 1, 1, 1, 0, 5, 5, 0, //-----------------------------------------
-    0, 0, 1, 0, 1, 0, 1, 1, 1, 1, //-----------------------------------------
-    0, 1, 1, 1, 1, 1, 1, 0, 0, 0, //-----------------------------------------
-    0, 1, 1, 4, 4, 4, 4, 0, 0, 0, //-----------------------------------------
-    0, 1, 0, 0, 0, 0, 0, 0, 0, 0, //-----------------------------------------
-};
-
-unsigned int levelEntity[] = {
-    3, 3, 3, 3, 1, 3, 3, 3, 3, 3, //-----------------------------------------
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, //-----------------------------------------
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, //-----------------------------------------
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, //-----------------------------------------
-    3, 3, 3, 3, 3, 3, 3, 3, 1, 3, //-----------------------------------------
-    3, 3, 1, 3, 3, 3, 3, 3, 3, 3, //-----------------------------------------
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, //-----------------------------------------
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, //-----------------------------------------
-    3, 3, 3, 3, 1, 3, 3, 3, 3, 3, //-----------------------------------------
-    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, //-----------------------------------------
-};
-
 // Constructor
 StateLayer::StateLayer(state::State &state, sf::RenderWindow &window,
                        std::string env)
@@ -97,12 +71,12 @@ std::vector<std::unique_ptr<Surface>> &StateLayer::getSurfaces() {
 void StateLayer::initSurfaces(state::State &state) {
   // create and load a surface
   Surface map;
-  map.load(pathTextureMap, sf::Vector2u(tileWidth, tileHeight), levelMap,
-           mapWidth, mapHeight);
+  map.load(pathTextureMap, sf::Vector2u(tileWidth, tileHeight),
+           state.getBoard(), mapWidth, mapHeight, 0);
 
   Surface entity;
   entity.load(pathTextureEntity, sf::Vector2u(tileWidth, tileHeight),
-              levelEntity, mapWidth, mapHeight);
+              state.getBoard(), mapWidth, mapHeight, 1);
 
   // create a unique_pointer which point on a new instance of surface created
   // before
