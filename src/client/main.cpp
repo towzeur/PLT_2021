@@ -1,14 +1,13 @@
-#include "render.h"
-#include <SFML/Graphics.hpp>
+//#include <SFML/Graphics.hpp>
 #include <iostream>
-#include <state.h>
 #include <string.h>
 
-using namespace render;
+#include "client.h"
+#include "render.h"
+#include "state.h"
 
-/* ----------------------------------------------------------------------------
-                                GLOBAL VARIABLE
------------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------- */
+
 const char *HELP_MESSAGE = R"V0G0N(
 usage: client <command> [<args>]
 
@@ -19,16 +18,7 @@ usage: client <command> [<args>]
     render      Display state render
 )V0G0N";
 
-// const char* UNKNOWN_MESSAGE = "client: '?' is not a command. See 'command
-// --help'."
-
-/* ----------------------------------------------------------------------------
-                         check if SFML is working
------------------------------------------------------------------------------*/
-
-void testSFML() { sf::Texture texture; }
-
-/* --------------------------------------------------------------------------*/
+/* -------------------------------------------------------------------------- */
 
 int main(int argc, char *argv[]) {
   // parse arguments
@@ -36,12 +26,23 @@ int main(int argc, char *argv[]) {
     std::string arg1(argv[1]);
 
     if (arg1 == "hello") {
+      // -----------------------------------------------------------------------
+      //                                HELLO
+      // -----------------------------------------------------------------------
       std::cout << "Hello PLT !" << std::endl;
+
     } else if (arg1 == "state") {
+      // -----------------------------------------------------------------------
+      //                                RENDER
+      // -----------------------------------------------------------------------
       std::cout << "STATE" << std::endl;
 
       state::State state0();
+
     } else if (arg1 == "render") {
+      // -----------------------------------------------------------------------
+      //                                RENDER
+      // -----------------------------------------------------------------------
       std::cout << "RENDER" << std::endl;
 
       state::State state;
@@ -49,20 +50,18 @@ int main(int argc, char *argv[]) {
           sf::VideoMode(state.getBoard().getNCol() * 32 + 256,
                         state.getBoard().getNRow() * 32 + 32, 32),
           "SLAY - RENDER");
-      StateLayer layer(state, window);
+      render::StateLayer layer(state, window);
       layer.initSurfaces(state);
-      state::Player player1;
-      player1.setName("Badisse");
-      state.addPlayer(&player1);
-      state::Player player2;
-      player2.setName("Nico");
-      state.addPlayer(&player2);
-      state::Player player3;
-      player3.setName("Hicham");
-      state.addPlayer(&player3);
-      state::Player player4;
-      player4.setName("Kaan");
-      state.addPlayer(&player4);
+
+      // add a few player
+      std::string texts[] = {"Badisse", "Nico", "Hicham", "Kaan"};
+      state::Player p;
+      for (const std::string &text : texts) {
+        p = state::Player();
+        p.setName(text);
+        state.addPlayer(&p);
+      }
+
       while (window.isOpen()) {
         sf::Event event;
         while (window.pollEvent(event)) {
@@ -72,17 +71,25 @@ int main(int argc, char *argv[]) {
         // render
         layer.draw(window, state);
       }
+
+    } else if (arg1 == "render2") {
+      // -----------------------------------------------------------------------
+      //                               RENDER 2
+      // -----------------------------------------------------------------------
+
+      client::Client clt = client::Client(); // = client::Client();
+      clt.run();
+
     } else {
       // std::cout << "Unknown command" << std::endl;
     }
+
   } else {
+    // -------------------------------------------------------------------------
+    //                                  HELP
+    // -------------------------------------------------------------------------
     std::cout << HELP_MESSAGE << std::endl;
   }
 
-  // begin test
-  // testSFML();
-
-  // Exemple exemple;
-  // exemple.setX(53);
   return 0;
 }
