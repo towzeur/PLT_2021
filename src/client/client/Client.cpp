@@ -92,8 +92,8 @@ void Client::run() {
           std::cout << "Down" << std::endl;
           hm.initialize(++r, c, hexa_r);
           hm.update();
-          //} else if (event.key.code == sf::Keyboard::Enter) {
-          // std::cout << "OK" << std::endl;
+        } else if (event.key.code == sf::Keyboard::Enter) {
+          std::cout << "OK" << std::endl;
         } else if (event.key.code == sf::Keyboard::Add) {
           std::cout << "+" << std::endl;
           hm.initialize(r, c, ++hexa_r);
