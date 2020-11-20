@@ -183,6 +183,14 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
 
     BOOST_CHECK(!iCell.isAccessible());
   }
+
+  // Soldier
+  {
+    Soldier sld;
+
+    sld.setPA(1);
+    BOOST_CHECK_EQUAL(sld.getPA(), 1);
+  }
 }
 
 /* vim: set sw=2 sts=2 et : */

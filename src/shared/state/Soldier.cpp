@@ -12,6 +12,6 @@ bool const Soldier::equals(const Entity &e) {}
 
 Entity *const Soldier::clone() {}
 
-int Soldier::getPA() {}
+int Soldier::getPA() { return this->PA; }
 
-void Soldier::setPA(int PA) {}
+void Soldier::setPA(int PA) { this->PA = PA; }
