@@ -2,7 +2,7 @@
 
 using namespace state;
 
-Territory::Territory() : savings(0) {}
+Territory::Territory() : savings(0) { this->uid = instanceCount++; }
 
 Territory::~Territory() {}
 
