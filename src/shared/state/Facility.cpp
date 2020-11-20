@@ -6,7 +6,7 @@ Facility::Facility() {}
 
 Facility::~Facility() {}
 
-int Facility::getSubTypeId() {}
+int Facility::getSubTypeId() { return this->subEntityTypeId; }
 
 bool const Facility::equals(const Entity &e) {}
 
