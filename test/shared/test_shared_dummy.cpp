@@ -176,6 +176,13 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
     e.setIncome(0);
     BOOST_CHECK_EQUAL(e.getIncome(), 0);
   }
+
+  // InnaccessibleCell
+  {
+    InaccessibleCell iCell;
+
+    BOOST_CHECK(!iCell.isAccessible());
+  }
 }
 
 /* vim: set sw=2 sts=2 et : */
