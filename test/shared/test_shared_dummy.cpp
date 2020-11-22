@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
 
     // Playing getter and setter
     pl.setPlaying(true);
-    BOOST_CHECK(pl.getPlaying());
+    BOOST_CHECK_EQUAL(pl.getPlaying(), 1);
 
     // Status TO DO
   }
@@ -158,11 +158,6 @@ BOOST_AUTO_TEST_CASE(TestState) {
   {
     Entity e;
 
-    BOOST_CHECK(!e.isEmpty());
-    BOOST_CHECK(!e.isFacility());
-    BOOST_CHECK(!e.isSoldier());
-    BOOST_CHECK(!e.isTree());
-
     BOOST_CHECK_EQUAL(e.getUid(), 1);
 
     e.setAttack(1);
@@ -179,7 +174,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
   {
     InaccessibleCell iCell;
 
-    BOOST_CHECK(!iCell.isAccessible());
+    BOOST_CHECK_EQUAL(iCell.isAccessible(), 0);
   }
 
   // Soldier
