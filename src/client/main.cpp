@@ -1,6 +1,6 @@
-//#include <SFML/Graphics.hpp>
-#include <iostream>
+#include <iostream> // readlink
 #include <string.h>
+#include <unistd.h>
 
 #include "client.h"
 #include "render.h"
@@ -78,6 +78,13 @@ int main(int argc, char *argv[]) {
       // -----------------------------------------------------------------------
       //                               RENDER 2
       // -----------------------------------------------------------------------
+
+      char pBuf[256];
+      size_t len = sizeof(pBuf);
+      size_t bytes = readlink("/proc/self/exe", pBuf, len);
+      if (bytes >= 0 && bytes < len)
+        pBuf[bytes] = '\0';
+      std::cout << pBuf << std::endl;
 
       client::Client clt = client::Client(); // = client::Client();
       clt.run();
