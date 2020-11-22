@@ -67,6 +67,7 @@ void Board::load(const std::string &file) {
   */
 
   for (int i = 2; i < nRow * nCol + 2; i++) {
+
     // Inaccessible Cell : 000
     if (dataMap[i] == 000) {
       std::unique_ptr<state::InaccessibleCell> iCellPtr(
@@ -136,19 +137,19 @@ void Board::load(const std::string &file) {
           errorEntity = false;
         }
         // Knight Cell
-        else if (dataMap[i] == players[e] + 6) {
+        else if (dataMap[i] == players[e] + 7) {
           state::Soldier entity(SOLDIER, KNIGHT, 3, 3);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Spearman Cell
-        else if (dataMap[i] == players[e] + 6) {
+        else if (dataMap[i] == players[e] + 8) {
           state::Soldier entity(SOLDIER, SPEARMAN, 2, 2);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Peasant Cell
-        else if (dataMap[i] == players[e] + 6) {
+        else if (dataMap[i] == players[e] + 9) {
           state::Soldier entity(SOLDIER, PEASANT, 1, 1);
           aCellPtr->setEntity(entity);
           errorEntity = false;
@@ -166,6 +167,9 @@ void Board::load(const std::string &file) {
       }
 
       cells.push_back(std::move(aCellPtr));
+      // printf("isacc1: %d", cells[i]->isAccessible());
+    } else {
+      std::cout << "Error map.txt: accessibility" << std::endl;
     }
   }
 }
