@@ -4,9 +4,17 @@ using namespace state;
 
 Soldier::Soldier() {}
 
-Soldier::~Soldier() {}
+Soldier::Soldier(EntityTypeId entityTypeId, int subTypeId, int attack,
+                 int defense, int income)
+    : Entity() {
+  this->entityTypeId = entityTypeId;
+  this->subTypeId = subTypeId;
+  this->attack = attack;
+  this->defense = defense;
+  this->income = income;
+}
 
-int Soldier::getSubTypeId() { return this->subTypeId; }
+Soldier::~Soldier() {}
 
 void Soldier::setSubTypeId(SoldierTypeId typeId) { this->subTypeId = typeId; }
 

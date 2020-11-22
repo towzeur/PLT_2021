@@ -4,9 +4,17 @@ using namespace state;
 
 Facility::Facility() {}
 
-Facility::~Facility() {}
+Facility::Facility(EntityTypeId entityTypeId, int subTypeId, int attack,
+                   int defense, int income)
+    : Entity() {
+  this->entityTypeId = entityTypeId;
+  this->subTypeId = subTypeId;
+  this->attack = attack;
+  this->defense = defense;
+  this->income = income;
+}
 
-int Facility::getSubTypeId() { return this->subTypeId; }
+Facility::~Facility() {}
 
 void Facility::setSubTypeId(FacilityTypeId typeId) { this->subTypeId = typeId; }
 

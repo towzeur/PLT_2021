@@ -4,9 +4,17 @@ using namespace state;
 
 Tree::Tree() {}
 
-Tree::~Tree() {}
+Tree::Tree(EntityTypeId entityTypeId, int subTypeId, int attack, int defense,
+           int income)
+    : Entity() {
+  this->entityTypeId = entityTypeId;
+  this->subTypeId = subTypeId;
+  this->attack = attack;
+  this->defense = defense;
+  this->income = income;
+}
 
-int Tree::getSubTypeId() { return this->subTypeId; }
+Tree::~Tree() {}
 
 void Tree::setSubTypeId(TreeTypeId typeId) { this->subTypeId = typeId; }
 
