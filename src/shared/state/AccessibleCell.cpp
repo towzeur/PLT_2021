@@ -2,6 +2,15 @@
 
 using namespace state;
 
+AccessibleCell::AccessibleCell(){};
+
+AccessibleCell::AccessibleCell(int row, int col) : Cell() {
+  this->col = col;
+  this->row = row;
+}
+
+AccessibleCell::~AccessibleCell(){};
+
 int AccessibleCell::getPlayerId() { return this->playerId; }
 
 void AccessibleCell::setPlayerId(int playerId) { this->playerId = playerId; }

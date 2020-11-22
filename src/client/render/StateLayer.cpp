@@ -12,6 +12,9 @@ using namespace render;
 using namespace std;
 using namespace state;
 
+#define SURFACE_MAP 0
+#define SURFACE_ENTITY 1
+
 // Constructor
 StateLayer::StateLayer(state::State &state, sf::RenderWindow &window,
                        std::string env)
@@ -72,10 +75,12 @@ void StateLayer::initSurfaces(state::State &state) {
   // create and load a surface
   Surface map;
   map.load(pathTextureMap, sf::Vector2u(tileWidth, tileHeight),
-           state.getBoard(), mapWidth, mapHeight, 0);
+           state.getBoard(), state.getBoard().getNCol(),
+           state.getBoard().getNRow(), SURFACE_MAP);
   Surface entity;
   entity.load(pathTextureEntity, sf::Vector2u(tileWidth, tileHeight),
-              state.getBoard(), mapWidth, mapHeight, 1);
+              state.getBoard(), state.getBoard().getNCol(),
+              state.getBoard().getNRow(), SURFACE_ENTITY);
 
   // create a unique_pointer which point on a new instance of surface created
   // before
