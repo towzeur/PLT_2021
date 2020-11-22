@@ -8,7 +8,7 @@
 #define MAP_TEXT_OFFSET 2
 #define NEXT_PLAYER_TILECODE_OFFSET 10
 
-const int playersTileCodeTileCode[] = {100, 110, 120, 130, 140, 150, 160};
+const int playersTileCode[] = {100, 110, 120, 130, 140, 150, 160};
 
 const int entityTileCode[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
