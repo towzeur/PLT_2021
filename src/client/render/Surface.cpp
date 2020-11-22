@@ -5,8 +5,6 @@
 
 using namespace render;
 
-int zoom = 1;
-
 bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
                    state::Board &board, unsigned int nb_col,
                    unsigned int nb_row, int surfaceNb) {
@@ -32,7 +30,7 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
     unsigned int odd_offset = 0;
 
     if (i % 2 == 0)
-      odd_offset = tileSize.x / 2;
+      odd_offset = size.x / 2;
     for (unsigned int j = 0; j < nb_col; ++j) {
 
       std::unique_ptr<state::Cell> &cell = cells[i * nb_row + j];
