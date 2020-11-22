@@ -17,10 +17,8 @@ BOOST_AUTO_TEST_CASE(TestSFML) {
 BOOST_AUTO_TEST_CASE(TestRender) {
   {
     state::State state;
-    sf::RenderWindow window(sf::VideoMode(state.getBoard().getNCol() * 32 + 256,
-                                          state.getBoard().getNRow() * 32 + 32,
-                                          32),
-                            "SLAY - RENDER");
+    sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
+
     StateLayer sl(state, window);
 
     BOOST_CHECK_EQUAL(sl.getTileHeight(), 84);
