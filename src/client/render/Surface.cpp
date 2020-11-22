@@ -5,13 +5,16 @@
 
 using namespace render;
 
+int zoom = 1;
+
 bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
                    state::Board &board, unsigned int nb_col,
                    unsigned int nb_row, int surfaceNb) {
 
   int x_offset = 30;
   int y_offset = 30;
-  std::vector<state::Cell> cells = board.getCells();
+  sf::Vector2u size(tileSize.x * zoom, tileSize.y * zoom);
+  std::vector<std::unique_ptr<state::Cell>> &cells = board.getCells();
   state::Cell cell;
   int tileNumber;
   int playerId;
@@ -30,20 +33,15 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
 
     if (i % 2 == 0)
       odd_offset = tileSize.x / 2;
-
     for (unsigned int j = 0; j < nb_col; ++j) {
-      // get the current tile type
-      if (sizeof(cells) != nb_col * nb_row * sizeof(state::Cell)) {
-        std::cout << "sizeof(cells) != nb_col * nb_row * sizeof(state::Cell)"
-                  << std::endl;
-        exit(EXIT_FAILURE);
-      }
-      state::Cell cell = cells[i * nb_row + j];
+
+      std::unique_ptr<state::Cell> &cell = cells[i * nb_row + j];
+
       if (surfaceNb == 0) {
-        if (!cell.isAccessible()) {
+        if (!cell->isAccessible()) {
           tileNumber = 0;
         } else {
-          playerId = cell.getPlayerId();
+          playerId = cell->getPlayerId();
           if (playerId == 0) {
             tileNumber = 1;
           } else if (playerId == 1) {
@@ -61,10 +59,10 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
           }
         }
       } else if (surfaceNb == 1) {
-        if (!cell.isAccessible()) {
+        if (!cell->isAccessible()) {
           tileNumber = 0;
         } else {
-          entity = cell.getEntity();
+          entity = cell->getEntity();
           if (entity.isEmpty()) {
             tileNumber = 0;
           } else if (entity.isSoldier()) {
@@ -103,41 +101,41 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
 
       // set hex position
       hex[0].position =
-          sf::Vector2f(x_offset + odd_offset + tileSize.x + tileSize.x * j,
-                       y_offset + tileSize.y / 4 + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + size.x + size.x * j,
+                       y_offset + size.y / 4 + size.y * 3 / 4 * i);
       hex[1].position =
-          sf::Vector2f(x_offset + odd_offset + tileSize.x / 2 + tileSize.x * j,
-                       y_offset + 0 + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + size.x / 2 + size.x * j,
+                       y_offset + 0 + size.y * 3 / 4 * i);
       hex[2].position =
-          sf::Vector2f(x_offset + odd_offset + 0 + tileSize.x * j,
-                       y_offset + tileSize.y / 4 + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + 0 + size.x * j,
+                       y_offset + size.y / 4 + size.y * 3 / 4 * i);
       hex[3].position =
-          sf::Vector2f(x_offset + odd_offset + 0 + tileSize.x * j,
-                       y_offset + tileSize.y / 4 + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + 0 + size.x * j,
+                       y_offset + size.y / 4 + size.y * 3 / 4 * i);
       hex[4].position =
-          sf::Vector2f(x_offset + odd_offset + 0 + tileSize.x * j,
-                       y_offset + tileSize.y * 3 / 4 + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + 0 + size.x * j,
+                       y_offset + size.y * 3 / 4 + size.y * 3 / 4 * i);
       hex[5].position =
-          sf::Vector2f(x_offset + odd_offset + tileSize.x / 2 + tileSize.x * j,
-                       y_offset + tileSize.y + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + size.x / 2 + size.x * j,
+                       y_offset + size.y + size.y * 3 / 4 * i);
       hex[6].position =
-          sf::Vector2f(x_offset + odd_offset + tileSize.x / 2 + tileSize.x * j,
-                       y_offset + tileSize.y + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + size.x / 2 + size.x * j,
+                       y_offset + size.y + size.y * 3 / 4 * i);
       hex[7].position =
-          sf::Vector2f(x_offset + odd_offset + tileSize.x + tileSize.x * j,
-                       y_offset + tileSize.y * 3 / 4 + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + size.x + size.x * j,
+                       y_offset + size.y * 3 / 4 + size.y * 3 / 4 * i);
       hex[8].position =
-          sf::Vector2f(x_offset + odd_offset + tileSize.x + tileSize.x * j,
-                       y_offset + tileSize.y / 4 + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + size.x + size.x * j,
+                       y_offset + size.y / 4 + size.y * 3 / 4 * i);
       hex[9].position =
-          sf::Vector2f(x_offset + odd_offset + tileSize.x + tileSize.x * j,
-                       y_offset + tileSize.y / 4 + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + size.x + size.x * j,
+                       y_offset + size.y / 4 + size.y * 3 / 4 * i);
       hex[10].position =
-          sf::Vector2f(x_offset + odd_offset + 0 + tileSize.x * j,
-                       y_offset + tileSize.y / 4 + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + 0 + size.x * j,
+                       y_offset + size.y / 4 + size.y * 3 / 4 * i);
       hex[11].position =
-          sf::Vector2f(x_offset + odd_offset + tileSize.x / 2 + tileSize.x * j,
-                       y_offset + tileSize.y + tileSize.y * 3 / 4 * i);
+          sf::Vector2f(x_offset + odd_offset + size.x / 2 + size.x * j,
+                       y_offset + size.y + size.y * 3 / 4 * i);
 
       // texture coord
       hex[0].texCoords =

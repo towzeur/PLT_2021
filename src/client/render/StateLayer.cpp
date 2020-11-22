@@ -72,10 +72,12 @@ void StateLayer::initSurfaces(state::State &state) {
   // create and load a surface
   Surface map;
   map.load(pathTextureMap, sf::Vector2u(tileWidth, tileHeight),
-           state.getBoard(), mapWidth, mapHeight, 0);
+           state.getBoard(), state.getBoard().getNCol(),
+           state.getBoard().getNRow(), 0);
   Surface entity;
   entity.load(pathTextureEntity, sf::Vector2u(tileWidth, tileHeight),
-              state.getBoard(), mapWidth, mapHeight, 1);
+              state.getBoard(), state.getBoard().getNCol(),
+              state.getBoard().getNRow(), 1);
 
   // create a unique_pointer which point on a new instance of surface created
   // before
