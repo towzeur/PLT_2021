@@ -31,10 +31,10 @@ void Board::load(const std::string &file) {
 
   std::vector<int> dataMap;
   while (mapFile) {
-    std::string s;
-    if (!getline(mapFile, s, ','))
+    std::string tileCode;
+    if (!getline(mapFile, tileCode, ','))
       break;
-    dataMap.push_back(std::stoi(s));
+    dataMap.push_back(std::stoi(tileCode));
   }
   mapFile.close();
 

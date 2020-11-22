@@ -40,21 +40,7 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
           tileNumber = 0;
         } else {
           playerId = cell->getPlayerId();
-          if (playerId == 0) {
-            tileNumber = 1;
-          } else if (playerId == 1) {
-            tileNumber = 2;
-          } else if (playerId == 2) {
-            tileNumber = 3;
-          } else if (playerId == 3) {
-            tileNumber = 4;
-          } else if (playerId == 4) {
-            tileNumber = 5;
-          } else if (playerId == 5) {
-            tileNumber = 6;
-          } else if (playerId == 6) {
-            tileNumber = 7;
-          }
+          tileNumber = playerId + 1;
         }
       } else if (surfaceNb == 1) {
         if (!cell->isAccessible()) {
@@ -64,15 +50,7 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
           if (entity.isEmpty()) {
             tileNumber = 0;
           } else if (entity.isSoldier()) {
-            if (entity.getSubTypeId() == 1) {
-              tileNumber = 9;
-            } else if (entity.getSubTypeId() == 2) {
-              tileNumber = 8;
-            } else if (entity.getSubTypeId() == 3) {
-              tileNumber = 7;
-            } else if (entity.getSubTypeId() == 4) {
-              tileNumber = 6;
-            }
+            tileNumber = 10 - entity.getSubTypeId();
           } else if (entity.isFacility()) {
             if (entity.getSubTypeId() == 1) {
               tileNumber = 2;
@@ -82,11 +60,7 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
               tileNumber = 5;
             }
           } else if (entity.isTree()) {
-            if (entity.getSubTypeId() == 1) {
-              tileNumber = 3;
-            } else if (entity.getSubTypeId() == 2) {
-              tileNumber = 4;
-            }
+            tileNumber = entity.getSubTypeId() + 2;
           }
         }
       } else {
