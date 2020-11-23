@@ -1,8 +1,11 @@
 #include "Board.h"
-#include "state.h"
+
+//#include <fstream>
+//#include <iostream>
+//#include <memory>
+
 #include <fstream>
 #include <iostream>
-#include <memory>
 
 #define NB_PLAYER_MAX 6
 #define MAP_TEXT_OFFSET 2
@@ -28,22 +31,21 @@ void Board::resize(int nRow, int nCol) {
   this->nRow = nRow;
 }
 
-void Board::load(const std::string &file) {
-  std::ifstream mapFile(file);
-
-  if (!mapFile) {
-    std::cout << "Unable to open file map.txt" << std::endl;
-    exit(EXIT_FAILURE); // call system to stop
+void Board::load(const std::string &filename) {
+  std::ifstream ifs(filename, std::ifstream::in);
+  if (!ifs.is_open()) { //
+    std::cout << "Unable to open filename map.txt" << std::endl;
+    throw std::runtime_error("Could not open file")
   }
 
   std::vector<int> dataMap;
-  while (mapFile) {
+  while (ifs) {
     std::string tileCode;
-    if (!getline(mapFile, tileCode, ','))
+    if (!getline(ifs, tileCode, ','))
       break;
     dataMap.push_back(std::stoi(tileCode));
   }
-  mapFile.close();
+  ifs.close();
 
   this->nRow = dataMap[0];
   this->nCol = dataMap[1];
