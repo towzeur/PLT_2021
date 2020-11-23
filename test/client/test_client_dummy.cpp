@@ -10,4 +10,7 @@ BOOST_AUTO_TEST_CASE(TestSFML) {
   }
 }
 
+BOOST_AUTO_TEST_CASE(TestClient) {
+  { BOOST_CHECK(1); }
+}
 /* vim: set sw=2 sts=2 et : */
