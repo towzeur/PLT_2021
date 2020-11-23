@@ -9,9 +9,7 @@
 #define NEXT_PLAYER_TILECODE_OFFSET 10
 
 const int playersTileCode[] = {100, 110, 120, 130, 140, 150, 160};
-
 const int entityTileCode[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-
 const int entityAttack[] = {0, 1, 2, 3, 4};
 const int entityDefense[] = {0, 1, 2, 3, 4};
 
@@ -79,13 +77,13 @@ void Board::load(const std::string &file) {
 
     // Inaccessible Cell : 000
     if (dataMap[i] == 000) {
-      std::unique_ptr<state::InaccessibleCell> iCellPtr(new InaccessibleCell(
+      std::unique_ptr<InaccessibleCell> iCellPtr(new InaccessibleCell(
           (i - MAP_TEXT_OFFSET) / nCol, (i - MAP_TEXT_OFFSET) % nCol));
       cells.push_back(std::move(iCellPtr));
     }
     // Accessible Cell : 1XX
     else if (dataMap[i] < 200) {
-      std::unique_ptr<state::AccessibleCell> aCellPtr(new AccessibleCell(
+      std::unique_ptr<AccessibleCell> aCellPtr(new AccessibleCell(
           (i - MAP_TEXT_OFFSET) / nCol, (i - MAP_TEXT_OFFSET) % nCol));
 
       bool errorPlayer = true;
@@ -105,65 +103,61 @@ void Board::load(const std::string &file) {
       for (int e = 0; e < NB_PLAYER_MAX + 1; e++) {
         // Empty Cell
         if (dataMap[i] == playersTileCode[e]) {
-          state::Empty entity(EMPTY, VOID);
+          Empty entity(EMPTY, VOID);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Castle Cell
         else if (dataMap[i] == playersTileCode[e] + entityTileCode[1]) {
-          state::Facility entity(FACILITY, CASTLE);
+          Facility entity(FACILITY, CASTLE);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Capital Cell
         else if (dataMap[i] == playersTileCode[e] + entityTileCode[2]) {
-          state::Facility entity(FACILITY, CAPITAL);
+          Facility entity(FACILITY, CAPITAL);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Pine Cell
         else if (dataMap[i] == playersTileCode[e] + entityTileCode[3]) {
-          state::Tree entity(TREE, PINE);
+          Tree entity(TREE, PINE);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Palm Cell
         else if (dataMap[i] == playersTileCode[e] + entityTileCode[4]) {
-          state::Tree entity(TREE, PALM);
+          Tree entity(TREE, PALM);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Gravestone Cell
         else if (dataMap[i] == playersTileCode[e] + entityTileCode[5]) {
-          state::Facility entity(FACILITY, GRAVESTONE);
+          Facility entity(FACILITY, GRAVESTONE);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Baron Cell
         else if (dataMap[i] == playersTileCode[e] + entityTileCode[6]) {
-          state::Soldier entity(SOLDIER, BARON, entityAttack[4],
-                                entityDefense[4]);
+          Soldier entity(SOLDIER, BARON, entityAttack[4], entityDefense[4]);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Knight Cell
         else if (dataMap[i] == playersTileCode[e] + entityTileCode[7]) {
-          state::Soldier entity(SOLDIER, KNIGHT, entityAttack[3],
-                                entityDefense[3]);
+          Soldier entity(SOLDIER, KNIGHT, entityAttack[3], entityDefense[3]);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Spearman Cell
         else if (dataMap[i] == playersTileCode[e] + entityTileCode[8]) {
-          state::Soldier entity(SOLDIER, SPEARMAN, entityAttack[2],
-                                entityDefense[2]);
+          Soldier entity(SOLDIER, SPEARMAN, entityAttack[2], entityDefense[2]);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
         // Peasant Cell
         else if (dataMap[i] == playersTileCode[e] + entityTileCode[9]) {
-          state::Soldier entity(SOLDIER, PEASANT, entityAttack[1],
-                                entityDefense[0]);
+          Soldier entity(SOLDIER, PEASANT, entityAttack[1], entityDefense[0]);
           aCellPtr->setEntity(entity);
           errorEntity = false;
         }
