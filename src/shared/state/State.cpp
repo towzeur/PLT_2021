@@ -36,6 +36,8 @@ void State::setNbPlayers(int np) { nbPlayers = np; }
 
 Board &State::getBoard() { return this->board; }
 
+void State::setBoard(Board& board) { this->board = board; }
+
 std::vector<Territory> &State::getTerritories() { return territories; }
 
 size_t State::addTerritory(Territory *t) {

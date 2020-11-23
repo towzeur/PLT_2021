@@ -47,7 +47,10 @@ BOOST_AUTO_TEST_CASE(TestState) {
     turn = st.getTurn();
     BOOST_CHECK_EQUAL(st.nextTurn(), turn + 1);
 
-    // getBoard TO DO
+    // getBoard
+    //Board brd;
+    //st.setBoard(brd);
+    //BOOST_CHECK_EQUAL(st.getBoard(), brd);
 
     // getTerritoties and addTerritory
     int territoriesSize = st.getTerritories().size();
@@ -117,7 +120,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     pl.setPlaying(true);
     BOOST_CHECK(pl.getPlaying());
 
-    // Status TO DO
+    // Status
     PlayerStatus status = PLAYING;
     pl.setStatus(status);
     BOOST_CHECK_EQUAL(pl.getStatus(), PLAYING);
