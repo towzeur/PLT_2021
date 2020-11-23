@@ -54,7 +54,11 @@ int Entity::getIncome() const { return this->income; }
 
 void Entity::setIncome(int income) { this->income = income; }
 
-int Entity::getSubTypeId() {}
+int Entity::getSubTypeId() { return subTypeId; }
+
+void Entity::setEntityTypeId(EntityTypeId entityTypeId) {
+  this->entityTypeId = entityTypeId;
+}
 
 EntityTypeId const Entity::getEntityTypeId() { return this->entityTypeId; }
 

@@ -4,9 +4,19 @@ using namespace state;
 
 Soldier::Soldier() {}
 
+Soldier::Soldier(EntityTypeId entityTypeId, int subTypeId, int attack,
+                 int defense, int income)
+    : Entity() {
+  this->entityTypeId = entityTypeId;
+  this->subTypeId = subTypeId;
+  this->attack = attack;
+  this->defense = defense;
+  this->income = income;
+}
+
 Soldier::~Soldier() {}
 
-int Soldier::getSubTypeId() { return this->subEntityTypeId; }
+void Soldier::setSubTypeId(SoldierTypeId typeId) { this->subTypeId = typeId; }
 
 bool const Soldier::equals(const Entity &e) {}
 

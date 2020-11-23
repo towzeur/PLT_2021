@@ -9,9 +9,9 @@
 
 using namespace client;
 
-const unsigned int ROW = 15;   //= 15;
-const unsigned int COL = 18;   //= 20;
-const unsigned int BOX_R = 20; // 16;
+const unsigned int ROW = 22;
+const unsigned int COL = 30;
+const unsigned int BOX_R = 15;
 const unsigned int WIDTH = 600;
 const unsigned int HEIGHT = 600;
 

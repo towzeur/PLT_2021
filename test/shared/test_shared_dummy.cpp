@@ -1,12 +1,13 @@
 #include "../../src/shared/state.h"
 #include <boost/test/unit_test.hpp>
+#include <fstream>
 #include <iostream>
 
 using namespace state;
 
 BOOST_AUTO_TEST_CASE(TestStaticAssert) { BOOST_CHECK(1); }
 
-BOOST_AUTO_TEST_CASE(TestExemple) {
+BOOST_AUTO_TEST_CASE(TestState) {
 
   // State
   {
@@ -123,16 +124,13 @@ BOOST_AUTO_TEST_CASE(TestExemple) {
   {
     Board bd;
 
-    // Board() constructor and getNCol, getNRow
-    int nc = bd.getNCol();
-    int nr = bd.getNRow();
-    BOOST_CHECK_EQUAL(nc, 50);
-    BOOST_CHECK_EQUAL(nr, 50);
-
     // resize
     bd.resize(30, 30);
     BOOST_CHECK_EQUAL(bd.getNCol(), 30);
     BOOST_CHECK_EQUAL(bd.getNRow(), 30);
+
+    // bd.load("testMap.txt");
+    //    BOOST_CHECK_EQUAL(bd.getNCol(), 3);
   }
 
   // AccessibleCell
