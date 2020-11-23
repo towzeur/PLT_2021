@@ -118,6 +118,10 @@ BOOST_AUTO_TEST_CASE(TestState) {
     BOOST_CHECK(pl.getPlaying());
 
     // Status TO DO
+    PlayerStatus status = PLAYING;
+    pl.setStatus(status);
+    BOOST_CHECK_EQUAL(pl.getStatus(), PLAYING);
+
   }
 
   // Board
@@ -178,6 +182,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
   // InnaccessibleCell
   {
     InaccessibleCell iCell;
+    Cell c;
 
     BOOST_CHECK(!iCell.isAccessible());
   }
