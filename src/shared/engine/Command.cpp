@@ -8,3 +8,5 @@ CommandTypeId Command::getCommandTypeId() const { return this->commandTypeId; }
 
 void Command::setCommandTypeId(CommandTypeId commandTypeId){ this->commandTypeId = commandTypeId; }
 
+const state::PlayerStatus& Command::getCurrentPlayerStatus() const{ return this->currentPlayerStatus; }
+
