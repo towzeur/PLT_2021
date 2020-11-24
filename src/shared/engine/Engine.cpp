@@ -25,6 +25,9 @@ void Engine::init() {
     std::cerr << e.what() << '\n';
     this->currentState.getBoard().load("res/map.txt");
   }
+
+  this->currentState.setTurn(1);
+  this->currentState.getPlayers()[0].setStatus(state::PLAYING);
 }
 
 void Engine::setCurrentState(state::State currentState) {
