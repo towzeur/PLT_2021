@@ -10,3 +10,5 @@ Engine::Engine() {}
 Engine::~Engine() {}
 
 state::State &Engine::getState() { return this->currentState; }
+
+Json::Value Engine::getRecord() { return this->record; }

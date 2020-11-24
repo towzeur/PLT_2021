@@ -199,6 +199,7 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   {
     Engine ngine;
     ngine.getState();
+    ngine.getRecord();
   }
 }
 
