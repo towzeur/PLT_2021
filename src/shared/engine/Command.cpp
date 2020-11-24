@@ -10,3 +10,5 @@ void Command::setCommandTypeId(CommandTypeId commandTypeId){ this->commandTypeId
 
 const state::PlayerStatus& Command::getCurrentPlayerStatus() const{ return this->currentPlayerStatus; }
 
+void Command::setCurrentPlayerStatus(const state::PlayerStatus& currentPlayerStatus){ this->currentPlayerStatus=currentPlayerStatus; }
+
