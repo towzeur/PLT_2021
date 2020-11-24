@@ -48,12 +48,6 @@ int main(int argc, char *argv[]) {
       std::cout << "RENDER" << std::endl;
 
       state::State state;
-      sf::RenderWindow window(
-          sf::VideoMode(state.getBoard().getNCol() * 32 + 256,
-                        state.getBoard().getNRow() * 32 + 32, 32),
-          "SLAY - RENDER");
-      render::StateLayer layer(state, window);
-      layer.initSurfaces(state);
 
       // add a few player
       std::string texts[] = {"Badisse", "Nico", "Hicham", "Kaan"};
@@ -63,6 +57,17 @@ int main(int argc, char *argv[]) {
         p.setName(text);
         state.addPlayer(&p);
       }
+
+      try {
+        state.getBoard().load("../res/map.txt");
+      } catch (const std::exception &e) {
+        std::cerr << e.what() << '\n';
+        state.getBoard().load("res/map.txt");
+      }
+
+      sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
+      render::StateLayer layer(state, window);
+      layer.initSurfaces(state);
 
       while (window.isOpen()) {
         sf::Event event;
