@@ -196,7 +196,10 @@ BOOST_AUTO_TEST_CASE(TestState) {
 BOOST_AUTO_TEST_CASE(TestEngine) {
 
   // Engine
-  { Engine ngine; }
+  {
+    Engine ngine;
+    ngine.getState();
+  }
 }
 
 /* vim: set sw=2 sts=2 et : */

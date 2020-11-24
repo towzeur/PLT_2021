@@ -8,3 +8,5 @@ using namespace engine;
 Engine::Engine() {}
 
 Engine::~Engine() {}
+
+state::State &Engine::getState() { return this->currentState; }
