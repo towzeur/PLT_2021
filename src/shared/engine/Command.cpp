@@ -6,4 +6,5 @@ using namespace engine;
 
 CommandTypeId Command::getCommandTypeId() const { return this->commandTypeId; }
 
-void Command::setCommandTypeId(CommandTypeId commandTypeId){ this->commandTypeId = commandTypeId; };
+void Command::setCommandTypeId(CommandTypeId commandTypeId){ this->commandTypeId = commandTypeId; }
+
