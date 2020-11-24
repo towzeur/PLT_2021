@@ -198,6 +198,7 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // Engine
   {
     Engine ngine;
+    ngine.init(); // To do (issue with file read ?)
     State st;
     ngine.setCurrentState(st);
     ngine.getCurrentState();
