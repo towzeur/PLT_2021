@@ -11,3 +11,9 @@ void Observable::notifyUpdating (){
         Observer->engineUpdating();
     }
 }
+
+void Observable::notifyUpdated (){
+    for(auto Observer : observers){
+        Observer->engineUpdated();
+    }
+}
