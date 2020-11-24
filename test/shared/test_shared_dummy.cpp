@@ -201,6 +201,8 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     State st;
     ngine.setCurrentState(st);
     ngine.getCurrentState();
+    Json::Value record;
+    ngine.setRecord(record);
     ngine.getRecord();
   }
 }
