@@ -1,24 +1,50 @@
-#include "Board.h"
 
-//#include <fstream>
-//#include <iostream>
-//#include <memory>
+#include "Board.h"
+#include "AccessibleCell.h"
+#include "InaccessibleCell.h"
+
+#include "Empty.h"
+#include "Facility.h"
+#include "Soldier.h"
+#include "Tree.h"
 
 #include <fstream>
 #include <iostream>
+#include <sstream> // stringstream
+
+using namespace state;
+
+// -----------------------------------------------------------------------------
 
 #define NB_PLAYER_MAX 6
 #define MAP_TEXT_OFFSET 2
 #define NEXT_PLAYER_TILECODE_OFFSET 10
+#define MAP_TXT_SEP ','
 
-const int playersTileCode[] = {100, 110, 120, 130, 140, 150, 160};
-const int entityTileCode[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-const int entityAttack[] = {0, 1, 2, 3, 4};
-const int entityDefense[] = {0, 1, 2, 3, 4};
+const int ENTITY_ATTACK[5] = {0, 1, 2, 3, 4};
+const int ENTITY_DEFENSE[5] = {0, 1, 2, 3, 4};
 
-using namespace state;
+enum TOKENS {
+  TOKEN_VOID = 0,
+  TOKEN_FACILITY_CASTLE = 1,
+  TOKEN_FACILITY_CAPITAL = 2,
+  TOKEN_TREE_PINE = 3,
+  TOKEN_TREE_PALM = 4,
+  TOKEN_SOLIDER_GRAVESTONE = 5,
+  TOKEN_SOLIDER_BARON = 6,
+  TOKEN_SOLIDER_KNIGHT = 7,
+  TOKEN_SOLIDER_SPEARMAN = 8,
+  TOKEN_SOLIDER_PEASANT = 9
+};
 
-Board::Board() : nRow(20), nCol(20) {}
+// -----------------------------------------------------------------------------
+
+Board::Board() {}
+
+Board::Board(int nRow, int nCol) {
+  this->nRow = nRow;
+  this->nCol = nCol;
+}
 
 Board::Board(const Board &board1) {}
 
@@ -29,158 +55,150 @@ void Board::operator=(const Board &board1) {}
 void Board::resize(int nRow, int nCol) {
   this->nCol = nCol;
   this->nRow = nRow;
+  // set up cells vector
+  cells.clear();
+  // cells.resize(nCol * nRow);
 }
 
+/**
+ * @brief
+ *
+ * /* tileCode : ABCD
+ *
+ *  - A => accessiblity:
+ *          - 0 = inaccessible
+ *          - 1 = accessible
+ *
+ * - B => player:
+ *          - 0 (player id) = neutral
+ *          - 1 (player id) = player 1
+ *          - ...
+ *          - 6 (player id) = player 6
+ *
+ * - C => Entity:
+ *          - 0 = VOID
+ *          - 1 = CASTLE
+ *          - 2 = CAPITAL
+ *          - 3 = PINE
+ *          - 4 = PALM
+ *          - 5 = GRAVESTONE
+ *          - 6 = BARON
+ *          - 7 = KNIGHT
+ *          - 8 = SPEARMAN
+ *          - 9 = PEASANT
+ *
+ * @param token
+ */
+std::unique_ptr<Cell> detokenize(std::string token) {
+  int a = std::stoi(token.substr(0, 1));
+  int b = std::stoi(token.substr(1, 1));
+  int c = std::stoi(token.substr(2, 1));
+
+  // if the cell is inacessible
+  if (a == 0) {
+    std::cout << "... ";
+    return std::unique_ptr<Cell>(new InaccessibleCell());
+    // return std::make_unique((Cell)InaccessibleCell()) // C++14
+  }
+
+  // cell is accessible
+  std::cout << a << b << c << " ";
+  AccessibleCell *acell = new AccessibleCell();
+  acell->setPlayerId(b);
+
+  // parse c : entity
+  Entity entity;
+  switch (c) {
+  case TOKEN_VOID:
+    entity = (Entity)Empty(EMPTY, VOID);
+    break;
+  case TOKEN_FACILITY_CASTLE:
+    entity = (Entity)Facility(FACILITY, CASTLE);
+    break;
+  case TOKEN_FACILITY_CAPITAL:
+    entity = (Entity)Facility(FACILITY, CAPITAL);
+    break;
+  case TOKEN_TREE_PINE:
+    entity = (Entity)Tree(TREE, PINE);
+    break;
+  case TOKEN_TREE_PALM:
+    entity = (Entity)Tree(TREE, PALM);
+    break;
+  case TOKEN_SOLIDER_GRAVESTONE:
+    entity = (Entity)Soldier(FACILITY, GRAVESTONE);
+    break;
+  case TOKEN_SOLIDER_BARON:
+    entity =
+        (Entity)Soldier(SOLDIER, BARON, ENTITY_ATTACK[4], ENTITY_DEFENSE[4]);
+    break;
+  case TOKEN_SOLIDER_KNIGHT:
+    entity =
+        (Entity)Soldier(SOLDIER, KNIGHT, ENTITY_ATTACK[3], ENTITY_DEFENSE[3]);
+    break;
+  case TOKEN_SOLIDER_SPEARMAN:
+    entity =
+        (Entity)Soldier(SOLDIER, SPEARMAN, ENTITY_ATTACK[2], ENTITY_DEFENSE[2]);
+    break;
+  case TOKEN_SOLIDER_PEASANT:
+    entity =
+        (Entity)Soldier(SOLDIER, PEASANT, ENTITY_ATTACK[1], ENTITY_DEFENSE[0]);
+    break;
+  default:
+    std::cout << "default\n";
+    break;
+  }
+  acell->setEntity(entity);
+
+  return std::unique_ptr<Cell>(acell);
+}
+
+void tokenize(std::string token) {}
+
 void Board::load(const std::string &filename) {
-  std::ifstream ifs(filename, std::ifstream::in);
-  if (!ifs.is_open()) { //
-    std::cout << "Unable to open filename map.txt" << std::endl;
-    throw std::runtime_error("Could not open file")
+
+  // Create the map input file stream
+  std::ifstream ifs(filename);
+  int n_row = 0, n_col = 0;
+  std::string line, tmp_str;
+
+  // check if the file is correctly open
+  if (!ifs.is_open()) {
+    throw std::runtime_error("Unable to open filename map.txt");
   }
 
-  std::vector<int> dataMap;
-  while (ifs) {
-    std::string tileCode;
-    if (!getline(ifs, tileCode, ','))
-      break;
-    dataMap.push_back(std::stoi(tileCode));
+  // read the first line : n_row, n_col
+  if (ifs.good()) {                  // check if no error flag are set
+    std::getline(ifs, line);         // extract the first line
+    std::stringstream sstream(line); // create a stringstream from line
+    // read row
+    std::getline(sstream, tmp_str, MAP_TXT_SEP);
+    n_row = std::stoi(tmp_str);
+    // read n_col
+    std::getline(sstream, tmp_str, MAP_TXT_SEP);
+    n_col = std::stoi(tmp_str);
   }
+  resize(n_row, n_col);
+  std::cout << n_row << " " << n_col << std::endl;
+
+  // read each line
+  int r = 0, c = 0, index;
+  std::unique_ptr<state::Cell> cell_ptr;
+
+  for (r = 0; r < n_row; ++r) {
+    // get line
+    std::getline(ifs, line);
+    std::stringstream sstream(line);
+    // loop through str token
+    for (c = 0; c < n_col; ++c) {
+      std::getline(sstream, tmp_str, MAP_TXT_SEP);
+      index = c + n_col * r;
+      cell_ptr = detokenize(tmp_str);
+      cells.push_back(std::move(cell_ptr));
+    }
+    std::cout << std::endl;
+  }
+
   ifs.close();
-
-  this->nRow = dataMap[0];
-  this->nCol = dataMap[1];
-
-  /* tileCode : ABCD
-
-   - A => accessiblity:
-            - 0 = inaccessible
-            - 1 = accessible
-
-   - B => player:
-            - 0 (player id) = neutral
-            - 1 (player id) = player 1
-            - ...
-            - 6 (player id) = player 6
-
-   - C => Entity:
-            - 0 = VOID
-            - 1 = CASTLE
-            - 2 = CAPITAL
-            - 3 = PINE
-            - 4 = PALM
-            - 5 = GRAVESTONE
-            - 6 = BARON
-            - 7 = KNIGHT
-            - 8 = SPEARMAN
-            - 9 = PEASANT
-  */
-
-  for (int i = MAP_TEXT_OFFSET; i < nRow * nCol + MAP_TEXT_OFFSET; i++) {
-
-    // Inaccessible Cell : 000
-    if (dataMap[i] == 000) {
-      std::unique_ptr<InaccessibleCell> iCellPtr(new InaccessibleCell(
-          (i - MAP_TEXT_OFFSET) / nCol, (i - MAP_TEXT_OFFSET) % nCol));
-      cells.push_back(std::move(iCellPtr));
-    }
-    // Accessible Cell : 1XX
-    else if (dataMap[i] < 200) {
-      std::unique_ptr<AccessibleCell> aCellPtr(new AccessibleCell(
-          (i - MAP_TEXT_OFFSET) / nCol, (i - MAP_TEXT_OFFSET) % nCol));
-
-      bool errorPlayer = true;
-      for (int p = 0; p < NB_PLAYER_MAX + 1; p++) {
-        if (dataMap[i] >= playersTileCode[p] &&
-            dataMap[i] < playersTileCode[p] + NEXT_PLAYER_TILECODE_OFFSET) {
-          aCellPtr->setPlayerId(p);
-          errorPlayer = false;
-        }
-      }
-      if (errorPlayer) {
-        std::cout << "Error map.txt: player nb" << std::endl;
-        exit(EXIT_FAILURE);
-      }
-
-      bool errorEntity = true;
-      for (int e = 0; e < NB_PLAYER_MAX + 1; e++) {
-        // Empty Cell
-        if (dataMap[i] == playersTileCode[e]) {
-          Empty entity(EMPTY, VOID);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-        // Castle Cell
-        else if (dataMap[i] == playersTileCode[e] + entityTileCode[1]) {
-          Facility entity(FACILITY, CASTLE);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-        // Capital Cell
-        else if (dataMap[i] == playersTileCode[e] + entityTileCode[2]) {
-          Facility entity(FACILITY, CAPITAL);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-        // Pine Cell
-        else if (dataMap[i] == playersTileCode[e] + entityTileCode[3]) {
-          Tree entity(TREE, PINE);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-        // Palm Cell
-        else if (dataMap[i] == playersTileCode[e] + entityTileCode[4]) {
-          Tree entity(TREE, PALM);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-        // Gravestone Cell
-        else if (dataMap[i] == playersTileCode[e] + entityTileCode[5]) {
-          Facility entity(FACILITY, GRAVESTONE);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-        // Baron Cell
-        else if (dataMap[i] == playersTileCode[e] + entityTileCode[6]) {
-          Soldier entity(SOLDIER, BARON, entityAttack[4], entityDefense[4]);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-        // Knight Cell
-        else if (dataMap[i] == playersTileCode[e] + entityTileCode[7]) {
-          Soldier entity(SOLDIER, KNIGHT, entityAttack[3], entityDefense[3]);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-        // Spearman Cell
-        else if (dataMap[i] == playersTileCode[e] + entityTileCode[8]) {
-          Soldier entity(SOLDIER, SPEARMAN, entityAttack[2], entityDefense[2]);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-        // Peasant Cell
-        else if (dataMap[i] == playersTileCode[e] + entityTileCode[9]) {
-          Soldier entity(SOLDIER, PEASANT, entityAttack[1], entityDefense[0]);
-          aCellPtr->setEntity(entity);
-          errorEntity = false;
-        }
-      }
-      if (errorEntity) {
-        std::cout << "Error map.txt: entity" << std::endl;
-        exit(EXIT_FAILURE);
-      }
-
-      if (dataMap[i] >= playersTileCode[1]) {
-        aCellPtr->getEntity().setIncome(2);
-      } else {
-        aCellPtr->getEntity().setIncome(0);
-      }
-
-      cells.push_back(std::move(aCellPtr));
-      // printf("isacc1: %d", cells[i]->isAccessible());
-    } else {
-      std::cout << "Error map.txt: accessibility" << std::endl;
-    }
-  }
 }
 
 Cell *const Board::get(int r, int c) {}
