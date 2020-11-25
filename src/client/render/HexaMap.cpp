@@ -92,10 +92,28 @@ void HexaMap::fill_vertex(int r, int c, sf::Color col) {
   }
 }
 
-void HexaMap::change_color(int r, int c, sf::Color col) {
+void HexaMap::hex_set_color(int r, int c, sf::Color col) {
   int idx = 8 * (r * n_col + c);
   for (int i = 0; i < 8; i++) {
     m_vertices[idx + i].color = col;
+  }
+}
+
+void HexaMap::hex_set_transparency(int r, int c, int a) {
+  int idx = 8 * (r * n_col + c);
+  for (int i = 0; i < 8; i++) {
+    m_vertices[idx + i].color.a = a;
+  }
+}
+void HexaMap::hex_hide(int r, int c) { hex_set_transparency(r, c, 0); }
+
+void HexaMap::hex_show(int r, int c) { hex_set_transparency(r, c, 255); }
+
+void HexaMap::hex_toggle_transparency(int r, int c) {
+  if (m_vertices[8 * (r * n_col + c)].color.a == 0) {
+    hex_show(r, c);
+  } else {
+    hex_hide(r, c);
   }
 }
 

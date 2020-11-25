@@ -141,7 +141,8 @@ void Client::run() {
           if ((r_click >= 0 && r_click < hm.getN_row()) &&
               (c_click >= 0 && c_click < hm.getN_col())) {
             std::cout << "!" << std::endl;
-            hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
+            // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
+            hm.hex_toggle_transparency(r_click, c_click);
           }
         } else
           // std::cout << std::endl;
