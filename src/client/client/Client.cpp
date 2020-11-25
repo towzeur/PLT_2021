@@ -11,9 +11,9 @@ using namespace client;
 
 const unsigned int ROW = 22;
 const unsigned int COL = 30;
-const unsigned int BOX_R = 15;
-const unsigned int WIDTH = 600;
-const unsigned int HEIGHT = 600;
+const unsigned int BOX_R = 14;
+const unsigned int WIDTH = 800;
+const unsigned int HEIGHT = 580;
 
 Client::Client() {}
 
@@ -23,7 +23,7 @@ void Client::run() {
   std::cout << std::endl;
 
   sf::ContextSettings settings;
-  settings.antialiasingLevel = 8;
+  // settings.antialiasingLevel = 8;
 
   sf::RenderWindow window({WIDTH, HEIGHT}, "Hexagons", sf::Style::Default,
                           settings);
@@ -34,7 +34,23 @@ void Client::run() {
   // window.setView(view);
   // view.setRotation(20.f);
 
-  // float fps;
+  // ---------------------------------------------------------------------------
+  //                                BACKGROUND
+  // ---------------------------------------------------------------------------
+  sf::Texture texture;
+  if (!texture.loadFromFile("res/texture/skins/background.bmp")) {
+    // error...
+    exit(1);
+  }
+  texture.setRepeated(true);
+
+  sf::Sprite sprite;
+  sprite.setTexture(texture);
+  sprite.setTextureRect(sf::IntRect(0, 0, WIDTH, HEIGHT));
+
+  // ---------------------------------------------------------------------------
+  //                                    FPS
+  // ---------------------------------------------------------------------------
   int frame = 0;
   sf::Clock clock;
   sf::Time time_curr; //, time_prev = clock.getElapsedTime();
@@ -51,6 +67,7 @@ void Client::run() {
   text.setCharacterSize(30); // in pixel !
   text.setFillColor(sf::Color::Yellow);
   // text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+  // ---------------------------------------------------------------------------
 
   render::HexaMap hm = render::HexaMap(ROW, COL, BOX_R);
   hm.initialize();
@@ -62,7 +79,6 @@ void Client::run() {
   /* -------------------------------------------------- */
 
   while (window.isOpen()) {
-
     // event loop
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -157,9 +173,10 @@ void Client::run() {
     );
     */
 
-    window.clear(sf::Color::Black);
+    window.clear(sf::Color::Red);
     // DRAW : start -------------------------------------------------------
 
+    window.draw(sprite); // background
     window.draw(hm);
     window.draw(text);
     // hm.draw_grid(window);
