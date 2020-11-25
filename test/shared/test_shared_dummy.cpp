@@ -1,9 +1,11 @@
+#include "../../src/shared/engine.h"
 #include "../../src/shared/state.h"
 #include <boost/test/unit_test.hpp>
 #include <fstream>
 #include <iostream>
 
 using namespace state;
+using namespace engine;
 
 BOOST_AUTO_TEST_CASE(TestStaticAssert) { BOOST_CHECK(1); }
 
@@ -196,6 +198,16 @@ BOOST_AUTO_TEST_CASE(TestState) {
 
     sld.setPA(1);
     BOOST_CHECK_EQUAL(sld.getPA(), 1);
+  }
+}
+
+BOOST_AUTO_TEST_CASE(TestEngine) {
+
+  // Engine
+  {
+    Engine ngine;
+    ngine.getCurrentState();
+    ngine.getRecord();
   }
 }
 

@@ -58,7 +58,13 @@ int main(int argc, char *argv[]) {
         state.addPlayer(&p);
       }
 
-      state.getBoard().load("res/map.txt");
+      try {
+        state.getBoard().load("../res/map.txt");
+      } catch (const std::exception &e) {
+        std::cerr << e.what() << '\n';
+        state.getBoard().load("res/map.txt");
+      }
+
       sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
       render::StateLayer layer(state, window);
       layer.initSurfaces(state);
