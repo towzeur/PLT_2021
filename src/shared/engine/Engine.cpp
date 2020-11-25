@@ -39,3 +39,9 @@ state::State &Engine::getCurrentState() { return this->currentState; }
 void Engine::setRecord(Json::Value record) { this->record = record; }
 
 Json::Value Engine::getRecord() { return this->record; }
+
+void Engine::addCommand(std::unique_ptr<Command> ptr_cmd) {
+  Json::Value newCommand = ptr_cmd->serialize();
+  record["CommandArray"][record["Size"].asUInt()] = newCommand;
+  record["Size"] = record["Size"].asUInt() + 1;
+}
