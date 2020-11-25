@@ -14,10 +14,10 @@ Tree::Tree(EntityTypeId entityTypeId, int subTypeId, int attack, int defense,
   this->income = income;
 }
 
+Tree::Tree (const Tree& tree1){}
+
 Tree::~Tree() {}
 
 void Tree::setSubTypeId(TreeTypeId typeId) { this->subTypeId = typeId; }
 
-bool const Tree::equals(const Entity &e) {}
-
-Entity *const Tree::clone() {}
+bool const Tree::operator==(const Entity& e) {}
