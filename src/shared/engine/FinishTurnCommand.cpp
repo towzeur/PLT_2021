@@ -7,4 +7,4 @@ using namespace state;
 using namespace std;
 
 
-FinishTurnCommand::FinishTurnCommand (){ Command::setCommandTypeId(FINISH_TURN); }
+FinishTurnCommand::FinishTurnCommand (){ Command::commandTypeId=FINISH_TURN; }
