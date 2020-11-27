@@ -206,8 +206,16 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     ngine.setRecord(record);
     ngine.getRecord();
     // To do when other classes are coded
-    // FinishTurnCommand *finish = new FinishTurnCommand();
-    //  ngine.addCommand(std::unique_ptr<Command>(finish));
+    Command *finish = new FinishTurnCommand();
+    ngine.addCommand(std::unique_ptr<Command>(finish));
+  }
+
+  // FinishTurnCommand
+  {
+    FinishTurnCommand finish;
+    finish.serialize();
+    State st;
+    finish.execute(st);
   }
 }
 
