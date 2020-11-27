@@ -29,3 +29,5 @@ void Cell::setEntity(Entity &entity) {}
 void Cell::setTerritoryId(int territoryId) {}
 
 int Cell::getTerritoryId() {}
+
+void Cell::setPlayerId(int playerId) {}
