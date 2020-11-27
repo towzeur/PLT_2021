@@ -215,7 +215,9 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     FinishTurnCommand finish;
     finish.serialize();
     State st;
+    int turn = st.getTurn();
     finish.execute(st);
+    BOOST_CHECK_EQUAL(st.getTurn(), turn + 1);
   }
 
   // MoveCommand

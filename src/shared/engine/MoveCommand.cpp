@@ -14,11 +14,26 @@ MoveCommand::MoveCommand(state::Soldier &soldierTarget,
 void MoveCommand::execute(state::State &state) {
   std::vector<std::unique_ptr<state::Cell>> &cells =
       state.getBoard().getCells();
-  for (std::unique_ptr<state::Cell> &soldier : cells) {
-    if (soldier->getEntity().getUid() == this->soldierTarget.getUid()) {
-      soldier->setRow(this->cellTarget.getRow());
-      soldier->setCol(this->cellTarget.getCol());
+
+  if (cellTarget.isAccessible()) {
+    for (std::unique_ptr<state::Cell> &soldier : cells) {
+
+      if (soldier->getEntity().getUid() == this->soldierTarget.getUid()) {
+        if (soldier->getEntity().getAttack() <
+            this->cellTarget.getEntity().getDefense()) {
+          std::cout << "Impossible action: soldier attack must be superior or "
+                       "equal to cell entity defense"
+                    << std::endl;
+          break;
+        } else {
+          soldier->setRow(this->cellTarget.getRow());
+          soldier->setCol(this->cellTarget.getCol());
+          break;
+        }
+      }
     }
+  } else {
+    std::cout << "Impossible action: innaccessible cell" << std::endl;
   }
 }
 
