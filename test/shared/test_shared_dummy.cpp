@@ -53,8 +53,8 @@ BOOST_AUTO_TEST_CASE(TestState) {
 
     // getTerritoties and addTerritory
     int territoriesSize = st.getTerritories().size();
-    Territory t;
-    BOOST_CHECK_EQUAL(st.addTerritory(&t), territoriesSize + 1);
+    std::unique_ptr<Territory> t;
+    BOOST_CHECK_EQUAL(st.addTerritory(t), territoriesSize + 1);
 
     // getPlayer and addPlayer
     int playersSize = st.getPlayers().size();
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     Territory tr;
 
     // getUid
-    BOOST_CHECK_EQUAL(tr.getUid(), 1); // Second territory created: uid = 1
+    BOOST_CHECK_EQUAL(tr.getUid(), 0); // Second territory created: uid = 1
 
     // CapitalRow getter and setter
     tr.setCapitalRow(5);
@@ -131,7 +131,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     BOOST_CHECK_EQUAL(bd.getNCol(), 30);
     BOOST_CHECK_EQUAL(bd.getNRow(), 30);
 
-    // bd.load("testMap.txt");
+    // bd.load("../../../map.txt");
     //    BOOST_CHECK_EQUAL(bd.getNCol(), 3);
   }
 
@@ -228,6 +228,15 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     MoveCommand move(soldier, destination);
     move.serialize();
     move.execute(st);
+  }
+
+  // SelectTerritoryCommand
+  {
+    State st;
+    Territory tr;
+    SelectTerritoryCommand selTerr(tr);
+    selTerr.serialize();
+    selTerr.execute(st);
   }
 }
 
