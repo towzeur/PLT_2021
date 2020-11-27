@@ -5,7 +5,7 @@
 
 using namespace engine;
 
-FinishTurnCommand::FinishTurnCommand() {}
+FinishTurnCommand::FinishTurnCommand() { this->commandTypeId = FINISH_TURN; }
 
 void FinishTurnCommand::execute(state::State &state) {
   state.setTurn(state.getTurn() + 1);
