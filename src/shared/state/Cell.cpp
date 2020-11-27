@@ -22,4 +22,6 @@ bool const Cell::isAccessible() {}
 
 int Cell::getPlayerId() {}
 
-Entity Cell::getEntity() {}
+Entity &Cell::getEntity() {}
+
+void Cell::setEntity(Entity &entity) {}
