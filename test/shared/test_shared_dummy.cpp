@@ -217,6 +217,16 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     State st;
     finish.execute(st);
   }
+
+  // MoveCommand
+  {
+    State st;
+    Soldier soldier;
+    AccessibleCell destination;
+    MoveCommand move(soldier, destination);
+    move.serialize();
+    move.execute(st);
+  }
 }
 
 /* vim: set sw=2 sts=2 et : */
