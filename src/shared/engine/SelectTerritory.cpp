@@ -18,7 +18,8 @@ void SelectTerritoryCommand::execute(state::State &state) {
 
     if (territory->getUid() == this->target.getUid()) {
       territory->setSelected(true);
-      break;
+    } else {
+      territory->setSelected(false);
     }
   }
 }
