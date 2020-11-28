@@ -36,15 +36,6 @@ void State::setNbPlayers(int np) { nbPlayers = np; }
 
 Board &State::getBoard() { return this->board; }
 
-std::vector<std::unique_ptr<Territory>> &State::getTerritories() {
-  return territories;
-}
-
-size_t State::addTerritory(std::unique_ptr<Territory> &t) {
-  territories.push_back(std::move(t));
-  return territories.size();
-}
-
 std::vector<Player> &State::getPlayers() { return players; }
 
 size_t State::addPlayer(Player *p) {

@@ -51,11 +51,6 @@ BOOST_AUTO_TEST_CASE(TestState) {
 
     // getBoard TO DO
 
-    // getTerritoties and addTerritory
-    int territoriesSize = st.getTerritories().size();
-    std::unique_ptr<Territory> t;
-    BOOST_CHECK_EQUAL(st.addTerritory(t), territoriesSize + 1);
-
     // getPlayer and addPlayer
     int playersSize = st.getPlayers().size();
     Player p;
