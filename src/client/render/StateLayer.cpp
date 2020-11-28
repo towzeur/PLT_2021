@@ -136,6 +136,16 @@ bool StateLayer::printText(state::State &state) {
   // add text for players
   for (unsigned int i = 0; i < state.getPlayers().size(); i++) {
     std::vector<state::Territory> &territories = players[i].getTerritories();
+    state::Territory selectedTerritory;
+    selectedTerritory.setIncome(0);
+    selectedTerritory.setSavings(0);
+    selectedTerritory.setWages(0);
+    for (state::Territory t : territories) {
+      if (t.isSelected()) {
+        selectedTerritory = t;
+        break;
+      }
+    }
     sf::Text player;
     player.setPosition(window.getSize().x - 350.f + i % 2 * 200,
                        ((int)i / 2) * 200.f + 50);
@@ -152,9 +162,11 @@ bool StateLayer::printText(state::State &state) {
     sf::Text playerInfo;
     playerInfo.setPosition(player.getPosition().x, player.getPosition().y + 50);
     playerInfo.setFont(font);
-    playerInfo.setString("Savings: " + std::to_string(0) + "$\nIncomes: " +
-                         std::to_string(0) + "$\nWages: " + std::to_string(0) +
-                         "$\nBalance: " + std::to_string(0) + "$");
+    playerInfo.setString(
+        "Savings: " + std::to_string(selectedTerritory.getSavings()) +
+        "$\nIncomes: " + std::to_string(selectedTerritory.getIncome()) +
+        "$\nWages: " + std::to_string(selectedTerritory.getWages()) +
+        "$\nBalance: " + std::to_string(selectedTerritory.getBalance()) + "$");
     playerInfo.setCharacterSize(20);
     texts.push(playerInfo);
   }
