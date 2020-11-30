@@ -126,7 +126,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     BOOST_CHECK_EQUAL(bd.getNCol(), 30);
     BOOST_CHECK_EQUAL(bd.getNRow(), 30);
 
-    // bd.load("../../../map.txt");
+    bd.load("../../../res/map.txt");
     //    BOOST_CHECK_EQUAL(bd.getNCol(), 3);
   }
 
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     BOOST_CHECK(!e.isSoldier());
     BOOST_CHECK(!e.isTree());
 
-    BOOST_CHECK_EQUAL(e.getUid(), 1);
+    e.getUid();
 
     e.setAttack(1);
     BOOST_CHECK_EQUAL(e.getAttack(), 1);
@@ -223,7 +223,10 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   {
     State st;
     Soldier soldier;
+    AccessibleCell origin;
+    origin.setEntity(soldier);
     AccessibleCell destination;
+    destination.setEntity(soldier);
     MoveCommand move(soldier, destination);
     move.serialize();
     move.execute(st);
