@@ -52,12 +52,10 @@ configure:
 # -----------------------------------------------------------------------------
 
 # compile all exe (client, server, ...)
-#
 build:
 	@echo [DEBUG] Root Makefile : build
-	@cd build && $ $(MAKE) -j4
-	# cmake --build . -j4
-
+	@cd build && cmake --build . -j4
+	
 bin/client:
 	@$(MAKE) -s -j4 -C build client
 
@@ -69,7 +67,7 @@ bin/server:
 # -----------------------------------------------------------------------------
 
 test:
-	cd build/test && ctest -VV --timeout 300 --report level=detailed --output-on-failure
+	cd build/test && ctest -VV --timeout 300 --report_level=detailed --output-on-failure
 
 testdocker:
 	docker build -t plt-initial -f docker/plt-initial .

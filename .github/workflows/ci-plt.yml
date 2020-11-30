@@ -36,10 +36,9 @@ jobs:
         make all
 
     - name: Test
-      working-directory: ${{runner.workspace}}/build/test
       shell: bash
       env:
         CTEST_OUTPUT_ON_FAILURE: 1
         BOOST_TEST_REPORT_LEVEL: detailed
       run: |
-        ctest -VV --timeout 300
+        make test
