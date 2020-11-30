@@ -4,6 +4,7 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <time.h>
+#include <unistd.h>
 
 using namespace client;
 
@@ -13,9 +14,70 @@ const unsigned int BOX_R = 14;
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 580;
 
+std::string ROOT_DIR = "PLT_2021";
+
+// =============================================================================
+// UTILS TEST FUNCTION
+// =============================================================================
+
+/**
+ * @brief find the relative path to the target
+ *
+ * /!\ - target must be relative to ROOT_DIR
+ *     - target must be within (-r) ROOT_DIR
+ *
+ * dependance:
+ *  #include <unistd.h> // get_current_dir_name()
+ *
+ * usage:
+ *  std::string rp_font_fps = resolve("res/fonts/Square.ttf");
+ *
+ * @param target
+ * @return std::string
+ */
+std::string resolve(std::string target) {
+  std::string out;
+  std::string path = get_current_dir_name();
+  std::cout << "[DEBUG] path : " << path << std::endl;
+
+  size_t found = path.find(ROOT_DIR);
+  std::cout << "[DEBUG] found : " << found << std::endl;
+  if (found != std::string::npos) {
+
+    std::string sub_path = path.substr(found + ROOT_DIR.size());
+    std::cout << "[DEBUG] substr : " << sub_path << std::endl;
+
+    // assert that only 1 ROOT_DIR was present in the path
+    if (sub_path.find(ROOT_DIR) != std::string::npos) {
+      exit(1);
+    }
+
+    // cout how many '/' are present
+    for (size_t i = 0; i < sub_path.size(); ++i) {
+      if (path[i] == '/')
+        out.append("../");
+    }
+    out.append(target);
+  } else {
+    exit(1);
+  }
+  std::cout << "[DEBUG] resolved path : " << out << std::endl;
+  return out;
+}
+
+// =============================================================================
+// CLIENT
+// =============================================================================
+
 Client::Client() {}
 
 void Client::run() {
+
+  std::string rp_background = resolve("res/texture/skins/background.bmp");
+  std::string rp_font_fps = resolve("res/fonts/Square.ttf");
+  std::string rp_skins = resolve("res/texture/skins/medieval.png");
+
+  // ---------------------------------------------------------------------------
 
   srand(time(NULL));
 
@@ -37,7 +99,7 @@ void Client::run() {
   //                                BACKGROUND
   // ---------------------------------------------------------------------------
   sf::Texture texture;
-  if (!texture.loadFromFile("res/texture/skins/background.bmp")) {
+  if (!texture.loadFromFile(rp_background)) {
     // error...
     exit(1);
   }
@@ -53,7 +115,7 @@ void Client::run() {
   sf::Time time_curr; //, time_prev = clock.getElapsedTime();
 
   sf::Font font;
-  if (!font.loadFromFile("res/fonts/Square.ttf"))
+  if (!font.loadFromFile(rp_font_fps))
     return;
 
   sf::Text text;
@@ -98,7 +160,7 @@ void Client::run() {
   // Declare and load a texture
   int entity_width = 20, entity_height = 30;
   sf::Texture entities_textures;
-  if (!entities_textures.loadFromFile("res/texture/skins/medieval.png")) {
+  if (!entities_textures.loadFromFile(rp_skins)) {
     exit(1);
   }
   int i_entity = rand() % 10;
@@ -108,7 +170,11 @@ void Client::run() {
   w_e = entity_width - 2;
   h_e = entity_height - 2;
   sf::Sprite entity_sprite(entities_textures, sf::IntRect(x_e, y_e, w_e, h_e));
-  entity_sprite.setPosition(100, 25);
+  int xc_e, yc_e;
+  sf::Vector2i hc = hm.get_hexa_center(rand() % ROW, rand() % COL);
+  xc_e = hc.x - entity_width / 2.;
+  yc_e = hc.y - entity_height / 2.;
+  entity_sprite.setPosition(xc_e, yc_e);
 
   // ---------------------------------------------------------------------------
   //                              GAME LOOP
