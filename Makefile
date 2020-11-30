@@ -52,12 +52,10 @@ configure:
 # -----------------------------------------------------------------------------
 
 # compile all exe (client, server, ...)
-#
 build:
 	@echo [DEBUG] Root Makefile : build
-	@cd build && $ $(MAKE) -j4
-	# cmake --build . -j4
-
+	@cd build && cmake --build . -j4
+	
 bin/client:
 	@$(MAKE) -s -j4 -C build client
 
