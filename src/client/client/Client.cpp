@@ -1,30 +1,91 @@
 #include "Client.h"
 
 //#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
-//#include <math.h> // sin and cos
-//#include <stdlib.h> // srand, rand
-//#include <time.h>   // time
-//#include <vector>
+#include <time.h>
+#include <unistd.h>
 
 using namespace client;
 
 const unsigned int ROW = 22;
 const unsigned int COL = 30;
-const unsigned int BOX_R = 15;
-const unsigned int WIDTH = 600;
-const unsigned int HEIGHT = 600;
+const unsigned int BOX_R = 14;
+const unsigned int WIDTH = 800;
+const unsigned int HEIGHT = 580;
+
+std::string ROOT_DIR = "PLT_2021";
+
+// =============================================================================
+// UTILS TEST FUNCTION
+// =============================================================================
+
+/**
+ * @brief find the relative path to the target
+ *
+ * /!\ - target must be relative to ROOT_DIR
+ *     - target must be within (-r) ROOT_DIR
+ *
+ * dependance:
+ *  #include <unistd.h> // get_current_dir_name()
+ *
+ * usage:
+ *  std::string rp_font_fps = resolve("res/fonts/Square.ttf");
+ *
+ * @param target
+ * @return std::string
+ */
+std::string resolve(std::string target) {
+  std::string out;
+  std::string path = get_current_dir_name();
+  std::cout << "[DEBUG] path : " << path << std::endl;
+
+  size_t found = path.find(ROOT_DIR);
+  std::cout << "[DEBUG] found : " << found << std::endl;
+  if (found != std::string::npos) {
+
+    std::string sub_path = path.substr(found + ROOT_DIR.size());
+    std::cout << "[DEBUG] substr : " << sub_path << std::endl;
+
+    // assert that only 1 ROOT_DIR was present in the path
+    if (sub_path.find(ROOT_DIR) != std::string::npos) {
+      exit(1);
+    }
+
+    // cout how many '/' are present
+    for (size_t i = 0; i < sub_path.size(); ++i) {
+      if (path[i] == '/')
+        out.append("../");
+    }
+    out.append(target);
+  } else {
+    exit(1);
+  }
+  std::cout << "[DEBUG] resolved path : " << out << std::endl;
+  return out;
+}
+
+// =============================================================================
+// CLIENT
+// =============================================================================
 
 Client::Client() {}
 
 void Client::run() {
 
+  std::string rp_background = resolve("res/texture/skins/background.bmp");
+  std::string rp_font_fps = resolve("res/fonts/Square.ttf");
+  std::string rp_skins = resolve("res/texture/skins/medieval.png");
+
+  // ---------------------------------------------------------------------------
+
+  srand(time(NULL));
+
   std::cout << "HELLO WORLD" << std::endl;
   std::cout << std::endl;
 
   sf::ContextSettings settings;
-  settings.antialiasingLevel = 8;
-
+  // settings.antialiasingLevel = 8;
   sf::RenderWindow window({WIDTH, HEIGHT}, "Hexagons", sf::Style::Default,
                           settings);
   // window.setVerticalSyncEnabled(true);
@@ -34,13 +95,27 @@ void Client::run() {
   // window.setView(view);
   // view.setRotation(20.f);
 
-  // float fps;
+  // ---------------------------------------------------------------------------
+  //                                BACKGROUND
+  // ---------------------------------------------------------------------------
+  sf::Texture texture;
+  if (!texture.loadFromFile(rp_background)) {
+    // error...
+    exit(1);
+  }
+  texture.setRepeated(true);
+  sf::Sprite sprite(texture, sf::IntRect(0, 0, WIDTH, HEIGHT));
+
+  // ---------------------------------------------------------------------------
+  //                                    FPS
+  // ---------------------------------------------------------------------------
+
   int frame = 0;
   sf::Clock clock;
   sf::Time time_curr; //, time_prev = clock.getElapsedTime();
 
   sf::Font font;
-  if (!font.loadFromFile("res/fonts/Square.ttf"))
+  if (!font.loadFromFile(rp_font_fps))
     return;
 
   sf::Text text;
@@ -52,6 +127,24 @@ void Client::run() {
   text.setFillColor(sf::Color::Yellow);
   // text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
+  // ---------------------------------------------------------------------------
+  //                              SOUND TEST
+  // ---------------------------------------------------------------------------
+
+  // render::AudioEngine ae = render::AudioEngine();
+  // ae.play("res/sound/Victory.wav");
+  // sf::SoundBuffer buffer;
+  // if (!buffer.loadFromFile("res/sound/Victory.wav")) {
+  //  return;
+  //}
+  // sf::Sound sound;
+  // sound.setBuffer(buffer);
+  // sound.play();
+
+  // ---------------------------------------------------------------------------
+  //                               HEXA MAP
+  // ---------------------------------------------------------------------------
+
   render::HexaMap hm = render::HexaMap(ROW, COL, BOX_R);
   hm.initialize();
   hm.update();
@@ -59,10 +152,34 @@ void Client::run() {
 
   int r = ROW, c = COL, hexa_r = BOX_R;
 
-  /* -------------------------------------------------- */
+  // ---------------------------------------------------------------------------
+  //                              ENTITTY
+  // ---------------------------------------------------------------------------
 
+  // 10 entity : rand() % 10,
+  // Declare and load a texture
+  int entity_width = 20, entity_height = 30;
+  sf::Texture entities_textures;
+  if (!entities_textures.loadFromFile(rp_skins)) {
+    exit(1);
+  }
+  int i_entity = rand() % 10;
+  int x_e, y_e, w_e, h_e;
+  x_e = 0 * (entity_width) + 1;
+  y_e = (i_entity) * (entity_height - 1) + 1;
+  w_e = entity_width - 2;
+  h_e = entity_height - 2;
+  sf::Sprite entity_sprite(entities_textures, sf::IntRect(x_e, y_e, w_e, h_e));
+  int xc_e, yc_e;
+  sf::Vector2i hc = hm.get_hexa_center(rand() % ROW, rand() % COL);
+  xc_e = hc.x - entity_width / 2.;
+  yc_e = hc.y - entity_height / 2.;
+  entity_sprite.setPosition(xc_e, yc_e);
+
+  // ---------------------------------------------------------------------------
+  //                              GAME LOOP
+  // ---------------------------------------------------------------------------
   while (window.isOpen()) {
-
     // event loop
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -125,7 +242,8 @@ void Client::run() {
           if ((r_click >= 0 && r_click < hm.getN_row()) &&
               (c_click >= 0 && c_click < hm.getN_col())) {
             std::cout << "!" << std::endl;
-            hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
+            // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
+            hm.hex_toggle_transparency(r_click, c_click);
           }
         } else
           // std::cout << std::endl;
@@ -141,28 +259,15 @@ void Client::run() {
       }
     }
 
-    // hm.update();
-    /*
-    hm.change_color(
-        rand() % r,
-        rand() % c,
-
-        sf::Color(
-            rand() % 255,
-            rand() % 255,
-            rand() % 255
-        )
-
-       (rand() % 2) ? sf::Color::Black : sf::Color::White
-    );
-    */
-
-    window.clear(sf::Color::Black);
+    window.clear(sf::Color::Red);
     // DRAW : start -------------------------------------------------------
 
+    // background
+    window.draw(sprite);
     window.draw(hm);
+    window.draw(entity_sprite);
+    // fps counter
     window.draw(text);
-    // hm.draw_grid(window);
 
     // DRAW : end   -------------------------------------------------------
     window.display();
