@@ -109,8 +109,22 @@ To get a local copy up and running follow these simple steps.
 
 ### Prerequisites
 
+Resynchronize the package index files 
 ```sh
-sudo apt install python python3 libmicrohttpd-dev lcov libsfml-dev gcc cmake make libxml2-dev dia lcov libboost-all-dev gcovr python-pip
+sudo apt-get update
+```
+
+Install with apt-get
+```sh
+sudo apt-get install build-essential \
+dia \
+libsfml-dev libxml2-dev libmicrohttpd-dev libboost-all-dev \
+python3 python3-pip \
+lcov gcovr
+```
+
+Install python package with pip (or pip3)
+```sh
 pip install gcovr
 ```
 
@@ -123,12 +137,14 @@ cd PLT_2021
 ```
 
 2. Build it
-
 ```sh
-mkdir build
-cd build
-cmake .. && make
+PLT_2021$ make
 ```
+
+3. Test it
+```sh
+PLT_2021$ make test
+``` 
 
 <!-- USAGE -->
 ## Usage
@@ -137,12 +153,17 @@ cmake .. && make
 
 Print a hello world message to stdout
 ```sh
-./bin/client hello
+PLT_2021$ bin/client hello
 ```
 
-Launch a series of very simple tests to verify the proper functioning of the state implementation and display an error message otherwise.
+First render attempt
 ```sh
-./bin/client state
+PLT_2021$ bin/client render
+```
+
+Second render attempt
+```sh
+PLT_2021$ bin/client render2
 ```
 
 <!-- ROADMAP -->
@@ -172,13 +193,13 @@ See the [open issues](https://github.com/towzeur/PLT_2021/issues) for a list of 
     * Report 2.1
     * Render diagram
     * Implemented code to print a rendering of state
-<!--
+
 * 2.2
     * Report 2.2
     * Engine diagram
     * Implemented code for the game engine
     * Print different renderings of state by calling the game engine 
-
+<!--
 * 2.final
     * Report 2.final
     * AI diagram
@@ -268,4 +289,4 @@ Distributed under the MIT License. See [LICENSE](license-url) for more informati
 [build-status-shield]: https://github.com/towzeur/PLT_2021/workflows/CI/badge.svg
 [build-status]: https://github.com/towzeur/PLT_2021/actions
 
-[version-shield]: https://img.shields.io/badge/version-2.1-blue.svg?cacheSeconds=2592000
+[version-shield]: https://img.shields.io/badge/version-2.2-blue.svg?cacheSeconds=2592000
