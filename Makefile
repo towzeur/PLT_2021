@@ -55,7 +55,8 @@ configure:
 #
 build:
 	@echo [DEBUG] Root Makefile : build
-	@cd build && make
+	@cd build && $ $(MAKE) -j4
+	# cmake --build . -j4
 
 bin/client:
 	@$(MAKE) -s -j4 -C build client
@@ -66,7 +67,11 @@ bin/server:
 # -----------------------------------------------------------------------------
 # docker 
 # -----------------------------------------------------------------------------
+
 test:
+	cd build/test && ctest -VV --timeout 300 --report level=detailed --output-on-failure
+
+testdocker:
 	docker build -t plt-initial -f docker/plt-initial .
 	./docker/validate.sh plt-test
 	./docker/run_docker_bash.sh plt-test
@@ -109,4 +114,4 @@ rapport/module.pdf: src/module.dia
 list:
 	@$(MAKE) -pRrq -f $(lastword $(MAKEFILE_LIST)) : 2>/dev/null | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' | sort | egrep -v -e '^[^[:alnum:]]' -e '^$@$$'
 
-.PHONY: configure build clean extern test list
+.PHONY: configure build clean extern test testdocker list
