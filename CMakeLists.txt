@@ -97,9 +97,9 @@ if(${MACHINE_ENSEA})
   set(SFML_ROOT "/usr/lsa")
   set(CMAKE_MODULE_PATH "${SFML_ROOT}/share/SFML/cmake/Modules/" ${CMAKE_MODULE_PATH})
 endif()
-find_package(SFML 2 COMPONENTS graphics network window system)
+find_package(SFML 2 COMPONENTS graphics network window system audio)
 if(NOT ${MACHINE_ENSEA})
-  set(SFML_LIBRARIES sfml-graphics sfml-network sfml-window sfml-system)
+  set(SFML_LIBRARIES sfml-graphics sfml-network sfml-window sfml-system sfml-audio)
 endif()
 
 # Find library libmicrohttpd
