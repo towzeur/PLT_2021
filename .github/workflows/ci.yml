@@ -17,7 +17,7 @@ on:
       -master
   
 jobs:
-  ci-plt:
+  ci_plt:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
