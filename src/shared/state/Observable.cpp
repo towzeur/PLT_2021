@@ -6,9 +6,7 @@ Observable::~Observable() {
     
 }
 
-void Observable::registerObserver(Observer* o) {
-    
-}
+void Observable::registerObserver(Observer* o) { observers.push_back(o); }
 
 void Observable::unregisterObserver(Observer* o) {
     
