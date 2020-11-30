@@ -43,6 +43,10 @@ int Territory::getSize() { return size; }
 
 void Territory::setSize(int size) { this->size = size; }
 
+void Territory::setSelected(bool selected) { this->selected = selected; }
+
+bool Territory::isSelected() { return this->selected; }
+
 Territory *const Territory::clone() {}
 
 bool const Territory::equals(const Territory &t1) {}

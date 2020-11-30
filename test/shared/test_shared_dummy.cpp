@@ -51,11 +51,6 @@ BOOST_AUTO_TEST_CASE(TestState) {
 
     // getBoard TO DO
 
-    // getTerritoties and addTerritory
-    int territoriesSize = st.getTerritories().size();
-    Territory t;
-    BOOST_CHECK_EQUAL(st.addTerritory(&t), territoriesSize + 1);
-
     // getPlayer and addPlayer
     int playersSize = st.getPlayers().size();
     Player p;
@@ -67,7 +62,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     Territory tr;
 
     // getUid
-    BOOST_CHECK_EQUAL(tr.getUid(), 1); // Second territory created: uid = 1
+    BOOST_CHECK_EQUAL(tr.getUid(), 0); // Second territory created: uid = 1
 
     // CapitalRow getter and setter
     tr.setCapitalRow(5);
@@ -131,7 +126,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     BOOST_CHECK_EQUAL(bd.getNCol(), 30);
     BOOST_CHECK_EQUAL(bd.getNRow(), 30);
 
-    // bd.load("testMap.txt");
+    bd.load("../../../res/map.txt");
     //    BOOST_CHECK_EQUAL(bd.getNCol(), 3);
   }
 
@@ -165,7 +160,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     BOOST_CHECK(!e.isSoldier());
     BOOST_CHECK(!e.isTree());
 
-    BOOST_CHECK_EQUAL(e.getUid(), 1);
+    e.getUid();
 
     e.setAttack(1);
     BOOST_CHECK_EQUAL(e.getAttack(), 1);
@@ -198,8 +193,54 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // Engine
   {
     Engine ngine;
+    ngine.init(); // To do (issue with file read ?)
+    State st;
+    ngine.setCurrentState(st);
     ngine.getCurrentState();
+    Json::Value record;
+    ngine.setRecord(record);
     ngine.getRecord();
+    // To do when other classes are coded
+    Command *finish = new FinishTurnCommand();
+    ngine.addCommand(std::unique_ptr<Command>(finish));
+  }
+
+  // FinishTurnCommand
+  {
+    FinishTurnCommand finish;
+    finish.serialize();
+    State st;
+    int turn = st.getTurn();
+    finish.execute(st);
+    BOOST_CHECK_EQUAL(st.getTurn(), turn + 1);
+    finish.setCommandTypeId(FINISH_TURN);
+    BOOST_CHECK_EQUAL(finish.getCommandTypeId(), FINISH_TURN);
+    finish.setCurrentPlayerStatus(PLAYING);
+    BOOST_CHECK_EQUAL(finish.getCurrentPlayerStatus(), PLAYING);
+  }
+
+  // MoveCommand
+  {
+    State st;
+    st.getBoard().load("../../../res/map.txt");
+    Soldier soldier;
+    AccessibleCell origin;
+    origin.setEntity(soldier);
+    std::vector<std::unique_ptr<state::Cell>> &cells = st.getBoard().getCells();
+    cells[1]->setEntity(soldier);
+    AccessibleCell destination;
+    MoveCommand move(soldier, destination);
+    move.serialize();
+    move.execute(st);
+  }
+
+  // SelectTerritoryCommand
+  {
+    State st;
+    Territory tr;
+    SelectTerritoryCommand selTerr(tr);
+    selTerr.serialize();
+    selTerr.execute(st);
   }
 }
 
