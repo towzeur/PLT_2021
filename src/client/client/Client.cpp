@@ -1,11 +1,9 @@
 #include "Client.h"
 
 //#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
-//#include <math.h> // sin and cos
-//#include <stdlib.h> // srand, rand
-//#include <time.h>   // time
-//#include <vector>
+#include <time.h>
 
 using namespace client;
 
@@ -19,12 +17,13 @@ Client::Client() {}
 
 void Client::run() {
 
+  srand(time(NULL));
+
   std::cout << "HELLO WORLD" << std::endl;
   std::cout << std::endl;
 
   sf::ContextSettings settings;
   // settings.antialiasingLevel = 8;
-
   sf::RenderWindow window({WIDTH, HEIGHT}, "Hexagons", sf::Style::Default,
                           settings);
   // window.setVerticalSyncEnabled(true);
@@ -43,14 +42,12 @@ void Client::run() {
     exit(1);
   }
   texture.setRepeated(true);
-
-  sf::Sprite sprite;
-  sprite.setTexture(texture);
-  sprite.setTextureRect(sf::IntRect(0, 0, WIDTH, HEIGHT));
+  sf::Sprite sprite(texture, sf::IntRect(0, 0, WIDTH, HEIGHT));
 
   // ---------------------------------------------------------------------------
   //                                    FPS
   // ---------------------------------------------------------------------------
+
   int frame = 0;
   sf::Clock clock;
   sf::Time time_curr; //, time_prev = clock.getElapsedTime();
@@ -67,6 +64,23 @@ void Client::run() {
   text.setCharacterSize(30); // in pixel !
   text.setFillColor(sf::Color::Yellow);
   // text.setStyle(sf::Text::Bold | sf::Text::Underlined);
+
+  // ---------------------------------------------------------------------------
+  //                              SOUND TEST
+  // ---------------------------------------------------------------------------
+
+  // render::AudioEngine ae = render::AudioEngine();
+  // ae.play("res/sound/Victory.wav");
+  // sf::SoundBuffer buffer;
+  // if (!buffer.loadFromFile("res/sound/Victory.wav")) {
+  //  return;
+  //}
+  // sf::Sound sound;
+  // sound.setBuffer(buffer);
+  // sound.play();
+
+  // ---------------------------------------------------------------------------
+  //                               HEXA MAP
   // ---------------------------------------------------------------------------
 
   render::HexaMap hm = render::HexaMap(ROW, COL, BOX_R);
@@ -76,8 +90,29 @@ void Client::run() {
 
   int r = ROW, c = COL, hexa_r = BOX_R;
 
-  /* -------------------------------------------------- */
+  // ---------------------------------------------------------------------------
+  //                              ENTITTY
+  // ---------------------------------------------------------------------------
 
+  // 10 entity : rand() % 10,
+  // Declare and load a texture
+  int entity_width = 20, entity_height = 30;
+  sf::Texture entities_textures;
+  if (!entities_textures.loadFromFile("res/texture/skins/medieval.png")) {
+    exit(1);
+  }
+  int i_entity = rand() % 10;
+  int x_e, y_e, w_e, h_e;
+  x_e = 0 * (entity_width) + 1;
+  y_e = (i_entity) * (entity_height - 1) + 1;
+  w_e = entity_width - 2;
+  h_e = entity_height - 2;
+  sf::Sprite entity_sprite(entities_textures, sf::IntRect(x_e, y_e, w_e, h_e));
+  entity_sprite.setPosition(100, 25);
+
+  // ---------------------------------------------------------------------------
+  //                              GAME LOOP
+  // ---------------------------------------------------------------------------
   while (window.isOpen()) {
     // event loop
     sf::Event event;
@@ -158,29 +193,15 @@ void Client::run() {
       }
     }
 
-    // hm.update();
-    /*
-    hm.change_color(
-        rand() % r,
-        rand() % c,
-
-        sf::Color(
-            rand() % 255,
-            rand() % 255,
-            rand() % 255
-        )
-
-       (rand() % 2) ? sf::Color::Black : sf::Color::White
-    );
-    */
-
     window.clear(sf::Color::Red);
     // DRAW : start -------------------------------------------------------
 
-    window.draw(sprite); // background
+    // background
+    window.draw(sprite);
     window.draw(hm);
+    window.draw(entity_sprite);
+    // fps counter
     window.draw(text);
-    // hm.draw_grid(window);
 
     // DRAW : end   -------------------------------------------------------
     window.display();
