@@ -67,24 +67,22 @@ void HexaMap::initialize(unsigned int nr, unsigned int nc, float hr) {
 }
 
 void HexaMap::fill_vertex(int r, int c, sf::Color col) {
-  int offset = ((c % 2) == 1) ? hexagon_h2 : 0;
-  int xc = hexa_centers_x[c];
-  int yc = hexa_centers_y[r] + offset;
+  sf::Vector2i hc = get_hexa_center(r, c);
   int idx = 8 * (r * n_col + c);
 
   // first quad (up)
-  m_vertices[idx + 0].position = sf::Vector2f(xc + hexagon_w2, yc);
+  m_vertices[idx + 0].position = sf::Vector2f(hc.x + hexagon_w2, hc.y);
   m_vertices[idx + 1].position =
-      sf::Vector2f(xc + 0.5 * hexagon_w2, yc + hexagon_h2);
+      sf::Vector2f(hc.x + 0.5 * hexagon_w2, hc.y + hexagon_h2);
   m_vertices[idx + 2].position =
-      sf::Vector2f(xc - 0.5 * hexagon_w2, yc + hexagon_h2);
-  m_vertices[idx + 3].position = sf::Vector2f(xc - hexagon_w2, yc);
+      sf::Vector2f(hc.x - 0.5 * hexagon_w2, hc.y + hexagon_h2);
+  m_vertices[idx + 3].position = sf::Vector2f(hc.x - hexagon_w2, hc.y);
   // second quad (top)
   m_vertices[idx + 4].position = m_vertices[idx + 3].position;
   m_vertices[idx + 5].position =
-      sf::Vector2f(xc - 0.5 * hexagon_w2, yc - hexagon_h2);
+      sf::Vector2f(hc.x - 0.5 * hexagon_w2, hc.y - hexagon_h2);
   m_vertices[idx + 6].position =
-      sf::Vector2f(xc + 0.5 * hexagon_w2, yc - hexagon_h2);
+      sf::Vector2f(hc.x + 0.5 * hexagon_w2, hc.y - hexagon_h2);
   m_vertices[idx + 7].position = m_vertices[idx + 0].position;
 
   for (int i = 0; i < 8; i++) {
@@ -168,3 +166,10 @@ void HexaMap::draw(sf::RenderTarget &target,
 unsigned int HexaMap::getN_row() { return n_row; }
 
 unsigned int HexaMap::getN_col() { return n_col; }
+
+sf::Vector2i HexaMap::get_hexa_center(int r, int c) {
+  int offset = ((c % 2) == 1) ? hexagon_h2 : 0;
+  int xc = hexa_centers_x[c];
+  int yc = hexa_centers_y[r] + offset;
+  return sf::Vector2i(xc, yc);
+}
