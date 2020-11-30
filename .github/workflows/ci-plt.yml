@@ -4,18 +4,16 @@ on:
   workflow_dispatch:
     inputs:
       message:
-        description: 'Message'     
+        description: 'Message'
         required: false
         default: 'none'
 
   push:
-    branches:
-      -master
-
+    branches: [ master ]
+    
   pull_request:
-    branches:
-      -master
-  
+    branches: [ master ]
+
 jobs:
   ci_plt:
     runs-on: ubuntu-latest
