@@ -213,6 +213,10 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     int turn = st.getTurn();
     finish.execute(st);
     BOOST_CHECK_EQUAL(st.getTurn(), turn + 1);
+    finish.setCommandTypeId(FINISH_TURN);
+    BOOST_CHECK_EQUAL(finish.getCommandTypeId(), FINISH_TURN);
+    finish.setCurrentPlayerStatus(PLAYING);
+    BOOST_CHECK_EQUAL(finish.getCurrentPlayerStatus(), PLAYING);
   }
 
   // MoveCommand
