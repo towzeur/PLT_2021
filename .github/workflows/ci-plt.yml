@@ -17,6 +17,8 @@ on:
 jobs:
   ci_plt:
     runs-on: ubuntu-latest
+    env:
+      DISPLAY: ':99'
     steps:
     - uses: actions/checkout@v2
 
