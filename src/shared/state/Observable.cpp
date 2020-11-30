@@ -17,7 +17,9 @@ void Observable::unregisterAllObservers() {
 }
 
 void Observable::notify(const Event& e) {
-    
+    for(auto Observer : observers){
+		Observer->stateChanged(e);
+	}
 }
 
 void Observable::flush() {
