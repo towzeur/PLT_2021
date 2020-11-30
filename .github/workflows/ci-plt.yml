@@ -10,7 +10,7 @@ on:
 
   push:
     branches: [ master ]
-    
+
   pull_request:
     branches: [ master ]
 
@@ -28,8 +28,7 @@ jobs:
         dia \
         libsfml-dev libxml2-dev libmicrohttpd-dev libboost-all-dev \
         python3 python3-pip \
-        lcov gcovr \
-        /
+        lcov gcovr
 
     - name: Build
       shell: bash
