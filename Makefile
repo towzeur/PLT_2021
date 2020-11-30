@@ -69,7 +69,7 @@ bin/server:
 # -----------------------------------------------------------------------------
 
 test:
-	cd build/test && ctest -VV --timeout 300 --report level=detailed --output-on-failure
+	cd build/test && ctest -VV --timeout 300 --report_level=detailed --output-on-failure
 
 testdocker:
 	docker build -t plt-initial -f docker/plt-initial .
