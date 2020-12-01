@@ -221,8 +221,8 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
 
   // MoveCommand
   {
-    State st;
-    st.getBoard().load("../../../res/map.txt");
+    State ste;
+    ste.getBoard().load("../../../res/map.txt");
     Soldier soldier;
     // std::vector<std::unique_ptr<state::Cell>> &cells =
     // st.getBoard().getCells();
@@ -230,7 +230,7 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     AccessibleCell destination;
     MoveCommand move(soldier, destination);
     move.serialize();
-    move.execute(st);
+    move.execute(ste);
   }
 
   // SelectTerritoryCommand
