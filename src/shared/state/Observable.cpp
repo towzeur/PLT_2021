@@ -39,4 +39,4 @@ bool Observable::getEnableCache() const {
     
 }
 
-void Observable::setEnableCache(bool enableCache) {}
+void Observable::setEnableCache(bool enableCache) { this->enableCache = enableCache; }
