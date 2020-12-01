@@ -29,9 +29,7 @@ void Observable::flush() {
     
 }
 
-bool Observable::getEnableNotifications() const {
-    
-}
+bool Observable::getEnableNotifications() const { return enableNotifications; }
 
 void Observable::setEnableNotifications(bool enableNotifications) { this->enableNotifications = enableNotifications; }
 
