@@ -12,3 +12,4 @@ src/*/*/*.h
 
 # dia
 *_old.dia
+*.dia.autosave
