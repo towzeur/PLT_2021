@@ -224,10 +224,8 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     State st;
     st.getBoard().load("../../../res/map.txt");
     Soldier soldier;
-    AccessibleCell origin;
-    origin.setEntity(soldier);
     std::vector<std::unique_ptr<state::Cell>> &cells = st.getBoard().getCells();
-    cells[1]->setEntity(soldier);
+    // cells[1]->setEntity(soldier);
     AccessibleCell destination;
     MoveCommand move(soldier, destination);
     move.serialize();
