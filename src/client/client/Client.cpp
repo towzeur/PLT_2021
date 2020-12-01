@@ -4,7 +4,9 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <time.h>
-#include <unistd.h>
+
+#include "state.h"
+#include "utils.h"
 
 using namespace client;
 
@@ -14,56 +16,11 @@ const unsigned int BOX_R = 14;
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 580;
 
-std::string ROOT_DIR = "PLT_2021";
+// std::string ROOT_DIR = "PLT_2021";
 
 // =============================================================================
 // UTILS TEST FUNCTION
 // =============================================================================
-
-/**
- * @brief find the relative path to the target
- *
- * /!\ - target must be relative to ROOT_DIR
- *     - target must be within (-r) ROOT_DIR
- *
- * dependance:
- *  #include <unistd.h> // get_current_dir_name()
- *
- * usage:
- *  std::string rp_font_fps = resolve("res/fonts/Square.ttf");
- *
- * @param target
- * @return std::string
- */
-std::string resolve(std::string target) {
-  std::string out;
-  std::string path = get_current_dir_name();
-  std::cout << "[DEBUG] path : " << path << std::endl;
-
-  size_t found = path.find(ROOT_DIR);
-  std::cout << "[DEBUG] found : " << found << std::endl;
-  if (found != std::string::npos) {
-
-    std::string sub_path = path.substr(found + ROOT_DIR.size());
-    std::cout << "[DEBUG] substr : " << sub_path << std::endl;
-
-    // assert that only 1 ROOT_DIR was present in the path
-    if (sub_path.find(ROOT_DIR) != std::string::npos) {
-      exit(1);
-    }
-
-    // cout how many '/' are present
-    for (size_t i = 0; i < sub_path.size(); ++i) {
-      if (path[i] == '/')
-        out.append("../");
-    }
-    out.append(target);
-  } else {
-    exit(1);
-  }
-  std::cout << "[DEBUG] resolved path : " << out << std::endl;
-  return out;
-}
 
 // =============================================================================
 // CLIENT
@@ -73,9 +30,12 @@ Client::Client() {}
 
 void Client::run() {
 
-  std::string rp_background = resolve("res/texture/skins/background.bmp");
-  std::string rp_font_fps = resolve("res/fonts/Square.ttf");
-  std::string rp_skins = resolve("res/texture/skins/medieval.png");
+  utils::PathUtils path_u = utils::PathUtils();
+  std::string rp_background =
+      path_u.resolveRelative("res/texture/skins/background.bmp");
+  std::string rp_font_fps = path_u.resolveRelative("res/fonts/Square.ttf");
+  std::string rp_skins =
+      path_u.resolveRelative("res/texture/skins/medieval.png");
 
   // ---------------------------------------------------------------------------
 
