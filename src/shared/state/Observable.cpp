@@ -35,8 +35,6 @@ bool Observable::getEnableNotifications() const {
 
 void Observable::setEnableNotifications(bool enableNotifications) { this->enableNotifications = enableNotifications; }
 
-bool Observable::getEnableCache() const {
-    
-}
+bool Observable::getEnableCache() const { return enableCache;}
 
 void Observable::setEnableCache(bool enableCache) { this->enableCache = enableCache; }
