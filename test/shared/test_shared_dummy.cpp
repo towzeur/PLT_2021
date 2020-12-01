@@ -1,5 +1,6 @@
 #include "../../src/shared/engine.h"
 #include "../../src/shared/state.h"
+#include "../../src/shared/utils.h"
 #include <boost/test/unit_test.hpp>
 #include <fstream>
 #include <iostream>
@@ -223,7 +224,8 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   {
     State ste;
     Board &bd = ste.getBoard();
-    // bd.load("../../../res/map.txt");
+    utils::PathUtils path_u = utils::PathUtils();
+    bd.load(path_u.resolveRelative("res/map.txt"));
     Soldier soldier;
     // std::vector<std::unique_ptr<state::Cell>> &cells =
     // st.getBoard().getCells();
