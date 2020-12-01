@@ -222,7 +222,8 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // MoveCommand
   {
     State ste;
-    // ste.getBoard().load("../../../res/map.txt");
+    Board &bd = ste.getBoard();
+    bd.load("../../../res/map.txt");
     Soldier soldier;
     // std::vector<std::unique_ptr<state::Cell>> &cells =
     // st.getBoard().getCells();
