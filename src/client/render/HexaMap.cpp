@@ -92,6 +92,7 @@ void HexaMap::initialize(int nr, int nc, float hr) {
 void HexaMap::fill_vertex(int r, int c, sf::Color col) {
   sf::Vector2i hc = get_hexa_center(r, c);
 
+  // set hexa's plain (filled) vertex
   int idx = 8 * (r * n_col + c);
   for (int i = 0; i < 4; ++i) {
     // upper rectangle
@@ -107,6 +108,7 @@ void HexaMap::fill_vertex(int r, int c, sf::Color col) {
     m_vertices[i_q1].color = col;
   }
 
+  // set hexa's outline vertex
   int idx_2 = 12 * (r * n_col + c);
   for (int i = 0; i < 6; ++i) {
     int i0 = idx_2 + 2 * i;
@@ -130,9 +132,15 @@ void HexaMap::hex_set_color(int r, int c, sf::Color col) {
 }
 
 void HexaMap::hex_set_transparency(int r, int c, int a) {
+  // hide the plain hexa
   int idx = 8 * (r * n_col + c);
   for (int i = 0; i < 8; i++) {
     m_vertices[idx + i].color.a = a;
+  }
+  // hide hexa's black outline
+  int idx_2 = 12 * (r * n_col + c);
+  for (int i = 0; i < 12; i++) {
+    m_vertices_2[idx_2 + i].color.a = a;
   }
 }
 void HexaMap::hex_hide(int r, int c) { hex_set_transparency(r, c, 0); }
