@@ -1,7 +1,9 @@
 #include "Client.h"
 
 //#include <SFML/Graphics.hpp>
+#include "json/json.h"
 #include <SFML/Audio.hpp>
+#include <fstream>
 #include <iostream>
 #include <time.h>
 
@@ -15,12 +17,6 @@ const unsigned int COL = 30;
 const unsigned int BOX_R = 14;
 const unsigned int WIDTH = 800;
 const unsigned int HEIGHT = 580;
-
-// std::string ROOT_DIR = "PLT_2021";
-
-// =============================================================================
-// UTILS TEST FUNCTION
-// =============================================================================
 
 // =============================================================================
 // CLIENT
@@ -38,6 +34,33 @@ void Client::run() {
       path_u.resolveRelative("res/texture/skins/medieval.png");
 
   // ---------------------------------------------------------------------------
+  //                                  JSON
+  // ---------------------------------------------------------------------------
+
+  Json::Value root;
+  std::ifstream ifs;
+  ifs.open(path_u.resolveRelative("res/texture/medieval.json"));
+
+  Json::CharReaderBuilder builder;
+  builder["collectComments"] = true;
+  JSONCPP_STRING errs;
+  if (!parseFromStream(builder, ifs, &root, &errs)) {
+    std::cout << errs << std::endl;
+    return;
+  }
+  std::cout << root << std::endl;
+
+  const std::string name = root["Name"].asString();
+  const int age = root["Age"].asInt();
+
+  std::cout << name << std::endl;
+  std::cout << age << std::endl;
+
+  // return;
+
+  // ---------------------------------------------------------------------------
+  //                                WINDOWS
+  // ---------------------------------------------------------------------------
 
   srand(time(NULL));
 
@@ -45,7 +68,7 @@ void Client::run() {
   std::cout << std::endl;
 
   sf::ContextSettings settings;
-  // settings.antialiasingLevel = 8;
+  settings.antialiasingLevel = 8;
   sf::RenderWindow window({WIDTH, HEIGHT}, "Hexagons", sf::Style::Default,
                           settings);
   // window.setVerticalSyncEnabled(true);
@@ -123,6 +146,7 @@ void Client::run() {
   if (!entities_textures.loadFromFile(rp_skins)) {
     exit(1);
   }
+
   int i_entity = rand() % 10;
   int x_e, y_e, w_e, h_e;
   x_e = 0 * (entity_width) + 1;
@@ -139,60 +163,58 @@ void Client::run() {
   // ---------------------------------------------------------------------------
   //                              GAME LOOP
   // ---------------------------------------------------------------------------
+  sf::Event event;
   while (window.isOpen()) {
-    // event loop
-    sf::Event event;
+
     while (window.pollEvent(event)) {
-
-      switch (event.type) {
-
-      case sf::Event::Closed:
+      if (event.type == sf::Event::Closed) {
         window.close();
         break;
+      }
 
-      case sf::Event::KeyPressed:
-        // std::cout << "[KEY] ";
+      if (event.type == sf::Event::Resized) {
+        // update the view to the new size of the window
+        sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+        window.setView(sf::View(visibleArea));
+      }
 
+      if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Right) {
           std::cout << "Right" << std::endl;
           hm.initialize(r, ++c, hexa_r);
-          hm.update();
         } else if (event.key.code == sf::Keyboard::Left) {
           std::cout << "Left" << std::endl;
           hm.initialize(r, --c, hexa_r);
-          hm.update();
         } else if (event.key.code == sf::Keyboard::Up) {
           std::cout << "Up" << std::endl;
           hm.initialize(--r, c, hexa_r);
-          hm.update();
         } else if (event.key.code == sf::Keyboard::Down) {
           std::cout << "Down" << std::endl;
           hm.initialize(++r, c, hexa_r);
-          hm.update();
           //} else if (event.key.code == sf::Keyboard::Enter) {
           //  std::cout << "OK" << std::endl;
         } else if (event.key.code == sf::Keyboard::Add) {
           std::cout << "+" << std::endl;
           hm.initialize(r, c, ++hexa_r);
-          hm.update();
         } else if (event.key.code == sf::Keyboard::Subtract) {
           std::cout << "-" << std::endl;
           hm.initialize(r, c, --hexa_r);
-          hm.update();
         }
+        hm.update();
+      }
 
-        else
-          // std::cout << std::endl;
-          break;
+      if (event.type == sf::Event::MouseButtonPressed) {
 
-      case sf::Event::MouseButtonPressed:
         // sf::Event::MouseButtonPressed and sf::Event::MouseButtonReleased
         //  left, right, middle (wheel), extra #1 and extra #2 (side buttons)
         // std::cout << "[MOUSE] ";
+
         if (event.mouseButton.button == sf::Mouse::Right) {
           std::cout << "RIGHT (" << event.mouseButton.x << ", "
                     << event.mouseButton.y << ")" << std::endl;
-        } else if (event.mouseButton.button == sf::Mouse::Left) {
+        }
+
+        if (event.mouseButton.button == sf::Mouse::Left) {
           std::cout << "LEFT (" << event.mouseButton.x << ", "
                     << event.mouseButton.y << ")" << std::endl;
           sf::Vector2u coords =
@@ -205,18 +227,11 @@ void Client::run() {
             // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
             hm.hex_toggle_transparency(r_click, c_click);
           }
-        } else
-          // std::cout << std::endl;
-          break;
-
-        /*
-        case sf::Event::MouseWheelEvent:
-            break;
-        */
-
-      default:
-        break;
+        }
       }
+
+      // if (event.type == sf::Event::MouseWheelEvent) {
+      //}
     }
 
     // DRAW : start -------------------------------------------------------
@@ -238,15 +253,9 @@ void Client::run() {
     frame++;
     if (clock.getElapsedTime().asSeconds() > 1.f) {
       clock.restart();
-
-      // std::cout << "[FPS] " << floor(frame) << std::endl; // flooring it will
-      // make the frame rate a rounded number
-
       text.setString(std::to_string(frame));
       text.setPosition(WIDTH - text.getLocalBounds().width - 10, 0);
       frame = 0;
     }
   }
-
-  std::cout << std::endl;
 }
