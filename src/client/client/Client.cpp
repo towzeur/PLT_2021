@@ -37,6 +37,10 @@ void Client::run() {
   //                                  JSON
   // ---------------------------------------------------------------------------
 
+  // ---------------------------------------------------------------------------
+  //                                  JSON
+  // ---------------------------------------------------------------------------
+
   Json::Value root;
   std::ifstream ifs;
   ifs.open(path_u.resolveRelative("res/texture/medieval.json"));
@@ -53,8 +57,14 @@ void Client::run() {
   const std::string name = root["Name"].asString();
   const int age = root["Age"].asInt();
 
+  bool bg_enable = root["background_enable"].asBool();
+
+  sf::Color bg_color =
+      utils::SfmlUtils::string_to_color(root["background_color"].asString());
+
   std::cout << name << std::endl;
   std::cout << age << std::endl;
+  std::cout << bg_enable << std::endl;
 
   // return;
 
@@ -78,16 +88,27 @@ void Client::run() {
   // window.setView(view);
   // view.setRotation(20.f);
 
+  // set window's icon
+  auto image = sf::Image{};
+  if (!image.loadFromFile(path_u.resolveRelative("res/icons/220x220w.png"))) {
+    // Error handling...
+  }
+  window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
+
   // ---------------------------------------------------------------------------
   //                                BACKGROUND
   // ---------------------------------------------------------------------------
+
   sf::Texture texture;
-  if (!texture.loadFromFile(rp_background)) {
-    // error...
-    exit(1);
+  sf::Sprite bg_sprite;
+  if (bg_enable) {
+    if (!texture.loadFromFile(rp_background)) {
+      // error...
+      exit(1);
+    }
+    texture.setRepeated(true);
+    bg_sprite = sf::Sprite(texture, sf::IntRect(0, 0, WIDTH, HEIGHT));
   }
-  texture.setRepeated(true);
-  sf::Sprite sprite(texture, sf::IntRect(0, 0, WIDTH, HEIGHT));
 
   // ---------------------------------------------------------------------------
   //                                    FPS
@@ -236,11 +257,12 @@ void Client::run() {
 
     // DRAW : start -------------------------------------------------------
 
-    window.clear(sf::Color::White); // clear the screen=
-    window.draw(sprite);            // background
-    window.draw(hm);                // hexa map
-    window.draw(entity_sprite);     // entities
-    window.draw(text);              // fps counter
+    window.clear(bg_color); // clear the screen
+    if (bg_enable)
+      window.draw(bg_sprite);   // background
+    window.draw(hm);            // hexa map
+    window.draw(entity_sprite); // entities
+    window.draw(text);          // fps counter
 
     // DRAW : end   -------------------------------------------------------
     window.display();

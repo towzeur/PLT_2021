@@ -1,5 +1,6 @@
 {
   "name": "colin",
-  "use_background": true,
-  "background": "res/texture/skins/background.bmp"
+  "background_enable": false,
+  "background": "res/texture/skins/background.bmp",
+  "background_color": "#00FF00"
 }
