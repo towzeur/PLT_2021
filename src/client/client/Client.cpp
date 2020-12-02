@@ -198,9 +198,9 @@ void Client::run() {
           sf::Vector2u coords =
               hm.PointToCoord(event.mouseButton.x, event.mouseButton.y);
           std::cout << "=>" << coords.x << "," << coords.y << std::endl;
-          unsigned int r_click = coords.x, c_click = coords.y;
-          if ((r_click >= 0 && r_click < hm.getN_row()) &&
-              (c_click >= 0 && c_click < hm.getN_col())) {
+          int r_click = coords.x, c_click = coords.y;
+          if ((r_click >= 0 && r_click < hm.get_n_row()) &&
+              (c_click >= 0 && c_click < hm.get_n_col())) {
             std::cout << "!" << std::endl;
             // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
             hm.hex_toggle_transparency(r_click, c_click);
@@ -219,15 +219,13 @@ void Client::run() {
       }
     }
 
-    window.clear(sf::Color::Red);
     // DRAW : start -------------------------------------------------------
 
-    // background
-    window.draw(sprite);
-    window.draw(hm);
-    window.draw(entity_sprite);
-    // fps counter
-    window.draw(text);
+    window.clear(sf::Color::White); // clear the screen=
+    window.draw(sprite);            // background
+    window.draw(hm);                // hexa map
+    window.draw(entity_sprite);     // entities
+    window.draw(text);              // fps counter
 
     // DRAW : end   -------------------------------------------------------
     window.display();
