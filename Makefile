@@ -39,7 +39,7 @@ extern: bin/dia2code
 	@echo [DEBUG] Root Makefile : extern
 
 bin/dia2code:
-	@$(MAKE) -s -j4 -C extern dia2code
+	@$(MAKE) -s -j 4 -C extern dia2code
 
 # configure the project
 configure:
@@ -54,13 +54,13 @@ configure:
 # compile all exe (client, server, ...)
 build:
 	@echo [DEBUG] Root Makefile : build
-	@cd build && cmake --build . -j4
+	@cd build && cmake --build . -j 4
 	
 bin/client:
-	@$(MAKE) -s -j4 -C build client
+	@$(MAKE) -s -j 4 -C build client
 
 bin/server:
-	@$(MAKE) -s -j4 -C build server
+	@$(MAKE) -s -j 4 -C build server
 
 # -----------------------------------------------------------------------------
 # docker 
