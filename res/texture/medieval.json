@@ -1,6 +1,6 @@
 {
-  "name": "colin",
+  "name": "medieval",
   "background_enable": false,
   "background": "res/texture/skins/background.bmp",
-  "background_color": "#00FF00"
+  "background_color": "#000000"
 }

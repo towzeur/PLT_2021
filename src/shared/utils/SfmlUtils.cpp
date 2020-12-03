@@ -16,7 +16,7 @@ SfmlUtils::SfmlUtils() {}
  *  g : 80 (16) = 128
  *  b : c8 (16) = 200
  *
- *  return sf:Color(r, g, b)
+ *  => sf:Color(r, g, b)
  *
  * @param str_color
  * @return sf::Color

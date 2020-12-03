@@ -2,13 +2,9 @@
 
 //#include <SFML/Graphics.hpp>
 #include "json/json.h"
-#include <SFML/Audio.hpp>
 #include <fstream>
 #include <iostream>
 #include <time.h>
-
-#include "state.h"
-#include "utils.h"
 
 using namespace client;
 
@@ -61,12 +57,6 @@ void Client::run() {
 
   sf::Color bg_color =
       utils::SfmlUtils::string_to_color(root["background_color"].asString());
-
-  std::cout << name << std::endl;
-  std::cout << age << std::endl;
-  std::cout << bg_enable << std::endl;
-
-  // return;
 
   // ---------------------------------------------------------------------------
   //                                WINDOWS
@@ -160,6 +150,12 @@ void Client::run() {
   //                              ENTITTY
   // ---------------------------------------------------------------------------
 
+  int entity_width = 20, entity_height = 30;
+  render::HexaEntity he = render::HexaEntity(hm, 20, 30);
+  he.initialize(rp_skins);
+  he.update();
+
+  /*
   // 10 entity : rand() % 10,
   // Declare and load a texture
   int entity_width = 20, entity_height = 30;
@@ -180,6 +176,7 @@ void Client::run() {
   xc_e = hc.x - entity_width / 2.;
   yc_e = hc.y - entity_height / 2.;
   entity_sprite.setPosition(xc_e, yc_e);
+  */
 
   // ---------------------------------------------------------------------------
   //                              GAME LOOP
@@ -259,10 +256,10 @@ void Client::run() {
 
     window.clear(bg_color); // clear the screen
     if (bg_enable)
-      window.draw(bg_sprite);   // background
-    window.draw(hm);            // hexa map
-    window.draw(entity_sprite); // entities
-    window.draw(text);          // fps counter
+      window.draw(bg_sprite); // background
+    window.draw(hm);          // hexa map
+    window.draw(he);          // entities
+    window.draw(text);        // fps counter
 
     // DRAW : end   -------------------------------------------------------
     window.display();

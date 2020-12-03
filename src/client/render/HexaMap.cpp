@@ -116,11 +116,11 @@ void HexaMap::fill_vertex(int r, int c, sf::Color col) {
     // start
     m_vertices_2[i0].position.x = hc.x + hexa_offsets[i].x;
     m_vertices_2[i0].position.y = hc.y + hexa_offsets[i].y;
-    m_vertices_2[i0].color = sf::Color::Black;
+    m_vertices_2[i0].color = sf::Color::White;
     // end
     m_vertices_2[i1].position.x = hc.x + hexa_offsets[(i + 1) % 6].x;
     m_vertices_2[i1].position.y = hc.y + hexa_offsets[(i + 1) % 6].y;
-    m_vertices_2[i1].color = sf::Color::Black;
+    m_vertices_2[i1].color = sf::Color::White;
   }
 }
 
@@ -201,8 +201,8 @@ void HexaMap::draw(sf::RenderTarget &target,
   states.transform *= getTransform();               // apply the transform
   states.texture = &m_tileset;                      // apply the tileset texture
 
-  target.draw(m_vertices, states);   // draw the vertex array
-  target.draw(m_vertices_2, states); // draw the vertex array
+  // target.draw(m_vertices, states);
+  target.draw(m_vertices_2, states);
 }
 
 int HexaMap::get_n_row() { return n_row; }
