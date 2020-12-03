@@ -131,18 +131,19 @@ bool StateLayer::printText(state::State &state) {
   // queue (fifo) which will contain all the text to display on the HUD
   std::queue<sf::Text> texts;
 
-  std::vector<state::Player> &players = state.getPlayers();
+  std::vector<std::unique_ptr<state::Player>> players = state.getPlayers();
 
   // add text for players
   for (unsigned int i = 0; i < state.getPlayers().size(); i++) {
-    std::vector<state::Territory> &territories = players[i].getTerritories();
-    state::Territory selectedTerritory;
-    selectedTerritory.setIncome(0);
-    selectedTerritory.setSavings(0);
-    selectedTerritory.setWages(0);
-    for (state::Territory t : territories) {
-      if (t.isSelected()) {
-        selectedTerritory = t;
+    std::vector<std::unique_ptr<state::Territory>> territories =
+        players[i]->getTerritories();
+    std::unique_ptr<state::Territory> selectedTerritory;
+    selectedTerritory->setIncome(0);
+    selectedTerritory->setSavings(0);
+    selectedTerritory->setWages(0);
+    for (auto &t : move(territories)) {
+      if (t->isSelected()) {
+        selectedTerritory = move(t);
         break;
       }
     }
@@ -150,11 +151,11 @@ bool StateLayer::printText(state::State &state) {
     player.setPosition(window.getSize().x - 350.f + i % 2 * 200,
                        ((int)i / 2) * 200.f + 50);
     player.setFont(font);
-    player.setString(state.getPlayers()[i].getName());
+    player.setString(state.getPlayers()[i]->getName());
     player.setCharacterSize(30);
-    if (players[i].getStatus() == state::PlayerStatus::PLAYING) {
+    if (players[i]->getStatus() == state::PlayerStatus::PLAYING) {
       player.setFillColor(sf::Color::Green);
-    } else if (players[i].getStatus() == state::PlayerStatus::LOST) {
+    } else if (players[i]->getStatus() == state::PlayerStatus::LOST) {
       player.setFillColor(sf::Color::Red);
     }
     texts.push(player);
@@ -163,10 +164,10 @@ bool StateLayer::printText(state::State &state) {
     playerInfo.setPosition(player.getPosition().x, player.getPosition().y + 50);
     playerInfo.setFont(font);
     playerInfo.setString(
-        "Savings: " + std::to_string(selectedTerritory.getSavings()) +
-        "$\nIncomes: " + std::to_string(selectedTerritory.getIncome()) +
-        "$\nWages: " + std::to_string(selectedTerritory.getWages()) +
-        "$\nBalance: " + std::to_string(selectedTerritory.getBalance()) + "$");
+        "Savings: " + std::to_string(selectedTerritory->getSavings()) +
+        "$\nIncomes: " + std::to_string(selectedTerritory->getIncome()) +
+        "$\nWages: " + std::to_string(selectedTerritory->getWages()) +
+        "$\nBalance: " + std::to_string(selectedTerritory->getBalance()) + "$");
     playerInfo.setCharacterSize(20);
     texts.push(playerInfo);
   }

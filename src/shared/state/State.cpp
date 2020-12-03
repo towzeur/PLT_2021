@@ -36,10 +36,12 @@ void State::setNbPlayers(int np) { nbPlayers = np; }
 
 Board &State::getBoard() { return this->board; }
 
-std::vector<Player> &State::getPlayers() { return players; }
+std::vector<std::unique_ptr<Player>> State::getPlayers() {
+  return move(players);
+}
 
-size_t State::addPlayer(Player *p) {
-  players.push_back(*p);
+size_t State::addPlayer(std::unique_ptr<Player> p) {
+  players.push_back(move(p));
   return players.size();
 }
 

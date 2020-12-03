@@ -52,11 +52,11 @@ int main(int argc, char *argv[]) {
 
       // add a few player
       std::string texts[] = {"Badisse", "Nico", "Hicham", "Kaan"};
-      state::Player p;
+
       for (const std::string &text : texts) {
-        p = state::Player();
-        p.setName(text);
-        state.addPlayer(&p);
+        std::unique_ptr<state::Player> p;
+        p->setName(text);
+        state.addPlayer(move(p));
       }
 
       try {

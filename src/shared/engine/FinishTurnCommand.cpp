@@ -21,11 +21,12 @@ void FinishTurnCommand::execute(state::State &state) {
     }
   }
 
-  std::vector<state::Territory> &territories = currentPlayer.getTerritories();
+  std::vector<std::unique_ptr<state::Territory>> territories =
+      currentPlayer.getTerritories();
 
-  for (state::Territory &territory : territories) {
+  for (auto &territory : move(territories)) {
     // Reset selected
-    territory.setSelected(false);
+    territory->setSelected(false);
   }
 
   state.setTurn(state.getTurn() + 1);

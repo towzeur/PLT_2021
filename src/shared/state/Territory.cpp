@@ -50,3 +50,9 @@ bool Territory::isSelected() { return this->selected; }
 Territory *const Territory::clone() {}
 
 bool const Territory::equals(const Territory &t1) {}
+
+void Territory::addCell(std::unique_ptr<Cell> cell) {
+  cells.push_back(move(cell));
+}
+
+std::vector<std::unique_ptr<Cell>> Territory::getCells() { return move(cells); }
