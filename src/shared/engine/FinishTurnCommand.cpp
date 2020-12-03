@@ -1,21 +1,4 @@
 #include "FinishTurnCommand.h"
-<<<<<<< HEAD
-#include <iostream>
-
-
-using namespace engine;
-using namespace state;
-using namespace std;
-
-
-FinishTurnCommand::FinishTurnCommand (){ commandTypeId=FINISH_TURN; }
-
-Json::Value FinishTurnCommand::serialize (){
-    Json::Value newCommand;
-    return newCommand["commandTypeId"]= commandTypeId;
-}
-
-=======
 #include "engine.h"
 #include <iostream>
 #include <unistd.h>
@@ -54,4 +37,3 @@ Json::Value FinishTurnCommand::serialize() {
 
   return newCommand;
 }
->>>>>>> 895345dc02f72c8b1ffbd22bd8f1f95535357026
