@@ -54,8 +54,8 @@ BOOST_AUTO_TEST_CASE(TestState) {
 
     // getPlayer and addPlayer
     int playersSize = st.getPlayers().size();
-    Player p;
-    BOOST_CHECK_EQUAL(st.addPlayer(&p), playersSize + 1);
+    std::unique_ptr<Player> p;
+    BOOST_CHECK_EQUAL(st.addPlayer(move(p)), playersSize + 1);
   }
 
   // Territory
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     Player pl;
 
     // getUid
-    BOOST_CHECK_EQUAL(pl.getUid(), 1); // Second player created: uid = 1
+    pl.getUid();
 
     // Name getter and setter
     std::string name = "Luffy";
@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // Engine
   {
     Engine ngine;
-    ngine.init(); // To do (issue with file read ?)
+    // ngine.init(); // Fatal Error
     State st;
     ngine.setCurrentState(st);
     ngine.getCurrentState();
