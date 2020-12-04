@@ -22,41 +22,9 @@ Client::Client() {}
 
 void Client::run() {
 
-  utils::PathUtils path_u = utils::PathUtils();
-  std::string rp_background =
-      path_u.resolveRelative("res/texture/skins/background.bmp");
-  std::string rp_font_fps = path_u.resolveRelative("res/fonts/Square.ttf");
-  std::string rp_skins =
-      path_u.resolveRelative("res/texture/skins/medieval.png");
-
   // ---------------------------------------------------------------------------
   //                                  JSON
   // ---------------------------------------------------------------------------
-
-  // ---------------------------------------------------------------------------
-  //                                  JSON
-  // ---------------------------------------------------------------------------
-
-  Json::Value root;
-  std::ifstream ifs;
-  ifs.open(path_u.resolveRelative("res/texture/medieval.json"));
-
-  Json::CharReaderBuilder builder;
-  builder["collectComments"] = true;
-  JSONCPP_STRING errs;
-  if (!parseFromStream(builder, ifs, &root, &errs)) {
-    std::cout << errs << std::endl;
-    return;
-  }
-  std::cout << root << std::endl;
-
-  const std::string name = root["Name"].asString();
-  const int age = root["Age"].asInt();
-
-  bool bg_enable = root["background_enable"].asBool();
-
-  sf::Color bg_color =
-      utils::SfmlUtils::string_to_color(root["background_color"].asString());
 
   // ---------------------------------------------------------------------------
   //                                WINDOWS
