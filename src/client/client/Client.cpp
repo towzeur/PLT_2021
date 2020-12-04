@@ -151,8 +151,8 @@ void Client::run() {
   // ---------------------------------------------------------------------------
 
   int entity_width = 20, entity_height = 30;
-  render::HexaEntity he = render::HexaEntity(hm, 20, 30);
-  he.initialize(rp_skins);
+  render::HexaEntity he = render::HexaEntity(hm, 20, 30, rp_skins);
+  he.initialize();
   he.update();
 
   /*
