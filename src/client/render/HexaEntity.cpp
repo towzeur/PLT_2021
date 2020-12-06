@@ -84,6 +84,14 @@ void HexaEntity::entity_show(int r, int c) {
   entity_set_transparency(r, c, 255);
 }
 
+void HexaEntity::entity_toggle_transparency(int r, int c) {
+  if (m_vertices[4 * (r * hm.get_n_col() + c)].color.a == 0) {
+    entity_show(r, c);
+  } else {
+    entity_hide(r, c);
+  }
+}
+
 void HexaEntity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   states.transform *= getTransform(); // apply the transform
   states.texture = &conf.entity_tileset;

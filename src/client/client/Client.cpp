@@ -54,11 +54,6 @@ void Client::run() {
   // ---------------------------------------------------------------------------
 
   render::Background bg = render::Background(config);
-  // sf::Texture texture;
-  // sf::Sprite bg_sprite;
-  // if (config.bg_enable) {
-  // texture.setRepeated(true);
-  // bg_sprite = sf::Sprite(texture, sf::IntRect(0, 0, WIDTH, HEIGHT));
 
   // ---------------------------------------------------------------------------
   //                                    FPS
@@ -98,15 +93,11 @@ void Client::run() {
   render::HexaMap hm = render::HexaMap(ROW, COL, BOX_R);
   hm.initialize();
   hm.update();
-  // window.setSize(sf::Vector2u(hm.width, hm.height));
-
-  int r = ROW, c = COL, hexa_r = BOX_R;
 
   // ---------------------------------------------------------------------------
   //                              ENTITTY
   // ---------------------------------------------------------------------------
 
-  int entity_width = 20, entity_height = 30;
   render::HexaEntity he = render::HexaEntity(config, hm);
   he.initialize();
   he.update();
@@ -115,6 +106,7 @@ void Client::run() {
   //                              GAME LOOP
   // ---------------------------------------------------------------------------
   sf::Event event;
+  int r = ROW, c = COL, hexa_r = BOX_R;
   while (window.isOpen()) {
 
     while (window.pollEvent(event)) {
@@ -177,6 +169,7 @@ void Client::run() {
             std::cout << "!" << std::endl;
             // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
             hm.hex_toggle_transparency(r_click, c_click);
+            he.entity_toggle_transparency(r_click, c_click);
           }
         }
       }
@@ -187,7 +180,7 @@ void Client::run() {
 
     // DRAW : start -------------------------------------------------------
 
-    window.clear();    // clear the screen
+    window.clear();    // clear the screen (not necessary)
     window.draw(bg);   // background
     window.draw(hm);   // hexa map
     window.draw(he);   // entities
