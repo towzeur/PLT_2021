@@ -87,5 +87,7 @@ void RenderConfig::load(std::string skin_name) {
     exit(1);
   }
 
-  std::cout << "///////////flag" << std::endl;
+  // ======== HexaMap ========
+  hexamap_outline_color =
+      utils::Utils::stringToColor(root["hexamap_outline_color"].asString());
 }

@@ -90,7 +90,7 @@ void Client::run() {
   //                               HEXA MAP
   // ---------------------------------------------------------------------------
 
-  render::HexaMap hm = render::HexaMap(ROW, COL, BOX_R);
+  render::HexaMap hm = render::HexaMap(config, ROW, COL, BOX_R);
   hm.initialize();
   hm.update();
 

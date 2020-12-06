@@ -5,10 +5,8 @@
 
 using namespace render;
 
-HexaMap::HexaMap(int nr, int nc, float hr) {
-  n_row = nr;
-  n_col = nc;
-  hexagon_r = hr;
+HexaMap::HexaMap(RenderConfig &conf, int nr, int nc, float hr)
+    : conf(conf), n_row(nr), n_col(nc), hexagon_r(hr) {
 
   COLOR_MAP[0] = sf::Color(187, 153, 221);
   COLOR_MAP[1] = sf::Color(221, 153, 187);
@@ -116,11 +114,11 @@ void HexaMap::fill_vertex(int r, int c, sf::Color col) {
     // start
     m_vertices_2[i0].position.x = hc.x + hexa_offsets[i].x;
     m_vertices_2[i0].position.y = hc.y + hexa_offsets[i].y;
-    m_vertices_2[i0].color = sf::Color::White;
+    m_vertices_2[i0].color = conf.hexamap_outline_color;
     // end
     m_vertices_2[i1].position.x = hc.x + hexa_offsets[(i + 1) % 6].x;
     m_vertices_2[i1].position.y = hc.y + hexa_offsets[(i + 1) % 6].y;
-    m_vertices_2[i1].color = sf::Color::White;
+    m_vertices_2[i1].color = conf.hexamap_outline_color;
   }
 }
 
@@ -200,9 +198,8 @@ void HexaMap::draw(sf::RenderTarget &target,
                    sf::RenderStates states) const { // const {
   states.transform *= getTransform();               // apply the transform
   states.texture = &m_tileset;                      // apply the tileset texture
-
-  // target.draw(m_vertices, states);
-  target.draw(m_vertices_2, states);
+  target.draw(m_vertices, states);                  // draw the fill
+  target.draw(m_vertices_2, states);                // draw the outline
 }
 
 int HexaMap::get_n_row() { return n_row; }

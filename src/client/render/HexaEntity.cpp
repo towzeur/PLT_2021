@@ -17,8 +17,6 @@ void HexaEntity::initialize() {
   m_vertices.setPrimitiveType(sf::Quads);
   m_vertices.resize(4 * n_row * n_col);
 
-  // load the tileset texture
-
   int x0, y0, w, h;
 
   w = conf.entity_width - 2;
@@ -61,10 +59,28 @@ void HexaEntity::initialize() {
       entity_show(r, c);
 
       // define its 4 texture coordinates
-      quad[0].texCoords = sf::Vector2f(1, 1);
-      quad[1].texCoords = sf::Vector2f(18, 1);
-      quad[2].texCoords = sf::Vector2f(18, 28);
-      quad[3].texCoords = sf::Vector2f(1, 28);
+      // -------------------------------------------
+      int i_entity = 0, x0, y0, x1, y1, x2, y2, x3, y3;
+      if (rand() % 2) {
+        i_entity = rand() % 10;
+      }
+      // top left
+      x0 = 0 * (conf.entity_width) + 1;
+      y0 = (i_entity) * (conf.entity_height - 1) + 1;
+      // top right
+      x1 = x0 + w;
+      y1 = y0;
+      // down right
+      x2 = x0 + w;
+      y2 = y0 + h;
+      // down left
+      x3 = x0;
+      y3 = y0 + h;
+
+      quad[0].texCoords = sf::Vector2f(x0, y0);
+      quad[1].texCoords = sf::Vector2f(x1, y1);
+      quad[2].texCoords = sf::Vector2f(x2, y2);
+      quad[3].texCoords = sf::Vector2f(x3, y3);
     }
   }
 }
