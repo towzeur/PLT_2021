@@ -1,10 +1,14 @@
 {
   "name": "medieval",
-  "tileset": ,
-  "background_enable": false,
-  "background_path": "res/texture/skins/background.bmp",
-  "background_color": "#000000",
-  "icon": "res/icons/220x220w.png",
+  "window_width": 800,
+  "window_height": 580,
+  "window_icon_path": "res/icons/220x220w.png",
+  "entity_width": 20,
+  "entity_height": 30,
+  "entity_tileset_path": "res/texture/skins/medieval.png",
+  "bg_color": "#000000",
+  "bg_enable": false,
+  "bg_texture_path": "res/texture/skins/background.bmp",
   "fps_enable": true,
   "fps_path": "res/fonts/Square.ttf"
 }

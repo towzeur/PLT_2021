@@ -11,8 +11,6 @@ using namespace client;
 const unsigned int ROW = 22;
 const unsigned int COL = 30;
 const unsigned int BOX_R = 14;
-const unsigned int WIDTH = 800;
-const unsigned int HEIGHT = 580;
 
 // =============================================================================
 // CLIENT
@@ -21,52 +19,45 @@ const unsigned int HEIGHT = 580;
 Client::Client() {}
 
 void Client::run() {
+  std::cout << "HELLO WORLD" << std::endl;
+  std::cout << std::endl;
+  srand(time(NULL));
 
-  // ---------------------------------------------------------------------------
-  //                                  JSON
-  // ---------------------------------------------------------------------------
+  render::RenderConfig config = render::RenderConfig();
+  config.load("medieval");
 
   // ---------------------------------------------------------------------------
   //                                WINDOWS
   // ---------------------------------------------------------------------------
 
-  srand(time(NULL));
-
-  std::cout << "HELLO WORLD" << std::endl;
-  std::cout << std::endl;
-
   sf::ContextSettings settings;
   settings.antialiasingLevel = 8;
-  sf::RenderWindow window({WIDTH, HEIGHT}, "Hexagons", sf::Style::Default,
-                          settings);
-  // window.setVerticalSyncEnabled(true);
+  sf::RenderWindow window({config.window_width, config.window_height},
+                          "Hexagons", sf::Style::Default, settings);
+  window.setVerticalSyncEnabled(true);
+
+  // set window's icon
+  window.setIcon(config.window_icon.getSize().x, config.window_icon.getSize().y,
+                 config.window_icon.getPixelsPtr());
+
+  // ---------------------------------------------------------------------------
+  //                                 VIEW
+  // ---------------------------------------------------------------------------
 
   // view
   // sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
   // window.setView(view);
   // view.setRotation(20.f);
 
-  // set window's icon
-  auto image = sf::Image{};
-  if (!image.loadFromFile(path_u.resolveRelative("res/icons/220x220w.png"))) {
-    // Error handling...
-  }
-  window.setIcon(image.getSize().x, image.getSize().y, image.getPixelsPtr());
-
   // ---------------------------------------------------------------------------
   //                                BACKGROUND
   // ---------------------------------------------------------------------------
 
-  sf::Texture texture;
-  sf::Sprite bg_sprite;
-  if (bg_enable) {
-    if (!texture.loadFromFile(rp_background)) {
-      // error...
-      exit(1);
-    }
-    texture.setRepeated(true);
-    bg_sprite = sf::Sprite(texture, sf::IntRect(0, 0, WIDTH, HEIGHT));
-  }
+  // sf::Texture texture;
+  // sf::Sprite bg_sprite;
+  // if (config.bg_enable) {
+  // texture.setRepeated(true);
+  // bg_sprite = sf::Sprite(texture, sf::IntRect(0, 0, WIDTH, HEIGHT));
 
   // ---------------------------------------------------------------------------
   //                                    FPS
@@ -76,15 +67,11 @@ void Client::run() {
   sf::Clock clock;
   sf::Time time_curr; //, time_prev = clock.getElapsedTime();
 
-  sf::Font font;
-  if (!font.loadFromFile(rp_font_fps))
-    return;
-
   sf::Text text;
-  text.setFont(font);
+  text.setFont(config.fps_font);
   text.setString("60");
   // sf::FloatRect blabla = text.getLocalBounds();
-  text.setPosition(WIDTH - text.getLocalBounds().width - 10, 0);
+  text.setPosition(config.window_width - text.getLocalBounds().width - 10, 0);
   text.setCharacterSize(30); // in pixel !
   text.setFillColor(sf::Color::Yellow);
   // text.setStyle(sf::Text::Bold | sf::Text::Underlined);
@@ -119,32 +106,9 @@ void Client::run() {
   // ---------------------------------------------------------------------------
 
   int entity_width = 20, entity_height = 30;
-  render::HexaEntity he = render::HexaEntity(hm, 20, 30, rp_skins);
+  render::HexaEntity he = render::HexaEntity(config, hm);
   he.initialize();
   he.update();
-
-  /*
-  // 10 entity : rand() % 10,
-  // Declare and load a texture
-  int entity_width = 20, entity_height = 30;
-  sf::Texture entities_textures;
-  if (!entities_textures.loadFromFile(rp_skins)) {
-    exit(1);
-  }
-
-  int i_entity = rand() % 10;
-  int x_e, y_e, w_e, h_e;
-  x_e = 0 * (entity_width) + 1;
-  y_e = (i_entity) * (entity_height - 1) + 1;
-  w_e = entity_width - 2;
-  h_e = entity_height - 2;
-  sf::Sprite entity_sprite(entities_textures, sf::IntRect(x_e, y_e, w_e, h_e));
-  int xc_e, yc_e;
-  sf::Vector2i hc = hm.get_hexa_center(rand() % ROW, rand() % COL);
-  xc_e = hc.x - entity_width / 2.;
-  yc_e = hc.y - entity_height / 2.;
-  entity_sprite.setPosition(xc_e, yc_e);
-  */
 
   // ---------------------------------------------------------------------------
   //                              GAME LOOP
@@ -222,12 +186,12 @@ void Client::run() {
 
     // DRAW : start -------------------------------------------------------
 
-    window.clear(bg_color); // clear the screen
-    if (bg_enable)
-      window.draw(bg_sprite); // background
-    window.draw(hm);          // hexa map
-    window.draw(he);          // entities
-    window.draw(text);        // fps counter
+    window.clear(config.bg_color); // clear the screen
+    // if (bg_enable)
+    //  window.draw(bg_sprite); // background
+    window.draw(hm);   // hexa map
+    window.draw(he);   // entities
+    window.draw(text); // fps counter
 
     // DRAW : end   -------------------------------------------------------
     window.display();
@@ -241,7 +205,8 @@ void Client::run() {
     if (clock.getElapsedTime().asSeconds() > 1.f) {
       clock.restart();
       text.setString(std::to_string(frame));
-      text.setPosition(WIDTH - text.getLocalBounds().width - 10, 0);
+      text.setPosition(config.window_width - text.getLocalBounds().width - 10,
+                       0);
       frame = 0;
     }
   }

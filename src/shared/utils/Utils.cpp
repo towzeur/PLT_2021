@@ -26,7 +26,7 @@ Utils::Utils() {}
 std::string Utils::resolveRelative(std::string target) {
   std::string out;
   std::string path = get_current_dir_name();
-  std::string root_dir = PathUtils::getRootDir();
+  std::string root_dir = Utils::getRootDir();
   std::cout << "[DEBUG] path : " << path << std::endl;
 
   size_t found = path.find(root_dir);

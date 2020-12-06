@@ -6,12 +6,7 @@
 
 using namespace render;
 
-HexaEntity::HexaEntity(HexaMap &hm, int ew, int eh, std::string tileset_path)
-    : hm(hm), entity_width(ew), entity_height(eh) {
-  if (!m_tileset.loadFromFile(tileset_path)) {
-    exit(1);
-  }
-}
+HexaEntity::HexaEntity(RenderConfig &conf, HexaMap &hm) : conf(conf), hm(hm) {}
 
 HexaEntity::~HexaEntity() {}
 
@@ -26,8 +21,8 @@ void HexaEntity::initialize() {
 
   int x0, y0, w, h;
 
-  w = entity_width - 2;
-  h = entity_height - 2;
+  w = conf.entity_width - 2;
+  h = conf.entity_height - 2;
   /*
   // top left
   x0 = 0 * (entity_width) + 1;
@@ -91,6 +86,7 @@ void HexaEntity::entity_show(int r, int c) {
 
 void HexaEntity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
   states.transform *= getTransform(); // apply the transform
-  states.texture = &m_tileset;        // apply the tileset texture
-  target.draw(m_vertices, states);    // draw the vertex array
+  states.texture = &conf.entity_tileset;
+  //&m_tileset;        // apply the tileset texture
+  target.draw(m_vertices, states); // draw the vertex array
 }
