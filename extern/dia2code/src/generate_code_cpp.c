@@ -744,7 +744,7 @@ void print_include_stdlib(struct stdlib_includes *si, char *name) {
       si->random = 1;
     }
     if (!si->sfmlGraphics &&
-        (strstr(name, "sf::RenderWindow") || trstr(name, "sf::VertexArray") ||
+        (strstr(name, "sf::RenderWindow") || strstr(name, "sf::VertexArray") ||
          strstr(name, "sf::Texture") || strstr(name, "sf::Color") ||
          strstr(name, "sf::Drawable") || strstr(name, "sf::Transformable") ||
          strstr(name, "sf::Sprite") || strstr(name, "sf::RenderTarget") ||
