@@ -156,27 +156,6 @@ void HexaMap::hex_toggle_transparency(int r, int c) {
 void HexaMap::update() {
   if (!initialized)
     initialize();
-
-  sf::Color color;
-  int ci = 0;
-
-  for (int c = 0; c < n_col; c++) {
-    for (int r = 0; r < n_row; r++) {
-
-      // color = COLOR_MAP[(ci++)%3];
-      /*
-      color = sf::Color(
-          rand() % 256 + 1,
-          rand() % 256 + 1,
-          rand() % 256 + 1
-      );
-      */
-      color = COLOR_MAP_SLAY[(ci++) % 6];
-      // color = sf::Color::White;
-      // color = (((c+r*n_col)%2)==0) ?  sf::Color::Blue : sf::Color::Red;
-      fill_vertex(r, c, color);
-    }
-  }
 }
 
 sf::Vector2u HexaMap::PointToCoord(double x, double y) {

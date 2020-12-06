@@ -12,75 +12,33 @@ HexaEntity::~HexaEntity() {}
 
 void HexaEntity::initialize() {
 
-  const int n_row = hm.get_n_row(), n_col = hm.get_n_col();
+  int n_row, n_col, w, h, w_2, h_2;
+  n_row = hm.get_n_row();
+  n_col = hm.get_n_col();
+  w = conf.entity_width - 2;
+  h = conf.entity_height - 2;
+  w_2 = w / 2.f;
+  h_2 = h / 2.f;
 
   m_vertices.setPrimitiveType(sf::Quads);
   m_vertices.resize(4 * n_row * n_col);
 
-  int x0, y0, w, h;
-
-  w = conf.entity_width - 2;
-  h = conf.entity_height - 2;
-  /*
-  // top left
-  x0 = 0 * (entity_width) + 1;
-  y0 = (i_entity) * (entity_height - 1) + 1;
-  // top right
-  x1 = x0 + w;
-  y1 = y0;
-  // down right
-  x2 = x0 + w;
-  y2 = y0 + h;
-  // down left
-  x3 = x0;
-  y3 = y0 + h;
-  */
-
   sf::Vector2i hc;
-  int w_2 = w / 2.f, h_2 = h / 2.f;
-
-  srand(time(NULL));
-
   for (int r = 0; r < n_row; ++r) {
     for (int c = 0; c < n_col; ++c) {
 
       hc = hm.get_hexa_center(r, c);
-
-      int i0 = 4 * (r * n_col + c);
-      sf::Vertex *quad = &m_vertices[i0];
-      // std::cout << hc.x << " | " << hc.y << std::endl;
+      sf::Vertex *quad = &m_vertices[4 * (r * n_col + c)];
 
       // define its 4 corners
-      quad[0].position = sf::Vector2f(hc.x - w_2, hc.y - h_2);
-      quad[1].position = sf::Vector2f(hc.x + w_2, hc.y - h_2);
-      quad[2].position = sf::Vector2f(hc.x + w_2, hc.y + h_2);
-      quad[3].position = sf::Vector2f(hc.x - w_2, hc.y + h_2);
+      int dy = -7;
+      quad[0].position = sf::Vector2f(hc.x - w_2, hc.y - h_2 + dy);
+      quad[1].position = sf::Vector2f(hc.x + w_2, hc.y - h_2 + dy);
+      quad[2].position = sf::Vector2f(hc.x + w_2, hc.y + h_2 + dy);
+      quad[3].position = sf::Vector2f(hc.x - w_2, hc.y + h_2 + dy);
 
       entity_show(r, c);
-
-      // define its 4 texture coordinates
-      // -------------------------------------------
-      int i_entity = 0, x0, y0, x1, y1, x2, y2, x3, y3;
-      if (rand() % 2) {
-        i_entity = rand() % 10;
-      }
-      // top left
-      x0 = 0 * (conf.entity_width) + 1;
-      y0 = (i_entity) * (conf.entity_height - 1) + 1;
-      // top right
-      x1 = x0 + w;
-      y1 = y0;
-      // down right
-      x2 = x0 + w;
-      y2 = y0 + h;
-      // down left
-      x3 = x0;
-      y3 = y0 + h;
-
-      quad[0].texCoords = sf::Vector2f(x0, y0);
-      quad[1].texCoords = sf::Vector2f(x1, y1);
-      quad[2].texCoords = sf::Vector2f(x2, y2);
-      quad[3].texCoords = sf::Vector2f(x3, y3);
+      entity_set(r, c, 0);
     }
   }
 }
@@ -106,6 +64,35 @@ void HexaEntity::entity_toggle_transparency(int r, int c) {
   } else {
     entity_hide(r, c);
   }
+}
+
+void HexaEntity::entity_set(int r, int c, int entity_type) {
+  int n_row, n_col, w, h, w_2, h_2;
+  n_row = hm.get_n_row();
+  n_col = hm.get_n_col();
+  w = conf.entity_width - 2;
+  h = conf.entity_height - 2;
+  w_2 = w / 2.f;
+  h_2 = h / 2.f;
+
+  int i0 = 4 * (r * n_col + c);
+  sf::Vertex *quad = &m_vertices[i0];
+
+  // top left
+  quad[0].texCoords.x = 0 * (conf.entity_width) + 1;
+  quad[0].texCoords.y = (entity_type) * (conf.entity_height - 1) + 1;
+
+  // top right
+  quad[1].texCoords.x = quad[0].texCoords.x + w;
+  quad[1].texCoords.y = quad[0].texCoords.y;
+
+  // down right
+  quad[2].texCoords.x = quad[0].texCoords.x + w;
+  quad[2].texCoords.y = quad[0].texCoords.y + h;
+
+  // down left
+  quad[3].texCoords.x = quad[0].texCoords.x;
+  quad[3].texCoords.y = quad[0].texCoords.y + h;
 }
 
 void HexaEntity::draw(sf::RenderTarget &target, sf::RenderStates states) const {
