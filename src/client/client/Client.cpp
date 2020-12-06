@@ -53,6 +53,7 @@ void Client::run() {
   //                                BACKGROUND
   // ---------------------------------------------------------------------------
 
+  render::Background bg = render::Background(config);
   // sf::Texture texture;
   // sf::Sprite bg_sprite;
   // if (config.bg_enable) {
@@ -186,9 +187,8 @@ void Client::run() {
 
     // DRAW : start -------------------------------------------------------
 
-    window.clear(config.bg_color); // clear the screen
-    // if (bg_enable)
-    //  window.draw(bg_sprite); // background
+    window.clear();    // clear the screen
+    window.draw(bg);   // background
     window.draw(hm);   // hexa map
     window.draw(he);   // entities
     window.draw(text); // fps counter

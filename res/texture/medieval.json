@@ -6,8 +6,8 @@
   "entity_width": 20,
   "entity_height": 30,
   "entity_tileset_path": "res/texture/skins/medieval.png",
-  "bg_color": "#000000",
-  "bg_enable": false,
+  "bg_color": "#FF0000",
+  "bg_enable": true,
   "bg_texture_path": "res/texture/skins/background.bmp",
   "fps_enable": true,
   "fps_path": "res/fonts/Square.ttf"
