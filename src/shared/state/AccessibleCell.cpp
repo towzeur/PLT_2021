@@ -23,9 +23,9 @@ void AccessibleCell::setTerritoryId(int territoryId) {
   this->territoryId = territoryId;
 }
 
-Entity AccessibleCell::getEntity() { return this->entity; }
+Entity &AccessibleCell::getEntity() { return this->entity; }
 
-void AccessibleCell::setEntity(Entity entity) { this->entity = entity; }
+void AccessibleCell::setEntity(Entity &entity) { this->entity = entity; }
 
 bool const AccessibleCell::operator== (const Cell &cell1) {}
 

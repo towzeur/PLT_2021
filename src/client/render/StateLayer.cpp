@@ -131,27 +131,52 @@ bool StateLayer::printText(state::State &state) {
   // queue (fifo) which will contain all the text to display on the HUD
   std::queue<sf::Text> texts;
 
+  std::vector<state::Player> &players = state.getPlayers();
+
   // add text for players
   for (unsigned int i = 0; i < state.getPlayers().size(); i++) {
+    std::vector<state::Territory> &territories = players[i].getTerritories();
+    state::Territory selectedTerritory;
+    selectedTerritory.setIncome(0);
+    selectedTerritory.setSavings(0);
+    selectedTerritory.setWages(0);
+    for (state::Territory t : territories) {
+      if (t.isSelected()) {
+        selectedTerritory = t;
+        break;
+      }
+    }
     sf::Text player;
-    player.setPosition(window.getSize().x - 200.f, i * 200.f);
+    player.setPosition(window.getSize().x - 350.f + i % 2 * 200,
+                       ((int)i / 2) * 200.f + 50);
     player.setFont(font);
     player.setString(state.getPlayers()[i].getName());
     player.setCharacterSize(30);
-    /* if (currentState.getTurnOwner() == 1)
-     player1.setFillColor(sf::Color::Green);*/
+    if (players[i].getStatus() == state::PlayerStatus::PLAYING) {
+      player.setFillColor(sf::Color::Green);
+    } else if (players[i].getStatus() == state::PlayerStatus::LOST) {
+      player.setFillColor(sf::Color::Red);
+    }
     texts.push(player);
 
     sf::Text playerInfo;
-    playerInfo.setPosition(window.getSize().x - 200.f,
-                           player.getPosition().y + 50);
+    playerInfo.setPosition(player.getPosition().x, player.getPosition().y + 50);
     playerInfo.setFont(font);
-    playerInfo.setString("Savings: " + std::to_string(0) + "$\nIncomes: " +
-                         std::to_string(0) + "$\nWages: " + std::to_string(0) +
-                         "$\nBalance: " + std::to_string(0) + "$");
+    playerInfo.setString(
+        "Savings: " + std::to_string(selectedTerritory.getSavings()) +
+        "$\nIncomes: " + std::to_string(selectedTerritory.getIncome()) +
+        "$\nWages: " + std::to_string(selectedTerritory.getWages()) +
+        "$\nBalance: " + std::to_string(selectedTerritory.getBalance()) + "$");
     playerInfo.setCharacterSize(20);
     texts.push(playerInfo);
   }
+
+  sf::Text shop;
+  shop.setPosition(window.getSize().x - 350.f, window.getSize().y - 200.f);
+  shop.setFont(font);
+  shop.setString("SHOP:\nPEASANT  CASTLE\n");
+  shop.setCharacterSize(30);
+  texts.push(shop);
 
   while (!texts.empty()) {
     window.draw(texts.front());
