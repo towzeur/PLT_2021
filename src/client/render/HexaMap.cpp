@@ -69,10 +69,10 @@ void HexaMap::initialize(int nr, int nc, float hr) {
   hexa_offsets[4] = sf::Vector2i(-hexagon_w2 / 2, -hexagon_h2);
   hexa_offsets[5] = sf::Vector2i(+hexagon_w2 / 2, -hexagon_h2);
 
-  for (int i = 0; i < 6; ++i) {
-    std::cout << i << ' ' << hexa_offsets[i].x << ' ' << hexa_offsets[i].y
-              << std::endl;
-  }
+  // for (int i = 0; i < 6; ++i) {
+  //  std::cout << i << ' ' << hexa_offsets[i].x << ' ' << hexa_offsets[i].y
+  //            << std::endl;
+  //}
 
   width = (hexagon_w / 4.f) * (nc > 0) + (nc * hexagon_w * 3.f / 4.f);
   height = (hexagon_h / 2.f) * (nc > 0) + (nr * hexagon_h);

@@ -27,14 +27,14 @@ std::string Utils::resolveRelative(std::string target) {
   std::string out;
   std::string path = get_current_dir_name();
   std::string root_dir = Utils::getRootDir();
-  std::cout << "[DEBUG] path : " << path << std::endl;
+  // std::cout << "[DEBUG] path : " << path << std::endl;
 
   size_t found = path.find(root_dir);
-  std::cout << "[DEBUG] found : " << found << std::endl;
+  // std::cout << "[DEBUG] found : " << found << std::endl;
   if (found != std::string::npos) {
 
     std::string sub_path = path.substr(found + root_dir.size());
-    std::cout << "[DEBUG] substr : " << sub_path << std::endl;
+    // std::cout << "[DEBUG] substr : " << sub_path << std::endl;
 
     // assert that only 1 root_dir was present in the path
     if (sub_path.find(root_dir) != std::string::npos) {
@@ -50,7 +50,7 @@ std::string Utils::resolveRelative(std::string target) {
   } else {
     exit(1);
   }
-  std::cout << "[DEBUG] resolved path : " << out << std::endl;
+  // std::cout << "[DEBUG] resolved path : " << out << std::endl;
   return out;
 }
 

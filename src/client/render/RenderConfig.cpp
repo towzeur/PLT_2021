@@ -43,7 +43,7 @@ void RenderConfig::load(std::string skin_name) {
     std::cout << errs << std::endl;
     exit(1);
   }
-  std::cout << root << std::endl;
+  // std::cout << root << std::endl;
 
   // ---------------------------------------------------------------------------
   // parse
