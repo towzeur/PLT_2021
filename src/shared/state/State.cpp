@@ -40,10 +40,7 @@ std::vector<std::unique_ptr<Player>> State::getPlayers() {
   return move(players);
 }
 
-size_t State::addPlayer(std::unique_ptr<Player> p) {
-  players.push_back(move(p));
-  return players.size();
-}
+void State::addPlayer(std::unique_ptr<Player> p) { players.push_back(move(p)); }
 
 Territory getTerritorySelected() {}
 
