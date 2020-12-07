@@ -55,7 +55,8 @@ BOOST_AUTO_TEST_CASE(TestState) {
     // getPlayer and addPlayer
     int playersSize = st.getPlayers().size();
     std::unique_ptr<Player> p;
-    BOOST_CHECK_EQUAL(st.addPlayer(move(p)), playersSize + 1);
+    st.addPlayer(move(p));
+    BOOST_CHECK_EQUAL(st.getNbPlayers(), playersSize + 1);
   }
 
   // Territory
@@ -194,7 +195,7 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // Engine
   {
     Engine ngine;
-    // ngine.init(); // Fatal Error
+    ngine.init(); // Fatal Error
     State st;
     ngine.setCurrentState(st);
     ngine.getCurrentState();
