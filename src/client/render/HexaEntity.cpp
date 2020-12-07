@@ -11,14 +11,12 @@ HexaEntity::HexaEntity(RenderConfig &conf, HexaMap &hm) : conf(conf), hm(hm) {}
 HexaEntity::~HexaEntity() {}
 
 void HexaEntity::initialize() {
-
-  int n_row, n_col, w, h, w_2, h_2;
-  n_row = hm.get_n_row();
-  n_col = hm.get_n_col();
-  w = conf.entity_width - 2;
-  h = conf.entity_height - 2;
-  w_2 = w / 2.f;
-  h_2 = h / 2.f;
+  const int n_row = hm.get_n_row();
+  const int n_col = hm.get_n_col();
+  const int w = conf.entity_width - 2;
+  const int h = conf.entity_height - 2;
+  const int w_2 = w / 2.f;
+  const int h_2 = h / 2.f;
 
   m_vertices.setPrimitiveType(sf::Quads);
   m_vertices.resize(4 * n_row * n_col);
@@ -37,13 +35,34 @@ void HexaEntity::initialize() {
       quad[2].position = sf::Vector2f(hc.x + w_2, hc.y + h_2 + dy);
       quad[3].position = sf::Vector2f(hc.x - w_2, hc.y + h_2 + dy);
 
-      entity_show(r, c);
       entity_set(r, c, 0);
     }
   }
 }
 
-void HexaEntity::update() {}
+void HexaEntity::update() {
+  int w, n_row, n_col;
+  w = conf.entity_width - 2;
+  n_row = hm.get_n_row();
+  n_col = hm.get_n_col();
+
+  if (clk.getElapsedTime().asSeconds() > 0.3f) {
+    clk.restart();
+    // change tileset
+    sf::Vertex *quad;
+    for (int r = 0; r < n_row; ++r) {
+      for (int c = 0; c < n_col; ++c) {
+        quad = &m_vertices[4 * (r * hm.get_n_col() + c)];
+        quad[0].texCoords.x = frame * (conf.entity_width - 1) + 1;
+        quad[1].texCoords.x = quad[0].texCoords.x + w;
+        quad[2].texCoords.x = quad[0].texCoords.x + w;
+        quad[3].texCoords.x = quad[0].texCoords.x;
+      }
+    }
+    // update frame
+    frame = (frame + 1) % conf.entity_frames;
+  }
+}
 
 void HexaEntity::entity_set_transparency(int r, int c, int a) {
   sf::Vertex *quad = &m_vertices[4 * (r * hm.get_n_col() + c)];
@@ -67,16 +86,11 @@ void HexaEntity::entity_toggle_transparency(int r, int c) {
 }
 
 void HexaEntity::entity_set(int r, int c, int entity_type) {
-  int n_row, n_col, w, h, w_2, h_2;
-  n_row = hm.get_n_row();
-  n_col = hm.get_n_col();
+  int w, h;
   w = conf.entity_width - 2;
   h = conf.entity_height - 2;
-  w_2 = w / 2.f;
-  h_2 = h / 2.f;
 
-  int i0 = 4 * (r * n_col + c);
-  sf::Vertex *quad = &m_vertices[i0];
+  sf::Vertex *quad = &m_vertices[4 * (r * hm.get_n_col() + c)];
 
   // top left
   quad[0].texCoords.x = 0 * (conf.entity_width) + 1;

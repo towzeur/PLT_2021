@@ -92,7 +92,7 @@ void Client::run() {
 
   render::HexaMap hm = render::HexaMap(config, ROW, COL, BOX_R);
   hm.initialize();
-  hm.update();
+  // hm.update();
 
   // ---------------------------------------------------------------------------
   //                              ENTITTY
@@ -100,7 +100,7 @@ void Client::run() {
 
   render::HexaEntity he = render::HexaEntity(config, hm);
   he.initialize();
-  he.update();
+  // he.update();
 
   // ---------------------------------------------------------------------------
   //                              init map
@@ -108,18 +108,23 @@ void Client::run() {
 
   for (int r = 0; r < ROW; ++r) {
     for (int c = 0; c < COL; ++c) {
+      he.entity_set(r, c, rand() % 11);
       hm.fill_vertex(r, c, hm.COLOR_MAP_SLAY[rand() % 6]);
-
+      // he.entity_set(r, c, 1);
+      /*
+      hm.fill_vertex(r, c, hm.COLOR_MAP_SLAY[rand() % 6]);
       if (rand() % 2) {
         hm.hex_show(r, c);
 
         he.entity_set(r, c, rand() % 10);
         he.entity_show(r, c);
-
       } else {
-        hm.hex_show(r, c);
-        he.entity_hide(r, c);
+        hm.hex_hide(r, c);
+
+        he.entity_set(r, c, 0);
+        he.entity_show(r, c);
       }
+      */
     }
   }
 
@@ -145,26 +150,26 @@ void Client::run() {
       if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Right) {
           std::cout << "Right" << std::endl;
-          hm.initialize(r, ++c, hexa_r);
+          // hm.initialize(r, ++c, hexa_r);
         } else if (event.key.code == sf::Keyboard::Left) {
           std::cout << "Left" << std::endl;
-          hm.initialize(r, --c, hexa_r);
+          // hm.initialize(r, --c, hexa_r);
         } else if (event.key.code == sf::Keyboard::Up) {
           std::cout << "Up" << std::endl;
-          hm.initialize(--r, c, hexa_r);
+          // hm.initialize(--r, c, hexa_r);
         } else if (event.key.code == sf::Keyboard::Down) {
           std::cout << "Down" << std::endl;
-          hm.initialize(++r, c, hexa_r);
+          // hm.initialize(++r, c, hexa_r);
           //} else if (event.key.code == sf::Keyboard::Enter) {
           //  std::cout << "OK" << std::endl;
         } else if (event.key.code == sf::Keyboard::Add) {
           std::cout << "+" << std::endl;
-          hm.initialize(r, c, ++hexa_r);
+          // hm.initialize(r, c, ++hexa_r);
         } else if (event.key.code == sf::Keyboard::Subtract) {
           std::cout << "-" << std::endl;
-          hm.initialize(r, c, --hexa_r);
+          // hm.initialize(r, c, --hexa_r);
         }
-        hm.update();
+        // hm.update();
       }
 
       if (event.type == sf::Event::MouseButtonPressed) {
@@ -214,6 +219,8 @@ void Client::run() {
     // time_curr = clock.getElapsedTime();
     // fps = 1.0f / (time_curr.asSeconds() - time_prev.asSeconds()); // the
     // asSeconds returns a float time_prev = time_curr;
+
+    he.update();
 
     frame++;
     if (clock.getElapsedTime().asSeconds() > 1.f) {
