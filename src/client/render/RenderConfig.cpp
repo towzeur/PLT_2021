@@ -11,6 +11,7 @@ RenderConfig::RenderConfig() {}
 void RenderConfig::load(std::string skin_name) {
 
   std::string tmp;
+  Json::Value node;
 
   // ---------------------------------------------------------------------------
   // construct the relative path from the skin name
@@ -73,13 +74,17 @@ void RenderConfig::load(std::string skin_name) {
   }
 
   // ======== background ========
-  bg_color = utils::Utils::stringToColor(root["bg_color"].asString());
-  bg_enable = root["bg_enable"].asBool();
-  tmp = utils::Utils::resolveRelative(root["bg_texture_path"].asString());
-  if (!bg_texture.loadFromFile(tmp)) {
-    std::cout << "[ERROR] bg_texture_path" << std::endl;
+  node = root["background"];
+  background_color = utils::Utils::stringToColor(node["color"].asString());
+  background_enable = node["enable"].asBool();
+  // background_image = sf::Image{};
+  tmp = utils::Utils::resolveRelative(node["image_path"].asString());
+  if (!background_image.loadFromFile(tmp)) {
+    std::cout << "[ERROR] background_image_path" << std::endl;
     exit(1);
   }
+  background_animated = node["animated"].asBool();
+  background_fps = node["fps"].asInt();
 
   // ======== fps ========
   tmp = utils::Utils::resolveRelative(root["fps_path"].asString());
@@ -94,7 +99,7 @@ void RenderConfig::load(std::string skin_name) {
 
   // ========  territory_tooltips ========
 
-  const Json::Value node = root["territory_tooltips"];
+  node = root["territory_tooltips"];
   territory_tooltips_width = node["width"].asInt();
   territory_tooltips_height = node["height"].asInt();
   territory_tooltips_margin_x = node["margin_x"].asInt();

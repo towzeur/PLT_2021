@@ -103,11 +103,17 @@ void Client::run() {
   // he.update();
 
   // ---------------------------------------------------------------------------
+  //                              ENTITTY
+  // ---------------------------------------------------------------------------
+
+  render::TerritoryTooltips tt = render::TerritoryTooltips(config);
+
+  // ---------------------------------------------------------------------------
   //                              init map
   // ---------------------------------------------------------------------------
 
-  for (int r = 0; r < ROW; ++r) {
-    for (int c = 0; c < COL; ++c) {
+  for (int r = 0; r < hm.get_n_row(); ++r) {
+    for (int c = 0; c < hm.get_n_col(); ++c) {
       he.entity_set(r, c, rand() % 11);
       hm.fill_vertex(r, c, hm.COLOR_MAP_SLAY[rand() % 6]);
       // he.entity_set(r, c, 1);
@@ -132,7 +138,7 @@ void Client::run() {
   //                              GAME LOOP
   // ---------------------------------------------------------------------------
   sf::Event event;
-  int r = ROW, c = COL, hexa_r = BOX_R;
+
   while (window.isOpen()) {
 
     while (window.pollEvent(event)) {
@@ -221,6 +227,7 @@ void Client::run() {
     // asSeconds returns a float time_prev = time_curr;
 
     he.update();
+    bg.update();
 
     frame++;
     if (clock.getElapsedTime().asSeconds() > 1.f) {

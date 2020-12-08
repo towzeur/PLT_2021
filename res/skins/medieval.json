@@ -18,9 +18,13 @@
   "entity_soldier_knight": 9,
   "entity_soldier_baron": 10,
   "entity_tileset_path": "res/texture/skins/medieval.png",
-  "bg_color": "#FF0000",
-  "bg_enable": true,
-  "bg_texture_path": "res/texture/skins/background.png",
+  "background": {
+    "color": "#FF0000",
+    "enable": true,
+    "image_path": "res/texture/water.png",
+    "animated": true,
+    "fps": 2
+  },
   "fps_enable": true,
   "fps_path": "res/fonts/Square.ttf",
   "hexamap_outline_color": "#000000",
