@@ -16,7 +16,7 @@ void RenderConfig::load(std::string skin_name) {
   // construct the relative path from the skin name
   // ---------------------------------------------------------------------------
   std::ostringstream stream;
-  stream << "res/texture/";
+  stream << "res/skins/";
   stream << skin_name;
   stream << ".json";
   std::string rpath_skin = utils::Utils::resolveRelative(stream.str());
