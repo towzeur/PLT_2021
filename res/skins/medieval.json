@@ -29,5 +29,11 @@
   "hexamap_color_2": "#008000",
   "hexamap_color_3": "#ffff00",
   "hexamap_color_4": "#00c000",
-  "hexamap_color_5": "#808000"
+  "hexamap_color_5": "#808000",
+  "territory_tooltips": {
+    "width": 128,
+    "height": 120,
+    "margin_x": 8,
+    "margin_y": 0
+  }
 }
