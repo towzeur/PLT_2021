@@ -20,11 +20,9 @@ BOOST_AUTO_TEST_CASE(TestState) {
     bool go = st.getGameOver();
     int turn = st.getTurn();
     int cpi = st.getCurrentPlayerId();
-    int np = st.getNbPlayers();
     BOOST_CHECK_EQUAL(go, false);
     BOOST_CHECK_EQUAL(turn, 0);
     BOOST_CHECK_EQUAL(cpi, 0);
-    BOOST_CHECK_EQUAL(np, 0);
 
     // gameOver setter
     go = true;
@@ -41,11 +39,6 @@ BOOST_AUTO_TEST_CASE(TestState) {
     st.setCurrentPlayerId(cpi);
     BOOST_CHECK_EQUAL(st.getCurrentPlayerId(), cpi);
 
-    // nbPlayers setter
-    np = 2;
-    st.setNbPlayers(np);
-    BOOST_CHECK_EQUAL(st.getNbPlayers(), np);
-
     // nextTurn
     turn = st.getTurn();
     BOOST_CHECK_EQUAL(st.nextTurn(), turn + 1);
@@ -56,7 +49,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     int playersSize = st.getPlayers().size();
     std::unique_ptr<Player> p;
     st.addPlayer(move(p));
-    BOOST_CHECK_EQUAL(st.getNbPlayers(), playersSize + 1);
+    BOOST_CHECK_EQUAL(st.getPlayers().size(), playersSize + 1);
   }
 
   // Territory
