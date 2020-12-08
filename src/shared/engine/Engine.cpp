@@ -14,12 +14,11 @@ void Engine::init() {
   std::string names[] = {"Badisse", "Nico", "Hicham", "Kaan"};
   bool neighborCellExist = true;
 
-  for (const std::string &name : names) {
-    std::unique_ptr<state::Player> p;
-    p->setName(name); // Fatal error test
+  for (auto &name : names) {
+    std::unique_ptr<state::Player> p(new state::Player);
+    p->setName(name);
     this->currentState.addPlayer(move(p));
   }
-
   try {
     this->currentState.getBoard().load("../../../res/map.txt");
   } catch (const std::exception &e) {
@@ -29,15 +28,23 @@ void Engine::init() {
 
   // Init Territories
   // Creation
+
+  std::vector<std::unique_ptr<state::Player>> players =
+      move(this->currentState.getPlayers());
   for (auto &c : move(this->currentState.getBoard().getCells())) {
     if (c->getEntity().getEntityTypeId() == state::EntityTypeId::FACILITY) {
-      std::unique_ptr<state::Territory> newTerritory;
+      std::unique_ptr<state::Player> p = move(players[c->getPlayerId() - 1]);
+      if (c->getPlayerId() - 1 == 0) {
+        p->setStatus(state::PLAYING);
+      }
+      std::unique_ptr<state::Territory> newTerritory(new state::Territory);
+      int uid = newTerritory->getUid();
       newTerritory->setCapitalCoords(c->getRow(), c->getCol());
-      this->currentState.getPlayers()[c->getPlayerId()]->addTerrotory(
-          move(newTerritory));
-      c->setTerritoryId(newTerritory->getUid());
+      p->addTerritory(move(newTerritory));
+      c->setTerritoryId(uid);
     }
   }
+
   // Adding cells which compose the territory
   for (auto &p : this->currentState.getPlayers()) {
     std::vector<std::unique_ptr<state::Cell>> allPlayerCells;
@@ -58,7 +65,6 @@ void Engine::init() {
   }
 
   this->currentState.setTurn(1);
-  this->currentState.getPlayers()[0]->setStatus(state::PLAYING);
 }
 
 void Engine::setCurrentState(state::State currentState) {
