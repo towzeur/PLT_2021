@@ -91,4 +91,12 @@ void RenderConfig::load(std::string skin_name) {
   // ======== HexaMap ========
   hexamap_outline_color =
       utils::Utils::stringToColor(root["hexamap_outline_color"].asString());
+
+  // ========  territory_tooltips ========
+
+  const Json::Value node = root["territory_tooltips"];
+  territory_tooltips_width = node["width"].asInt();
+  territory_tooltips_height = node["height"].asInt();
+  territory_tooltips_margin_x = node["margin_x"].asInt();
+  territory_tooltips_margin_y = node["margin_y"].asInt();
 }
