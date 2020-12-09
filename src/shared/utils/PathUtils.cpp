@@ -1,5 +1,6 @@
 #include <iostream>
 #include <unistd.h>
+#include <mach-o/dyld.h>
 
 #include "PathUtils.h"
 
@@ -24,7 +25,16 @@ PathUtils::PathUtils() {}
  */
 std::string PathUtils::resolveRelative(std::string target) {
   std::string out;
-  std::string path = get_current_dir_name();
+
+char pathh[1024];
+uint32_t size = sizeof(pathh);
+if (_NSGetExecutablePath(pathh, &size) == 0)
+    printf("executable path is %s\n", pathh);
+else
+    printf("buffer too small; need size %u\n", size);
+
+
+  std::string path(pathh) ;
   std::cout << "[DEBUG] path : " << path << std::endl;
 
   size_t found = path.find(ROOT_DIR);
