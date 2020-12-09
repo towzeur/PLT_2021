@@ -6,6 +6,8 @@ int Territory::instanceCount = 0;
 
 Territory::Territory() : savings(0) { this->uid = instanceCount++; }
 
+Territory::Territory (const Territory& territory1) {}
+
 Territory::~Territory() {}
 
 int Territory::getUid() { return uid; }
@@ -47,6 +49,4 @@ void Territory::setSelected(bool selected) { this->selected = selected; }
 
 bool Territory::isSelected() { return this->selected; }
 
-Territory *const Territory::clone() {}
-
-bool const Territory::equals(const Territory &t1) {}
+bool const Territory::operator== (const Territory& t1) {}
