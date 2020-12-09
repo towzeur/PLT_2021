@@ -2,7 +2,7 @@
 
 using namespace state;
 
-State::State() : gameOver(false), turn(0), currentPlayerId(0), nbPlayers(0) {}
+State::State() : gameOver(false), turn(0), currentPlayerId(0) {}
 
 State::State(const State &state1) {}
 
@@ -30,18 +30,11 @@ int State::getCurrentPlayerId() { return currentPlayerId; }
 
 void State::setCurrentPlayerId(int cpi) { currentPlayerId = cpi; }
 
-int State::getNbPlayers() { return nbPlayers; }
-
-void State::setNbPlayers(int np) { nbPlayers = np; }
-
 Board &State::getBoard() { return this->board; }
 
-std::vector<Player> &State::getPlayers() { return players; }
+std::vector<std::shared_ptr<Player>> State::getPlayers() { return players; }
 
-size_t State::addPlayer(Player *p) {
-  players.push_back(*p);
-  return players.size();
-}
+void State::addPlayer(std::shared_ptr<Player> p) { players.push_back(move(p)); }
 
 Territory getTerritorySelected() {}
 

@@ -2,7 +2,7 @@
 
 using namespace state;
 
-int Player::instanceCount = 0;
+int Player::instanceCount = 1;
 
 Player::Player() { this->uid = instanceCount++; }
 
@@ -24,8 +24,10 @@ void Player::setStatus(PlayerStatus status) { this->status = status; }
 
 Player *const Player::clone() {}
 
-void Player::addTerrotory(Territory &territory) {
+void Player::addTerritory(std::shared_ptr<Territory> territory) {
   this->territories.push_back(territory);
 }
 
-std::vector<Territory> &Player::getTerritories() { return this->territories; }
+std::vector<std::shared_ptr<Territory>> Player::getTerritories() {
+  return territories;
+}

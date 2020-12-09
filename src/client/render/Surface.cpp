@@ -12,7 +12,7 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
   int x_offset = 30;
   int y_offset = 30;
   sf::Vector2u size(tileSize.x * zoom, tileSize.y * zoom);
-  std::vector<std::unique_ptr<state::Cell>> &cells = board.getCells();
+  std::vector<std::shared_ptr<state::Cell>> cells = board.getCells();
   state::Cell cell;
   int tileNumber;
   int playerId;
@@ -33,7 +33,7 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
       odd_offset = size.x / 2;
     for (unsigned int j = 0; j < nb_col; ++j) {
 
-      std::unique_ptr<state::Cell> &cell = cells[i * nb_row + j];
+      std::shared_ptr<state::Cell> cell = cells[i * nb_row + j];
 
       if (surfaceNb == 0) {
         if (!cell->isAccessible()) {
