@@ -61,13 +61,10 @@ void Engine::init() {
         neighborCellExist = false;
       }
       for (size_t i = 0; i < allPlayerCells.size(); i++) {
-        std::cout << p->getName() << "\ncell: " << i << std::endl;
-        // printf("size: %d\n", p->getTerritories()[0]->getCells().size());
         if (p->getTerritories()[0]->getCells().size() == 0) {
           neighborCellExist = false;
         }
         for (auto &cp : p->getTerritories()[0]->getCells()) {
-          //  printf("ok\n");
           if (cp->getCol() == allPlayerCells[i]->getCol() &&
               cp->getRow() == allPlayerCells[i]->getRow() - 1) {
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
