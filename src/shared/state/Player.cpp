@@ -2,7 +2,7 @@
 
 using namespace state;
 
-int Player::instanceCount = 0;
+int Player::instanceCount = 1;
 
 Player::Player() { this->uid = instanceCount++; }
 
