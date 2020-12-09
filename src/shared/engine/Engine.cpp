@@ -32,22 +32,21 @@ void Engine::init() {
 
   std::vector<std::shared_ptr<state::Player>> players =
       this->currentState.getPlayers();
-  for (auto &c : move(this->currentState.getBoard().getCells())) {
+  for (auto &c : this->currentState.getBoard().getCells()) {
     if (c->getEntity().getEntityTypeId() == state::EntityTypeId::FACILITY) {
       std::shared_ptr<state::Player> p = players[c->getPlayerId() - 1];
       if (c->getPlayerId() - 1 == 0) {
         p->setStatus(state::PLAYING);
       }
-      std::unique_ptr<state::Territory> newTerritory(new state::Territory);
+      std::shared_ptr<state::Territory> newTerritory(new state::Territory);
       int uid = newTerritory->getUid();
       newTerritory->setCapitalCoords(c->getRow(), c->getCol());
-      p->addTerritory(move(newTerritory));
+      p->addTerritory(newTerritory);
       c->setTerritoryId(uid);
     }
   }
   // Adding cells which compose the territory
   for (auto &p : this->currentState.getPlayers()) {
-    printf("ok1\n");
 
     std::vector<std::shared_ptr<state::Cell>> allPlayerCells;
     for (auto &c : this->currentState.getBoard().getCells()) {
@@ -55,13 +54,47 @@ void Engine::init() {
         allPlayerCells.push_back(c);
       }
     }
-    printf("ok2\n");
 
     while (neighborCellExist) {
-      for (auto &c : allPlayerCells) {
+      if (allPlayerCells.size() == 0) {
+        neighborCellExist = false;
+      }
+      for (size_t i = 0; i < allPlayerCells.size(); i++) {
+        printf("size: %d\n", p->getTerritories()[0]->getCells().size());
+        if (p->getTerritories()[0]->getCells().size() == 0) {
+          neighborCellExist = false;
+        }
         for (auto &cp : p->getTerritories()[0]->getCells()) {
-          if (cp->getCol() == c->getCol() && cp->getRow() == c->getRow() - 1) {
-            p->getTerritories()[0]->addCell(c);
+          printf("ok\n");
+          if (cp->getCol() == allPlayerCells[i]->getCol() &&
+              cp->getRow() == allPlayerCells[i]->getRow() - 1) {
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
+                     cp->getRow() == allPlayerCells[i]->getRow() - 1) {
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+            allPlayerCells.push_back(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
+                     cp->getRow() == allPlayerCells[i]->getRow() + 1) {
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+            allPlayerCells.push_back(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
+                     cp->getRow() == allPlayerCells[i]->getRow() - 1) {
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+            allPlayerCells.push_back(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
+                     cp->getRow() == allPlayerCells[i]->getRow() + 1) {
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+            allPlayerCells.push_back(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
+                     cp->getRow() == allPlayerCells[i]->getRow()) {
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+            allPlayerCells.push_back(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() - 1 &&
+                     cp->getRow() == allPlayerCells[i]->getRow()) {
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+            allPlayerCells.push_back(allPlayerCells[i]);
+          } else {
+            neighborCellExist = false;
           }
         }
       }
