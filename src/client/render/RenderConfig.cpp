@@ -53,10 +53,11 @@ void RenderConfig::load(std::string skin_name) {
   name = root["Name"].asString();
 
   // ======== window ========
-  window_width = root["window_width"].asInt();
-  window_height = root["window_height"].asInt();
+  node = root["window"];
+  window_width = node["width"].asInt();
+  window_height = node["height"].asInt();
   window_icon = sf::Image{};
-  tmp = utils::Utils::resolveRelative(root["window_icon_path"].asString());
+  tmp = utils::Utils::resolveRelative(node["icon_path"].asString());
   if (!window_icon.loadFromFile(tmp)) {
     // Error handling...
     std::cout << "[ERROR] window_icon_path" << std::endl;
@@ -64,10 +65,11 @@ void RenderConfig::load(std::string skin_name) {
   }
 
   // ======== entity ========
-  entity_width = root["entity_width"].asInt();
-  entity_height = root["entity_height"].asInt();
-  entity_frames = root["entity_frames"].asInt();
-  tmp = utils::Utils::resolveRelative(root["entity_tileset_path"].asString());
+  node = root["entity"];
+  entity_width = node["width"].asInt();
+  entity_height = node["height"].asInt();
+  entity_frames = node["frames"].asInt();
+  tmp = utils::Utils::resolveRelative(node["tileset_path"].asString());
   if (!entity_tileset.loadFromFile(tmp)) {
     std::cout << "[ERROR] entity_tileset_path" << std::endl;
     exit(1);
@@ -87,15 +89,18 @@ void RenderConfig::load(std::string skin_name) {
   background_fps = node["fps"].asInt();
 
   // ======== fps ========
-  tmp = utils::Utils::resolveRelative(root["fps_path"].asString());
+  node = root["fps_counter"];
+  fps_enable = node["enable"].asBool();
+  tmp = utils::Utils::resolveRelative(node["font_path"].asString());
   if (!fps_font.loadFromFile(tmp)) {
     std::cout << "[ERROR] fps_path" << std::endl;
     exit(1);
   }
 
   // ======== HexaMap ========
+  node = root["hexamap"];
   hexamap_outline_color =
-      utils::Utils::stringToColor(root["hexamap_outline_color"].asString());
+      utils::Utils::stringToColor(node["outline_color"].asString());
 
   // ========  territory_tooltips ========
 

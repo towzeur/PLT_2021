@@ -1,39 +1,51 @@
 {
   "name": "medieval",
-  "window_width": 800,
-  "window_height": 580,
-  "window_icon_path": "res/icons/220x220w.png",
-  "entity_width": 20,
-  "entity_height": 30,
-  "entity_frames": 4,
-  "entity_empty_void": 0,
-  "entity_tree_pine": 1,
-  "entity_tree_palm": 2,
-  "entity_facility_capital_on": 3,
-  "entity_facility_capital_off": 4,
-  "entity_facility_castle": 5,
-  "entity_facility_gravestone": 6,
-  "entity_soldier_peasant": 7,
-  "entity_soldier_spearman": 8,
-  "entity_soldier_knight": 9,
-  "entity_soldier_baron": 10,
-  "entity_tileset_path": "res/texture/skins/medieval.png",
+  "window": {
+    "width": 800,
+    "height": 580,
+    "icon_path": "res/icons/220x220w.png"
+  },
+  "entity": {
+    "width": 20,
+    "height": 30,
+    "frames": 4,
+    "tileset_path": "res/texture/skins/medieval.png",
+    "mapping": {
+      "empty_void": 0,
+      "tree_pine": 1,
+      "tree_palm": 2,
+      "facility_capital_on": 3,
+      "facility_capital_off": 4,
+      "facility_castle": 5,
+      "facility_gravestone": 6,
+      "soldier_peasant": 7,
+      "soldier_spearman": 8,
+      "soldier_knight": 9,
+      "soldier_baron": 10
+    }
+  },
   "background": {
     "color": "#FF0000",
     "enable": true,
-    "image_path": "res/texture/water.png",
+    "image_path": "res/texture/water1.png",
     "animated": true,
-    "fps": 2
+    "fps": 4
   },
-  "fps_enable": true,
-  "fps_path": "res/fonts/Square.ttf",
-  "hexamap_outline_color": "#000000",
-  "hexamap_color_0": "#00ff00",
-  "hexamap_color_1": "#c0c000",
-  "hexamap_color_2": "#008000",
-  "hexamap_color_3": "#ffff00",
-  "hexamap_color_4": "#00c000",
-  "hexamap_color_5": "#808000",
+  "fps_counter": {
+    "enable": true,
+    "font_path": "res/fonts/Square.ttf"
+  },
+  "hexamap": {
+    "outline_color": "#000000",
+    "colors": [
+      "#00ff00",
+      "#c0c000",
+      "#008000",
+      "#ffff00",
+      "#00c000",
+      "#808000"
+    ]
+  },
   "territory_tooltips": {
     "width": 128,
     "height": 120,
