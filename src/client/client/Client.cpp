@@ -1,16 +1,10 @@
 #include "Client.h"
 
-//#include <SFML/Graphics.hpp>
-#include "json/json.h"
 #include <fstream>
 #include <iostream>
 #include <time.h>
 
 using namespace client;
-
-const unsigned int ROW = 22;
-const unsigned int COL = 30;
-const unsigned int BOX_R = 14;
 
 // =============================================================================
 // CLIENT
@@ -20,7 +14,6 @@ Client::Client() {}
 
 void Client::run() {
   std::cout << "HELLO WORLD" << std::endl;
-  std::cout << std::endl;
   srand(time(NULL));
 
   render::RenderConfig config = render::RenderConfig();
@@ -39,15 +32,6 @@ void Client::run() {
   // set window's icon
   window.setIcon(config.window_icon.getSize().x, config.window_icon.getSize().y,
                  config.window_icon.getPixelsPtr());
-
-  // ---------------------------------------------------------------------------
-  //                                 VIEW
-  // ---------------------------------------------------------------------------
-
-  // view
-  // sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
-  // window.setView(view);
-  // view.setRotation(20.f);
 
   // ---------------------------------------------------------------------------
   //                                BACKGROUND
@@ -90,17 +74,15 @@ void Client::run() {
   //                               HEXA MAP
   // ---------------------------------------------------------------------------
 
-  render::HexaMap hm = render::HexaMap(config, ROW, COL, BOX_R);
-  hm.initialize();
-  // hm.update();
+  render::HexaMap hm = render::HexaMap(config);
+  std::cout << "hexamap width " << hm.get_width() << std::endl;
+  std::cout << "hexamap height " << hm.get_height() << std::endl;
 
   // ---------------------------------------------------------------------------
   //                              ENTITTY
   // ---------------------------------------------------------------------------
 
   render::HexaEntity he = render::HexaEntity(config);
-  he.initialize();
-  // he.update();
 
   // ---------------------------------------------------------------------------
   //                              ENTITTY
@@ -112,25 +94,20 @@ void Client::run() {
   //                              init map
   // ---------------------------------------------------------------------------
 
-  for (int r = 0; r < hm.get_n_row(); ++r) {
-    for (int c = 0; c < hm.get_n_col(); ++c) {
+  for (int r = 0; r < config.hexamap_n_row; ++r) {
+    for (int c = 0; c < config.hexamap_n_col; ++c) {
       he.entity_set(r, c, rand() % 11);
-      hm.fill_vertex(r, c, hm.COLOR_MAP_SLAY[rand() % 6]);
-      // he.entity_set(r, c, 1);
-      /*
-      hm.fill_vertex(r, c, hm.COLOR_MAP_SLAY[rand() % 6]);
+      hm.hex_set_color(r, c, config.hexamap_colors[rand() % 6]);
+
       if (rand() % 2) {
         hm.hex_show(r, c);
-
         he.entity_set(r, c, rand() % 10);
         he.entity_show(r, c);
       } else {
         hm.hex_hide(r, c);
-
         he.entity_set(r, c, 0);
-        he.entity_show(r, c);
+        he.entity_hide(r, c);
       }
-      */
     }
   }
 
@@ -196,8 +173,8 @@ void Client::run() {
               hm.PointToCoord(event.mouseButton.x, event.mouseButton.y);
           std::cout << "=>" << coords.x << "," << coords.y << std::endl;
           int r_click = coords.x, c_click = coords.y;
-          if ((r_click >= 0 && r_click < hm.get_n_row()) &&
-              (c_click >= 0 && c_click < hm.get_n_col())) {
+          if ((r_click >= 0 && r_click < config.hexamap_n_row) &&
+              (c_click >= 0 && c_click < config.hexamap_n_col)) {
             std::cout << "!" << std::endl;
             // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
             hm.hex_toggle_transparency(r_click, c_click);
