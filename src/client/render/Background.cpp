@@ -12,7 +12,6 @@ Background::Background(RenderConfig &conf) : conf(conf) {
     texture.setRepeated(true); // set this to fill the background
 
     if (conf.background_animated) {
-      const sf::Uint8 *pixels = conf.background_image.getPixelsPtr();
       unsigned int width = conf.background_image.getSize().x;
       unsigned int height = conf.background_image.getSize().y;
       nb_frames = width / height;
