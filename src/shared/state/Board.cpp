@@ -41,6 +41,9 @@ enum TOKENS {
 
 Board::Board() {}
 
+Board::Board (const Board& board1): nRow(board1.nRow),
+nCol(board1.nCol) {}
+
 Board::Board(int nRow, int nCol) {
   this->nRow = nRow;
   this->nCol = nCol;
@@ -213,6 +216,4 @@ int Board::getNRow() { return nRow; }
 
 std::vector<std::unique_ptr<Cell>> &Board::getCells() { return this->cells; }
 
-Board *const Board::clone() {}
-
-bool const Board::equals(const Board &board1) {}
+bool const Board::operator== (const Board& board1) {}
