@@ -1,12 +1,14 @@
 #include "RenderConfig.h"
 
-#include "json/json.h" // Json
+#include "json/json.h"
 #include <fstream>
 #include <iostream>
 
 using namespace render;
 
 RenderConfig::RenderConfig() {}
+
+RenderConfig::~RenderConfig() {}
 
 void RenderConfig::load(std::string skin_name) {
 
@@ -99,11 +101,16 @@ void RenderConfig::load(std::string skin_name) {
 
   // ======== HexaMap ========
   node = root["hexamap"];
+  hexamap_n_row = node["n_row"].asInt();
+  hexamap_n_col = node["n_col"].asInt();
+  hexamap_hexa_r = node["hexa_r"].asInt();
   hexamap_outline_color =
       utils::Utils::stringToColor(node["outline_color"].asString());
+  node = node["colors"];
+  for (unsigned int i = 0; i < node.size(); ++i)
+    hexamap_colors.push_back(utils::Utils::stringToColor(node[i].asString()));
 
   // ========  territory_tooltips ========
-
   node = root["territory_tooltips"];
   territory_tooltips_width = node["width"].asInt();
   territory_tooltips_height = node["height"].asInt();
