@@ -133,7 +133,6 @@ bool StateLayer::printText(state::State &state) {
   std::vector<std::shared_ptr<state::Player>> players = state.getPlayers();
 
   // add text for players
-  printf("size: %d\n", state.getPlayers().size());
   for (unsigned int i = 0; i < players.size(); i++) {
     std::vector<std::shared_ptr<state::Territory>> territories =
         players[i]->getTerritories();
@@ -141,6 +140,7 @@ bool StateLayer::printText(state::State &state) {
     selectedTerritory->setIncome(0);
     selectedTerritory->setSavings(0);
     selectedTerritory->setWages(0);
+    selectedTerritory->setBalance(0);
     for (auto &t : move(territories)) {
       if (t->isSelected()) {
         selectedTerritory = t;
@@ -152,7 +152,6 @@ bool StateLayer::printText(state::State &state) {
                        ((int)i / 2) * 200.f + 50);
     player.setFont(font);
     player.setString(players[i]->getName());
-    std::cout << players[i]->getName() << std::endl;
     player.setCharacterSize(30);
     if (players[i]->getStatus() == state::PlayerStatus::PLAYING) {
       player.setFillColor(sf::Color::Green);
@@ -163,7 +162,6 @@ bool StateLayer::printText(state::State &state) {
 
     sf::Text playerInfo;
     playerInfo.setPosition(player.getPosition().x, player.getPosition().y + 50);
-    std::cout << player.getPosition().x << std::endl;
     playerInfo.setFont(font);
     playerInfo.setString(
         "Savings: " + std::to_string(selectedTerritory->getSavings()) +
@@ -179,6 +177,7 @@ bool StateLayer::printText(state::State &state) {
   shop.setFont(font);
   shop.setString("SHOP:\nPEASANT  CASTLE\n");
   shop.setCharacterSize(30);
+  shop.setFillColor(sf::Color::Blue);
   texts.push(shop);
 
   while (!texts.empty()) {
