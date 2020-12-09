@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // Engine
   {
     Engine ngine;
-    // ngine.init(); // Fatal Error
+    ngine.init();
     State st;
     ngine.setCurrentState(st);
     ngine.getCurrentState();
