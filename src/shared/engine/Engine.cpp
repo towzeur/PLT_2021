@@ -47,8 +47,9 @@ void Engine::init() {
   }
   // Adding cells which compose the territory
   for (auto &p : this->currentState.getPlayers()) {
-
+    neighborCellExist = true;
     std::vector<std::shared_ptr<state::Cell>> allPlayerCells;
+
     for (auto &c : this->currentState.getBoard().getCells()) {
       if (c->getPlayerId() == p->getUid()) {
         allPlayerCells.push_back(c);
@@ -60,12 +61,13 @@ void Engine::init() {
         neighborCellExist = false;
       }
       for (size_t i = 0; i < allPlayerCells.size(); i++) {
-        printf("size: %d\n", p->getTerritories()[0]->getCells().size());
+        std::cout << p->getName() << "\ncell: " << i << std::endl;
+        // printf("size: %d\n", p->getTerritories()[0]->getCells().size());
         if (p->getTerritories()[0]->getCells().size() == 0) {
           neighborCellExist = false;
         }
         for (auto &cp : p->getTerritories()[0]->getCells()) {
-          printf("ok\n");
+          //  printf("ok\n");
           if (cp->getCol() == allPlayerCells[i]->getCol() &&
               cp->getRow() == allPlayerCells[i]->getRow() - 1) {
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
