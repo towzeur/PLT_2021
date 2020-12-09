@@ -130,20 +130,20 @@ void StateLayer::draw(sf::RenderWindow &window, state::State &state) {
 bool StateLayer::printText(state::State &state) {
   // queue (fifo) which will contain all the text to display on the HUD
   std::queue<sf::Text> texts;
-
-  std::vector<std::unique_ptr<state::Player>> players = state.getPlayers();
+  std::vector<std::shared_ptr<state::Player>> players = state.getPlayers();
 
   // add text for players
-  for (unsigned int i = 0; i < state.getPlayers().size(); i++) {
-    std::vector<std::unique_ptr<state::Territory>> territories =
+  printf("size: %d\n", state.getPlayers().size());
+  for (unsigned int i = 0; i < players.size(); i++) {
+    std::vector<std::shared_ptr<state::Territory>> territories =
         players[i]->getTerritories();
-    std::unique_ptr<state::Territory> selectedTerritory;
+    std::shared_ptr<state::Territory> selectedTerritory(new state::Territory);
     selectedTerritory->setIncome(0);
     selectedTerritory->setSavings(0);
     selectedTerritory->setWages(0);
     for (auto &t : move(territories)) {
       if (t->isSelected()) {
-        selectedTerritory = move(t);
+        selectedTerritory = t;
         break;
       }
     }
@@ -151,7 +151,8 @@ bool StateLayer::printText(state::State &state) {
     player.setPosition(window.getSize().x - 350.f + i % 2 * 200,
                        ((int)i / 2) * 200.f + 50);
     player.setFont(font);
-    player.setString(state.getPlayers()[i]->getName());
+    player.setString(players[i]->getName());
+    std::cout << players[i]->getName() << std::endl;
     player.setCharacterSize(30);
     if (players[i]->getStatus() == state::PlayerStatus::PLAYING) {
       player.setFillColor(sf::Color::Green);
@@ -162,6 +163,7 @@ bool StateLayer::printText(state::State &state) {
 
     sf::Text playerInfo;
     playerInfo.setPosition(player.getPosition().x, player.getPosition().y + 50);
+    std::cout << player.getPosition().x << std::endl;
     playerInfo.setFont(font);
     playerInfo.setString(
         "Savings: " + std::to_string(selectedTerritory->getSavings()) +

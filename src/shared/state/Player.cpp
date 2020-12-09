@@ -24,10 +24,10 @@ void Player::setStatus(PlayerStatus status) { this->status = status; }
 
 Player *const Player::clone() {}
 
-void Player::addTerritory(std::unique_ptr<Territory> territory) {
-  this->territories.push_back(move(territory));
+void Player::addTerritory(std::shared_ptr<Territory> territory) {
+  this->territories.push_back(territory);
 }
 
-std::vector<std::unique_ptr<Territory>> Player::getTerritories() {
-  return move(territories);
+std::vector<std::shared_ptr<Territory>> Player::getTerritories() {
+  return territories;
 }

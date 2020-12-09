@@ -211,7 +211,7 @@ int Board::getNCol() { return nCol; }
 
 int Board::getNRow() { return nRow; }
 
-std::vector<std::unique_ptr<Cell>> &Board::getCells() { return this->cells; }
+std::vector<std::shared_ptr<Cell>> &Board::getCells() { return this->cells; }
 
 Board *const Board::clone() {}
 

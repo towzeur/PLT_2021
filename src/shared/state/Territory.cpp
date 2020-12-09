@@ -51,8 +51,6 @@ Territory *const Territory::clone() {}
 
 bool const Territory::equals(const Territory &t1) {}
 
-void Territory::addCell(std::unique_ptr<Cell> cell) {
-  cells.push_back(move(cell));
-}
+void Territory::addCell(std::shared_ptr<Cell> cell) { cells.push_back(cell); }
 
-std::vector<std::unique_ptr<Cell>> Territory::getCells() { return move(cells); }
+std::vector<std::shared_ptr<Cell>> Territory::getCells() { return cells; }

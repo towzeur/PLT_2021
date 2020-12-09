@@ -32,11 +32,9 @@ void State::setCurrentPlayerId(int cpi) { currentPlayerId = cpi; }
 
 Board &State::getBoard() { return this->board; }
 
-std::vector<std::unique_ptr<Player>> State::getPlayers() {
-  return move(players);
-}
+std::vector<std::shared_ptr<Player>> State::getPlayers() { return players; }
 
-void State::addPlayer(std::unique_ptr<Player> p) { players.push_back(move(p)); }
+void State::addPlayer(std::shared_ptr<Player> p) { players.push_back(move(p)); }
 
 Territory getTerritorySelected() {}
 
