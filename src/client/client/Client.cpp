@@ -98,7 +98,7 @@ void Client::run() {
   //                              ENTITTY
   // ---------------------------------------------------------------------------
 
-  render::HexaEntity he = render::HexaEntity(config, hm);
+  render::HexaEntity he = render::HexaEntity(config);
   he.initialize();
   // he.update();
 

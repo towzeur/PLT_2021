@@ -1,7 +1,7 @@
 #include "HexaMap.h"
 
 #include <iostream>
-#include <math.h> // sin and cos
+#include <math.h> // sqrt
 
 using namespace render;
 
