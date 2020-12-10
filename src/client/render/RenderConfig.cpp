@@ -76,6 +76,7 @@ void RenderConfig::load(std::string skin_name) {
     std::cout << "[ERROR] entity_tileset_path" << std::endl;
     exit(1);
   }
+  entity_fps = node["fps"].asInt();
 
   // ======== background ========
   node = root["background"];

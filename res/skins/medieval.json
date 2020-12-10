@@ -22,13 +22,14 @@
       "soldier_spearman": 8,
       "soldier_knight": 9,
       "soldier_baron": 10
-    }
+    },
+    "fps": 4
   },
   "background": {
     "color": "#FF0000",
-    "enable": true,
-    "image_path": "res/texture/water.png",
-    "animated": true,
+    "enable": false,
+    "image_path": "res/texture/water_redfire.png",
+    "animated": false,
     "fps": 4
   },
   "fps_counter": {

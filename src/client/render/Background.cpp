@@ -45,7 +45,7 @@ Background::~Background() {
 void Background::update() {
   if (conf.background_animated) {
 
-    if (clk.getElapsedTime().asSeconds() > (1.0 / conf.background_fps)) {
+    if (clk.getElapsedTime().asSeconds() > (1. / conf.background_fps)) {
       clk.restart();
 
       texture.update(frames[i_frame]);

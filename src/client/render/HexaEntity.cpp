@@ -89,15 +89,12 @@ void HexaEntity::entity_set(int r, int c, int entity_type) {
   // top left
   quad[0].texCoords.x = 0 * (conf.entity_width) + 1;
   quad[0].texCoords.y = (entity_type) * (conf.entity_height - 1) + 1;
-
   // top right
   quad[1].texCoords.x = quad[0].texCoords.x + w;
   quad[1].texCoords.y = quad[0].texCoords.y;
-
   // down right
   quad[2].texCoords.x = quad[0].texCoords.x + w;
   quad[2].texCoords.y = quad[0].texCoords.y + h;
-
   // down left
   quad[3].texCoords.x = quad[0].texCoords.x;
   quad[3].texCoords.y = quad[0].texCoords.y + h;
@@ -106,21 +103,21 @@ void HexaEntity::entity_set(int r, int c, int entity_type) {
 void HexaEntity::update() {
   int w = conf.entity_width - 2;
 
-  if (clk.getElapsedTime().asSeconds() > 0.3f) {
+  if (clk.getElapsedTime().asSeconds() > (1. / conf.entity_fps)) {
     clk.restart();
-    // change tileset
+
     sf::Vertex *quad;
     for (int r = 0; r < conf.hexamap_n_row; ++r) {
       for (int c = 0; c < conf.hexamap_n_col; ++c) {
         quad = &m_vertices[4 * (r * conf.hexamap_n_col + c)];
-        quad[0].texCoords.x = frame * (conf.entity_width - 1) + 1;
+        quad[0].texCoords.x = i_frame * (conf.entity_width - 1) + 1;
         quad[1].texCoords.x = quad[0].texCoords.x + w;
         quad[2].texCoords.x = quad[0].texCoords.x + w;
         quad[3].texCoords.x = quad[0].texCoords.x;
       }
     }
     // update frame
-    frame = (frame + 1) % conf.entity_frames;
+    i_frame = (i_frame + 1) % conf.entity_frames;
   }
 }
 
