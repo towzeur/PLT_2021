@@ -60,6 +60,7 @@ void Engine::init() {
     }
 
     while (neighborCellExist) {
+
       if (allPlayerCells.size() == 0) {
         neighborCellExist = false;
       }
@@ -69,32 +70,28 @@ void Engine::init() {
         }
         for (auto &cp : p->getTerritories()[0]->getCells()) {
           if (cp->getCol() == allPlayerCells[i]->getCol() &&
-              cp->getRow() == allPlayerCells[i]->getRow() - 1) {
+              cp->getRow() == allPlayerCells[i]->getRow()) {
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
+                     cp->getRow() == allPlayerCells[i]->getRow() - 1) {
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
                      cp->getRow() == allPlayerCells[i]->getRow() - 1) {
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
                      cp->getRow() == allPlayerCells[i]->getRow() + 1) {
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
                      cp->getRow() == allPlayerCells[i]->getRow() - 1) {
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
                      cp->getRow() == allPlayerCells[i]->getRow() + 1) {
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
                      cp->getRow() == allPlayerCells[i]->getRow()) {
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() - 1 &&
                      cp->getRow() == allPlayerCells[i]->getRow()) {
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else {
             neighborCellExist = false;
           }
