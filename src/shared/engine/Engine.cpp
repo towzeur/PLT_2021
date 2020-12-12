@@ -9,6 +9,8 @@ Engine::Engine() {}
 
 Engine::~Engine() {}
 
+void checkNeighbor() {}
+
 void Engine::init() {
 
   std::string names[] = {"Badisse", "Nico", "Hicham", "Kaan"};
@@ -41,6 +43,7 @@ void Engine::init() {
       std::shared_ptr<state::Territory> newTerritory(new state::Territory);
       int uid = newTerritory->getUid();
       newTerritory->setCapitalCoords(c->getRow(), c->getCol());
+      newTerritory->addCell(c);
       p->addTerritory(newTerritory);
       c->setTerritoryId(uid);
     }
