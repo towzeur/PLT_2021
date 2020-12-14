@@ -125,7 +125,7 @@ std::shared_ptr<Cell> detokenize(std::string token) {
     entity = (Entity)Tree(TREE, PALM);
     break;
   case TOKEN_SOLIDER_GRAVESTONE:
-    entity = (Entity)Soldier(FACILITY, GRAVESTONE);
+    entity = (Entity)Facility(FACILITY, GRAVESTONE);
     break;
   case TOKEN_SOLIDER_BARON:
     entity =
