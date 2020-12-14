@@ -11,18 +11,19 @@ void FinishTurnCommand::execute(state::State &state) {
 
   std::vector<std::shared_ptr<state::Cell>> cells = state.getBoard().getCells();
   for (std::shared_ptr<state::Cell> &soldier : cells) {
-    if (soldier->getEntity().isSoldier()) {
-      state::Soldier &s = dynamic_cast<state::Soldier &>(soldier->getEntity());
+    printf("ns\n");
+    if (soldier->getEntity().isSoldier() && soldier->isAccessible()) {
       // Reset PA of all soldiers at the end of the turn
-      if (s.getPA() == 0) {
-        s.setPA(0);
-      }
+      printf("bonjour\n");
+      printf("c= %d r= %d\n", soldier->getCol(), soldier->getRow());
+      soldier->getEntity().setPA(1);
     }
   }
+  printf("bbbb\n");
 
   std::vector<std::shared_ptr<state::Territory>> territories =
       currentPlayer.getTerritories();
-
+  printf("jjj\n");
   for (auto &territory : territories) {
     // Reset selected
     territory->setSelected(false);
