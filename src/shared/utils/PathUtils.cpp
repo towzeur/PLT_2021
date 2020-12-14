@@ -1,12 +1,9 @@
 #include <iostream>
 #include <unistd.h>
-#include <boost/filesystem.hpp>
-
 #include "PathUtils.h"
+#define CWD_MAX 1024                                                             
 
 using namespace utils;
-using namespace boost::filesystem;
-
 
 PathUtils::PathUtils() {}
 
@@ -25,9 +22,11 @@ PathUtils::PathUtils() {}
  * @param target
  * @return std::string
  */
+char cwd[CWD_MAX];
 std::string PathUtils::resolveRelative(std::string target) {
   std::string out;
-  std::string path = path;
+  std::string path = getcwd(cwd, CWD_MAX);
+ 
   std::cout << "[DEBUG] path : " << path << std::endl;
 
   size_t found = path.find(ROOT_DIR);
