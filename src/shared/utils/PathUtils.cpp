@@ -1,9 +1,15 @@
 #include <iostream>
 #include <unistd.h>
+#ifndef BOOST_ALL_DYN_LINK
+#   define BOOST_ALL_DYN_LINK
+#endif 
+#include <boost/filesystem.hpp>
+
 #include "PathUtils.h"
-#define CWD_MAX 1024                                                             
 
 using namespace utils;
+using namespace boost::filesystem;
+
 
 PathUtils::PathUtils() {}
 
@@ -22,11 +28,9 @@ PathUtils::PathUtils() {}
  * @param target
  * @return std::string
  */
-char cwd[CWD_MAX];
 std::string PathUtils::resolveRelative(std::string target) {
   std::string out;
-  std::string path = getcwd(cwd, CWD_MAX);
- 
+  std::string path = boost::filesystem::path().string();
   std::cout << "[DEBUG] path : " << path << std::endl;
 
   size_t found = path.find(ROOT_DIR);
