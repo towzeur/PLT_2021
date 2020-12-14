@@ -10,6 +10,11 @@ generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../utils.dia")
 # Find all source files to compile into a library
 file(GLOB_RECURSE shared_sources *.cpp)
 
+# Find library Boost
+find_package(Boost 1.50 COMPONENTS filesystem REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
+message(STATUS "Boost include directory: ${Boost_INCLUDE_DIRS}")
 
 # Build the "shared" library and add required includes
 add_library(${lib_shared_target} STATIC ${shared_sources} ${jsoncpp_sources})
