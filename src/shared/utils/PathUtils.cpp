@@ -1,8 +1,6 @@
 #include <iostream>
 #include <unistd.h>
-#ifndef BOOST_ALL_DYN_LINK
-#   define BOOST_ALL_DYN_LINK
-#endif 
+
 #include <boost/filesystem.hpp>
 
 #include "PathUtils.h"
@@ -29,7 +27,7 @@ PathUtils::PathUtils() {}
  * @return std::string
  */
 std::string PathUtils::resolveRelative(std::string target) {
-  std::string out;
+  /*std::string out;
   std::string path = boost::filesystem::path().string();
   std::cout << "[DEBUG] path : " << path << std::endl;
 
@@ -55,5 +53,5 @@ std::string PathUtils::resolveRelative(std::string target) {
     exit(1);
   }
   std::cout << "[DEBUG] resolved path : " << out << std::endl;
-  return out;
+  return out;*/
 }
