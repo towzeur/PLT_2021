@@ -1,10 +1,12 @@
 #include <iostream>
 #include <unistd.h>
-#include <mach-o/dyld.h>
+#include <boost/filesystem.hpp>
 
 #include "PathUtils.h"
 
 using namespace utils;
+using namespace boost::filesystem;
+
 
 PathUtils::PathUtils() {}
 
@@ -25,16 +27,7 @@ PathUtils::PathUtils() {}
  */
 std::string PathUtils::resolveRelative(std::string target) {
   std::string out;
-
-char pathh[1024];
-uint32_t size = sizeof(pathh);
-if (_NSGetExecutablePath(pathh, &size) == 0)
-    printf("executable path is %s\n", pathh);
-else
-    printf("buffer too small; need size %u\n", size);
-
-
-  std::string path(pathh) ;
+  std::string path = path;
   std::cout << "[DEBUG] path : " << path << std::endl;
 
   size_t found = path.find(ROOT_DIR);
