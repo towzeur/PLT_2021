@@ -77,4 +77,12 @@ bool const Entity::equals(const Entity & element) {
 		return true;
 }
 
-Entity *const Entity::clone() {}
+Entity *const Entity::clone() {
+  Entity* e = new Entity;
+		e->attack =this->attack;
+		e->defense =this->defense;
+		e->income=this->income;
+		e->subTypeId=this->subTypeId;
+
+		return e;
+}
