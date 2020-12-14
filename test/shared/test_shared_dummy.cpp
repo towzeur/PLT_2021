@@ -206,7 +206,12 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     finish.serialize();
     State st;
     int turn = st.getTurn();
+    st.getBoard().load("../../../res/map.txt");
+    Entity ent = (Entity)Soldier(SOLDIER, BARON, 4, 4);
+    std::vector<std::shared_ptr<state::Cell>> cells = st.getBoard().getCells();
+    cells[0]->setEntity(ent);
     finish.execute(st);
+    // BOOST_CHECK_EQUAL(-1, 1);
     BOOST_CHECK_EQUAL(st.getTurn(), turn + 1);
     finish.setCommandTypeId(FINISH_TURN);
     BOOST_CHECK_EQUAL(finish.getCommandTypeId(), FINISH_TURN);
