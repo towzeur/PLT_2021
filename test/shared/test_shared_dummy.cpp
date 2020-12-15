@@ -242,9 +242,15 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // SelectTerritoryCommand
   {
     State st;
-    Territory tr;
-    SelectTerritoryCommand selTerr(tr);
+    std::shared_ptr<Territory> tr(new Territory);
+    std::shared_ptr<Territory> tr2(new Territory);
+    SelectTerritoryCommand selTerr(*tr);
     selTerr.serialize();
+    Player pl;
+    pl.addTerritory(tr);
+    pl.addTerritory(tr2);
+    selTerr.setCurrentPlayer(pl);
+    selTerr.execute(st);
     selTerr.execute(st);
   }
 }
