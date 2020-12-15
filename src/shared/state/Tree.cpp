@@ -14,7 +14,8 @@ Tree::Tree(EntityTypeId entityTypeId, int subTypeId, int attack, int defense,
   this->income = income;
 }
 
-Tree::Tree (const Tree& tree1){}
+Tree::Tree (const Tree& tree1): entityTypeId(tree1.entityTypeId), subTypeId(tree1.subTypeId),
+attack(tree1.attack), defense(tree1.defense), income(tree1.income) {}
 
 Tree::~Tree() {}
 
