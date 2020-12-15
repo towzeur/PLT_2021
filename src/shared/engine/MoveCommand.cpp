@@ -5,8 +5,7 @@
 
 using namespace engine;
 
-MoveCommand::MoveCommand(state::Soldier &soldierTarget,
-                         state::AccessibleCell &cellTarget)
+MoveCommand::MoveCommand(state::Soldier &soldierTarget, state::Cell &cellTarget)
     : soldierTarget(soldierTarget), cellTarget(cellTarget) {
   this->commandTypeId = MOVE;
 }
@@ -36,14 +35,17 @@ void MoveCommand::execute(state::State &state) {
             int newDefense = this->cellTarget.getEntity().getDefense() +
                              soldier->getEntity().getDefense();
             if (newAttack > 4 || newDefense > 4) {
+
               std::cout << "Impossible action: the result of your fusion "
                            "can't give a soldier with an attack or a defense "
                            "superior at 4"
                         << std::endl;
               break;
+
             }
             // Fusion
             else {
+
               if (newAttack == 2 && newDefense == 2) {
                 state::Entity *spearman = new state::Soldier(
                     state::EntityTypeId::SOLDIER,
@@ -73,6 +75,7 @@ void MoveCommand::execute(state::State &state) {
                 break;
               }
             }
+
           }
           // Cut a tree on his own territory
           else if (this->cellTarget.getEntity().getEntityTypeId() ==
@@ -87,11 +90,12 @@ void MoveCommand::execute(state::State &state) {
             soldier->setEntity(*empty);
           }
         }
-
         // Check if he try to conquere a new territory
         else {
+
           if (soldier->getEntity().getAttack() <
               this->cellTarget.getEntity().getDefense()) {
+
             std::cout
                 << "Impossible action: soldier attack must be superior or "
                    "equal to cell entity defense"
@@ -101,10 +105,8 @@ void MoveCommand::execute(state::State &state) {
           // Conquere a cell
           else if (this->cellTarget.getEntity().getEntityTypeId() ==
                    state::EntityTypeId::EMPTY) {
-            state::Soldier &s =
-                dynamic_cast<state::Soldier &>(soldier->getEntity());
-            s.setPA(0);
-            this->cellTarget.setEntity(s);
+
+            soldier->getEntity().setPA(0);
             this->cellTarget.setTerritoryId(soldier->getTerritoryId());
             this->cellTarget.setPlayerId(soldier->getPlayerId());
             state::Entity *empty = new state::Empty(state::EntityTypeId::EMPTY,
@@ -112,7 +114,9 @@ void MoveCommand::execute(state::State &state) {
             soldier->setEntity(*empty);
           }
         }
+        printf("jul11\n");
       }
+      printf("ooooo\n");
     }
   }
 

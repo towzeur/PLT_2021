@@ -226,15 +226,10 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // MoveCommand
   {
     State ste;
-    // Board &bd = ste.getBoard();
-    // utils::PathUtils path_u = utils::PathUtils();
-    // bd.load(path_u.resolveRelative("res/map.txt"));    // Issue on Jenkins
-    Soldier soldier;
-    // std::vector<std::unique_ptr<state::Cell>> &cells =
-    // st.getBoard().getCells();
-    // cells[1]->setEntity(soldier);
-    AccessibleCell destination;
-    MoveCommand move(soldier, destination);
+    ste.getBoard().load("../../../res/map.txt");
+    Soldier soldier(SOLDIER, BARON, 4, 4);
+    ste.getBoard().getCells()[1]->setEntity(soldier);
+    MoveCommand move(soldier, *(ste.getBoard().getCells()[2]));
     move.serialize();
     move.execute(ste);
   }
