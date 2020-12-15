@@ -1,13 +1,9 @@
 #include <iostream>
 #include <unistd.h>
 
-#include <boost/filesystem.hpp>
-
 #include "PathUtils.h"
 
 using namespace utils;
-using namespace boost::filesystem;
-
 
 PathUtils::PathUtils() {}
 
@@ -28,7 +24,7 @@ PathUtils::PathUtils() {}
  */
 std::string PathUtils::resolveRelative(std::string target) {
   std::string out;
-  std::string path = boost::filesystem::path().string();
+  std::string path = get_current_dir_name();
   std::cout << "[DEBUG] path : " << path << std::endl;
 
   size_t found = path.find(ROOT_DIR);
