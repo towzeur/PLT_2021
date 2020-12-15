@@ -225,13 +225,78 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
 
   // MoveCommand
   {
-    State ste;
-    ste.getBoard().load("../../../res/map.txt");
+    Engine ngine1;
+    ngine1.init();
     Soldier soldier(SOLDIER, BARON, 4, 4);
-    ste.getBoard().getCells()[1]->setEntity(soldier);
-    MoveCommand move(soldier, *(ste.getBoard().getCells()[2]));
+    ngine1.getCurrentState().getBoard().getCells()[1]->setEntity(soldier);
+    MoveCommand move(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                     *(ngine1.getCurrentState().getBoard().getCells()[0]));
+    MoveCommand move2(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                      *(ngine1.getCurrentState().getBoard().getCells()[20]));
     move.serialize();
-    move.execute(ste);
+    move.execute(ngine1.getCurrentState());
+    move2.execute(ngine1.getCurrentState());
+    Soldier soldier2(SOLDIER, BARON, 4, 4);
+    ngine1.getCurrentState().getBoard().getCells()[1]->setEntity(soldier2);
+    MoveCommand move3(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                      *(ngine1.getCurrentState().getBoard().getCells()[20]));
+    move3.execute(ngine1.getCurrentState());
+
+    Soldier soldier3(SOLDIER, PEASANT, 1, 1);
+    Soldier soldier4(SOLDIER, PEASANT, 1, 1);
+    ngine1.getCurrentState().getBoard().getCells()[1]->setEntity(soldier3);
+    ngine1.getCurrentState().getBoard().getCells()[20]->setEntity(soldier4);
+    MoveCommand move4(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                      *(ngine1.getCurrentState().getBoard().getCells()[20]));
+    move4.execute(ngine1.getCurrentState());
+
+    Soldier soldier5(SOLDIER, SPEARMAN, 2, 2);
+    Soldier soldier6(SOLDIER, PEASANT, 1, 1);
+    ngine1.getCurrentState().getBoard().getCells()[1]->setEntity(soldier5);
+    ngine1.getCurrentState().getBoard().getCells()[20]->setEntity(soldier6);
+    MoveCommand move5(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                      *(ngine1.getCurrentState().getBoard().getCells()[20]));
+    move5.execute(ngine1.getCurrentState());
+
+    Soldier soldier7(SOLDIER, SPEARMAN, 2, 2);
+    Soldier soldier8(SOLDIER, SPEARMAN, 2, 2);
+    ngine1.getCurrentState().getBoard().getCells()[1]->setEntity(soldier7);
+    ngine1.getCurrentState().getBoard().getCells()[20]->setEntity(soldier8);
+    MoveCommand move6(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                      *(ngine1.getCurrentState().getBoard().getCells()[20]));
+    move6.execute(ngine1.getCurrentState());
+
+    Soldier soldier9(SOLDIER, SPEARMAN, 2, 2);
+    Soldier soldier10(SOLDIER, SPEARMAN, 1, 2);
+    ngine1.getCurrentState().getBoard().getCells()[1]->setEntity(soldier9);
+    ngine1.getCurrentState().getBoard().getCells()[20]->setEntity(soldier10);
+    MoveCommand move7(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                      *(ngine1.getCurrentState().getBoard().getCells()[20]));
+    move7.execute(ngine1.getCurrentState());
+
+    Soldier soldier11(SOLDIER, SPEARMAN, 2, 2);
+    Facility tree1(TREE, PINE);
+    ngine1.getCurrentState().getBoard().getCells()[1]->setEntity(soldier10);
+    ngine1.getCurrentState().getBoard().getCells()[20]->setEntity(tree1);
+    MoveCommand move8(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                      *(ngine1.getCurrentState().getBoard().getCells()[20]));
+    move8.execute(ngine1.getCurrentState());
+
+    Soldier soldier12(SOLDIER, SPEARMAN, 2, 2);
+    Soldier soldier13(SOLDIER, KNIGHT, 3, 3);
+    ngine1.getCurrentState().getBoard().getCells()[1]->setEntity(soldier12);
+    ngine1.getCurrentState().getBoard().getCells()[2]->setEntity(soldier13);
+    MoveCommand move9(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                      *(ngine1.getCurrentState().getBoard().getCells()[2]));
+    move9.execute(ngine1.getCurrentState());
+
+    Soldier soldier14(SOLDIER, SPEARMAN, 2, 2);
+    Soldier soldier15(SOLDIER, KNIGHT, 3, 3);
+    ngine1.getCurrentState().getBoard().getCells()[1]->setEntity(soldier15);
+    ngine1.getCurrentState().getBoard().getCells()[2]->setEntity(soldier14);
+    MoveCommand move10(*(ngine1.getCurrentState().getBoard().getCells()[1]),
+                       *(ngine1.getCurrentState().getBoard().getCells()[2]));
+    move10.execute(ngine1.getCurrentState());
   }
 
   // SelectTerritoryCommand
