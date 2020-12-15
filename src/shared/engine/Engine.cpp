@@ -9,8 +9,6 @@ Engine::Engine() {}
 
 Engine::~Engine() {}
 
-void checkNeighbor() {}
-
 void Engine::init() {
 
   std::string names[] = {"Badisse", "Nico", "Hicham", "Kaan"};
