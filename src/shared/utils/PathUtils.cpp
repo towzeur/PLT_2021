@@ -5,7 +5,6 @@
 
 using namespace utils;
 
-
 PathUtils::PathUtils() {}
 
 /**

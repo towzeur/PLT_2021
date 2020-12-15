@@ -41,6 +41,7 @@ void Engine::init() {
       std::shared_ptr<state::Territory> newTerritory(new state::Territory);
       int uid = newTerritory->getUid();
       newTerritory->setCapitalCoords(c->getRow(), c->getCol());
+      newTerritory->addCell(c);
       p->addTerritory(newTerritory);
       c->setTerritoryId(uid);
     }
@@ -57,6 +58,7 @@ void Engine::init() {
     }
 
     while (neighborCellExist) {
+
       if (allPlayerCells.size() == 0) {
         neighborCellExist = false;
       }
@@ -65,33 +67,36 @@ void Engine::init() {
           neighborCellExist = false;
         }
         for (auto &cp : p->getTerritories()[0]->getCells()) {
+          printf("cpCol: %d   cpRow: %d\ncCol: %d   cRow: %d\n", cp->getCol(),
+                 cp->getRow(), allPlayerCells[i]->getCol(),
+                 allPlayerCells[i]->getRow());
           if (cp->getCol() == allPlayerCells[i]->getCol() &&
-              cp->getRow() == allPlayerCells[i]->getRow() - 1) {
+              cp->getRow() == allPlayerCells[i]->getRow()) {
+            printf("same\n");
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
+                     cp->getRow() == allPlayerCells[i]->getRow() + 1) {
+            printf("haut gauche\n");
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
                      cp->getRow() == allPlayerCells[i]->getRow() - 1) {
+            printf("bas gauche\n");
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
-          } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
-                     cp->getRow() == allPlayerCells[i]->getRow() + 1) {
-            p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
                      cp->getRow() == allPlayerCells[i]->getRow() - 1) {
+            printf("haut droite\n");
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
                      cp->getRow() == allPlayerCells[i]->getRow() + 1) {
+            printf("bas droite\n");
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
                      cp->getRow() == allPlayerCells[i]->getRow()) {
+            printf("droite\n");
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else if (cp->getCol() == allPlayerCells[i]->getCol() - 1 &&
                      cp->getRow() == allPlayerCells[i]->getRow()) {
+            printf("gauche\n");
             p->getTerritories()[0]->addCell(allPlayerCells[i]);
-            allPlayerCells.push_back(allPlayerCells[i]);
           } else {
             neighborCellExist = false;
           }

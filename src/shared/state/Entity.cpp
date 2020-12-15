@@ -62,27 +62,6 @@ void Entity::setEntityTypeId(EntityTypeId entityTypeId) {
 
 EntityTypeId const Entity::getEntityTypeId() { return this->entityTypeId; }
 
-bool const Entity::equals(const Entity & element) {
-  if(this->uid!=element.uid)
-		return false;
-	else if(this->attack!=element.attack)
-		return false;
-	else if(this->defense!=element.defense)
-		return false;
-	else if(this->income!=element.income)
-		return false;
-	else if(this->subTypeId!=element.subTypeId)
-		return false;
-	else
-		return true;
-}
+bool const Entity::equals(const Entity & element) {}
 
-Entity *const Entity::clone() {
-  Entity* e = new Entity;
-		e->attack =this->attack;
-		e->defense =this->defense;
-		e->income=this->income;
-		e->subTypeId=this->subTypeId;
-
-		return e;
-}
+Entity *const Entity::clone() {}
