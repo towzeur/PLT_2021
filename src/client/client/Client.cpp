@@ -1,10 +1,20 @@
 #include "Client.h"
 
+#include <cstdlib>
 #include <fstream>
 #include <iostream>
 #include <time.h>
 
+#include <SFML/Graphics.hpp>
+#include <TGUI/TGUI.hpp>
+
+#include "utils/Utils.h"
+
 using namespace client;
+
+// =============================================================================
+// CLIENT
+// =============================================================================
 
 // =============================================================================
 // CLIENT
@@ -25,13 +35,86 @@ void Client::run() {
 
   sf::ContextSettings settings;
   settings.antialiasingLevel = 8;
-  sf::RenderWindow window({config.window_width, config.window_height},
-                          "Hexagons", sf::Style::Default, settings);
+  sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close;
+  // Titlebar   = 1 << 0
+  // Resize     = 1 << 1
+  // Close      = 1 << 2
+  // Fullscreen = 1 << 3
+  // Default = Titlebar | Resize | Close
+  sf::RenderWindow window({config.window_size.x, config.window_size.y},
+                          "Hexagons", style, settings);
+
   window.setVerticalSyncEnabled(true);
 
   // set window's icon
   window.setIcon(config.window_icon.getSize().x, config.window_icon.getSize().y,
                  config.window_icon.getPixelsPtr());
+
+  // ---------------------------------------------------------------------------
+  //                                   TGUI
+  // ---------------------------------------------------------------------------
+
+  tgui::Gui gui(window);
+
+  const sf::String &tgui_theme =
+      utils::Utils::resolveRelative("res/tgui/widgets/Black.txt");
+  tgui::Theme::Ptr theme = tgui::Theme::create(tgui_theme);
+
+  tgui::MenuBar::Ptr menu = theme->load("MenuBar");
+  menu->setSize(config.window_size.x, config.window_menu_height);
+
+  // canvas_w = config.window_size.x - config.window_right_panel_width;
+  // canvas_h = config.window_size.y - config.window_menu_height;
+
+  const std::string &tgui_font =
+      // const sf::String &tgui_font =
+      utils::Utils::resolveRelative("res/fonts/Segoe_UI.ttf");
+  menu->setFont(tgui_font);
+  menu->addMenu("File");
+  menu->addMenuItem("File", "Load");
+  menu->addMenuItem("File", "Save");
+  menu->addMenuItem("File", "Exit");
+  menu->addMenu("Moves");
+  menu->addMenuItem("Moves", "Copy");
+  menu->addMenuItem("Moves", "Paste");
+  menu->addMenu("Help");
+  menu->addMenuItem("Help", "About");
+  // Signals: MenuItemClicked
+  // Optional parameter sf::String: name of the item on which you clicked
+  // Optional parameter std::vector<sf::String>: Which menu was open, followed
+  // by which item you clicked on Uses Callback member 'text' (menu item name)
+  // and index' (index of the open menu)
+  //
+  // signalNames	Name of the signal, or multiple names split by spaces
+  // func	The function to connect
+  // args	The arguments that should be bound to the function
+  menu->connect("MenuItemClicked", [&]() { window.close(); });
+
+  gui.add(menu);
+
+  // tgui::VerticalLayout::Ptr layout = tgui::VerticalLayout::create();
+  tgui::Panel::Ptr layout = tgui::Panel::create();
+  layout->setBackgroundColor(sf::Color(0, 0, 0, 150));
+  layout->setSize(140.f, config.window_size.y - config.window_menu_height);
+  layout->setPosition(config.window_size.x - config.window_right_panel_width,
+                      config.window_menu_height);
+  gui.add(layout);
+
+  tgui::Label::Ptr label = theme->load("Label");
+  label->setText("TEST 1");
+  label->setTextSize(10);
+  // label->setPosition(10, 90);
+  label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
+  label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+  layout->add(label);
+
+  tgui::Button::Ptr button = theme->load("button");
+  // button->setPosition(75, 70);
+  button->setText("Fin de Tour");
+  // button->setSize(100, 30);
+  button->connect("pressed",
+                  [=]() { std::cout << "button - end turn" << std::endl; });
+  layout->add(button);
 
   // ---------------------------------------------------------------------------
   //                                BACKGROUND
@@ -51,7 +134,7 @@ void Client::run() {
   text.setFont(config.fps_font);
   text.setString("60");
   // sf::FloatRect blabla = text.getLocalBounds();
-  text.setPosition(config.window_width - text.getLocalBounds().width - 10, 0);
+  text.setPosition(config.window_size.x - text.getLocalBounds().width - 10, 0);
   text.setCharacterSize(30); // in pixel !
   text.setFillColor(sf::Color::Yellow);
   // text.setStyle(sf::Text::Bold | sf::Text::Underlined);
@@ -78,11 +161,20 @@ void Client::run() {
   std::cout << "hexamap width " << hm.get_width() << std::endl;
   std::cout << "hexamap height " << hm.get_height() << std::endl;
 
+  int map_full_width = config.window_size.x - config.window_right_panel_width;
+  int map_full_height = config.window_size.y - config.window_menu_height;
+  int map_offset_x = 0 + (map_full_width - hm.get_width()) / 2;
+  int map_offset_y =
+      config.window_menu_height + (map_full_height - hm.get_height()) / 2;
+
+  hm.setPosition(map_offset_x, map_offset_y);
+
   // ---------------------------------------------------------------------------
   //                              ENTITTY
   // ---------------------------------------------------------------------------
 
   render::HexaEntity he = render::HexaEntity(config);
+  he.setPosition(map_offset_x, map_offset_y);
 
   // ---------------------------------------------------------------------------
   //                              ENTITTY
@@ -167,33 +259,35 @@ void Client::run() {
         }
 
         if (event.mouseButton.button == sf::Mouse::Left) {
-          std::cout << "LEFT (" << event.mouseButton.x << ", "
-                    << event.mouseButton.y << ")" << std::endl;
-          sf::Vector2u coords =
-              hm.PointToCoord(event.mouseButton.x, event.mouseButton.y);
-          std::cout << "=>" << coords.x << "," << coords.y << std::endl;
-          int r_click = coords.x, c_click = coords.y;
-          if ((r_click >= 0 && r_click < config.hexamap_n_row) &&
-              (c_click >= 0 && c_click < config.hexamap_n_col)) {
-            std::cout << "!" << std::endl;
+          sf::Vector2i pos;
+          std::cout << "LEFT (" << event.mouseButton.x << ", ";
+          std::cout << event.mouseButton.y << ")" << std::endl;
+          // convert pixel to position(row, col)
+
+          pos = hm.PointToCoord(event.mouseButton.x, event.mouseButton.y);
+          std::cout << "=>" << pos.x << "," << pos.y << std::endl;
+
+          if ((pos.x >= 0 && pos.x <= config.hexamap_n_row) &&
+              (pos.y >= 0 && pos.y <= config.hexamap_n_col)) {
             // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
-            hm.hex_toggle_transparency(r_click, c_click);
-            he.entity_toggle_transparency(r_click, c_click);
+            hm.hex_toggle_transparency(pos.x, pos.y);
+            he.entity_toggle_transparency(pos.x, pos.y);
           }
         }
       }
 
-      // if (event.type == sf::Event::MouseWheelEvent) {
-      //}
+      // Pass the event to all the widgets
+      gui.handleEvent(event);
     }
 
+    window.clear(); // clear the screen (not necessary)
     // DRAW : start -------------------------------------------------------
 
-    window.clear();    // clear the screen (not necessary)
     window.draw(bg);   // background
     window.draw(hm);   // hexa map
     window.draw(he);   // entities
     window.draw(text); // fps counter
+    gui.draw();
 
     // DRAW : end   -------------------------------------------------------
     window.display();
@@ -210,7 +304,7 @@ void Client::run() {
     if (clock.getElapsedTime().asSeconds() > 1.f) {
       clock.restart();
       text.setString(std::to_string(frame));
-      text.setPosition(config.window_width - text.getLocalBounds().width - 10,
+      text.setPosition(config.window_size.x - text.getLocalBounds().width - 10,
                        0);
       frame = 0;
     }

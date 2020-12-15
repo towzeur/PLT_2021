@@ -124,7 +124,18 @@ void HexaMap::update() {}
  * @param y ordinate of the point (in pixel)
  * @return sf::Vector2u
  */
-sf::Vector2u HexaMap::PointToCoord(double x, double y) {
+sf::Vector2i HexaMap::PointToCoord(double x, double y) {
+
+  const sf::Vector2f &offset = getPosition();
+  if (x < offset.x || x >= (offset.x + get_width()))
+    return sf::Vector2i(-1, -1);
+
+  if (y < offset.y || y >= (offset.y + get_height()))
+    return sf::Vector2i(-1, -1);
+
+  // apply the offset
+  x = x - offset.x;
+  y = y - offset.y;
 
   // swap x and y for column-odd ; hexagon_h2=hexagon_w2; hexagon_w=>hexagon_w
   y = (y - get_hexa_h_2()) / (2 * get_hexa_h_2());
@@ -137,7 +148,8 @@ sf::Vector2u HexaMap::PointToCoord(double x, double y) {
   int cube_x = r, cube_z = q; // cube_y = -r - q
   int col = cube_x;
   int row = cube_z + (cube_x - (cube_x & 1)) / 2;
-  return sf::Vector2u(row, col);
+
+  return sf::Vector2i(row, col);
 }
 
 /**
