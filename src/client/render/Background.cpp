@@ -24,7 +24,7 @@ Background::Background(RenderConfig &conf) : conf(conf) {
                        sf::IntRect(i * height, 0, height, height), true);
       }
 
-      texture.loadFromImage(frames[5]);
+      texture.loadFromImage(frames[i_frame]);
 
     } else { // static bg (no tileset)
       texture.loadFromImage(conf.background_image);
@@ -32,17 +32,19 @@ Background::Background(RenderConfig &conf) : conf(conf) {
 
     // init the sprite
     sprite = sf::Sprite(
-        texture, sf::IntRect(0, 0, conf.window_width, conf.window_height));
+        texture, sf::IntRect(0, 0, conf.window_size.x, conf.window_size.y));
   }
 }
 
 Background::~Background() {
   if (frames) {
-    delete frames;
+    delete[] frames;
   }
 }
 
 void Background::update() {
+  if (!conf.background_enable)
+    return;
   if (conf.background_animated) {
 
     if (clk.getElapsedTime().asSeconds() > (1. / conf.background_fps)) {

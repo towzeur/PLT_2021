@@ -267,8 +267,8 @@ void Client::run() {
           pos = hm.PointToCoord(event.mouseButton.x, event.mouseButton.y);
           std::cout << "=>" << pos.x << "," << pos.y << std::endl;
 
-          if ((pos.x >= 0 && pos.x <= config.hexamap_n_row) &&
-              (pos.y >= 0 && pos.y <= config.hexamap_n_col)) {
+          if ((pos.x >= 0 && pos.x < config.hexamap_n_row) &&
+              (pos.y >= 0 && pos.y < config.hexamap_n_col)) {
             // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
             hm.hex_toggle_transparency(pos.x, pos.y);
             he.entity_toggle_transparency(pos.x, pos.y);
