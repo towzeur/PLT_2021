@@ -181,6 +181,14 @@ BOOST_AUTO_TEST_CASE(TestState) {
     sld.setPA(1);
     BOOST_CHECK_EQUAL(sld.getPA(), 1);
   }
+
+  // Tree
+  {
+    Tree tree;
+
+    tree.setSubTypeId(PINE);
+    BOOST_CHECK_EQUAL(tree.getSubTypeId(), PINE);
+  }
 }
 
 BOOST_AUTO_TEST_CASE(TestEngine) {

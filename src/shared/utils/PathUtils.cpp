@@ -1,5 +1,5 @@
 #include <iostream>
-#include <unistd.h>
+#include <boost/filesystem.hpp>
 
 #include "PathUtils.h"
 
@@ -14,7 +14,7 @@ PathUtils::PathUtils() {}
  *     - target must be within (-r) ROOT_DIR
  *
  * dependance:
- *  #include <unistd.h> // get_current_dir_name()
+ *  #include <boost/filesystem.hpp>
  *
  * usage:
  *  std::string rp_font_fps = resolve("res/fonts/Square.ttf");
@@ -23,31 +23,30 @@ PathUtils::PathUtils() {}
  * @return std::string
  */
 std::string PathUtils::resolveRelative(std::string target) {
+  boost::filesystem::path path = boost::filesystem::current_path();
+  //std::cout << "[DEBUG] path : " << path << std::endl;
+
   std::string out;
-  std::string path = get_current_dir_name();
-  std::cout << "[DEBUG] path : " << path << std::endl;
 
-  size_t found = path.find(ROOT_DIR);
-  std::cout << "[DEBUG] found : " << found << std::endl;
-  if (found != std::string::npos) {
+  int distance = -1;
+  for (auto it=path.end(); it != path.begin(); --it, ++distance){
+    //std::cout << "[DEBUG] : " << *it << std::endl;
 
-    std::string sub_path = path.substr(found + ROOT_DIR.size());
-    std::cout << "[DEBUG] substr : " << sub_path << std::endl;
+    if ((it->string()).compare("PLT_2021") == 0){
+      //std::cout << "FOUND !" << distance << std::endl;
 
-    // assert that only 1 ROOT_DIR was present in the path
-    if (sub_path.find(ROOT_DIR) != std::string::npos) {
-      exit(1);
+      std::string out;
+      // prepend with relative parent cd
+      const std::string input = "../";
+      for (int i = 0; i < distance; ++i) 
+        out.append(input);
+      //std::cout << "out : " << out << std::endl;
+      // append the target
+      out.append(target);
+      // return the resolved path
+      return out;
     }
-
-    // cout how many '/' are present
-    for (size_t i = 0; i < sub_path.size(); ++i) {
-      if (path[i] == '/')
-        out.append("../");
-    }
-    out.append(target);
-  } else {
-    exit(1);
   }
-  std::cout << "[DEBUG] resolved path : " << out << std::endl;
-  return out;
+
+  return std::string();
 }
