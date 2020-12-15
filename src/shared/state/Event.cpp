@@ -2,14 +2,17 @@
 
 using namespace state;
 
+Event::Event(){}
+
 Event::~Event() {
     
 }
+
 
 EventTypeId const Event::getEventType () {
 
 }
 
-Event* const Event::clone () {
+Event::Event (const Event& event1) {
 
 }
