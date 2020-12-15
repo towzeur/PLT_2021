@@ -17,14 +17,11 @@ void SelectTerritoryCommand::execute(state::State &state) {
     if (territory->getUid() == this->target.getUid()) {
       if (territory->isSelected() == true) {
         territory->setSelected(false);
-        printf("oo\n");
       } else {
         territory->setSelected(true);
-        printf("pp\n");
       }
     } else {
       territory->setSelected(false);
-      printf("cc\n");
     }
   }
 }
