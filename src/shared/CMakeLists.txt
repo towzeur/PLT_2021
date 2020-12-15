@@ -11,10 +11,10 @@ generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../utils.dia")
 file(GLOB_RECURSE shared_sources *.cpp)
 
 # Find library Boost
-find_package(Boost 1.50 COMPONENTS filesystem REQUIRED)
-include_directories(${Boost_INCLUDE_DIRS})
+find_package(Boost 1.50 COMPONENTS system filesystem REQUIRED)
 message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
 message(STATUS "Boost include directory: ${Boost_INCLUDE_DIRS}")
+
 
 # Build the "shared" library and add required includes
 add_library(${lib_shared_target} STATIC ${shared_sources} ${jsoncpp_sources})
@@ -23,6 +23,11 @@ target_include_directories(${lib_shared_target} PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${jsoncpp_include_dir}
   )
+
+target_link_libraries(${lib_shared_target}
+  ${Boost_FILESYSTEM_LIBRARY}
+  ${Boost_SYSTEM_LIBRARY}
+)
 
 # vim: set sw=2 sts=2 et:
 
