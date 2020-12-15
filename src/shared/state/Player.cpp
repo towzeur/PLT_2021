@@ -6,7 +6,7 @@ int Player::instanceCount = 1;
 
 Player::Player() { this->uid = instanceCount++; }
 
-Player::~Player() {}
+Player::~Player() { Player::instanceCount = 1; }
 
 int Player::getUid() { return uid; }
 
