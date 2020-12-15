@@ -84,5 +84,8 @@ Entity *const Entity::clone() {
 		e->income=this->income;
 		e->subTypeId=this->subTypeId;
 
-		return e;
-}
+Entity *const Entity::clone() {}
+
+int Entity::getPA() { return this->PA; }
+
+void Entity::setPA(int PA) { this->PA = PA; }

@@ -214,6 +214,15 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     finish.serialize();
     State st;
     int turn = st.getTurn();
+    st.getBoard().load("../../../res/map.txt");
+    Entity ent = (Entity)Soldier(SOLDIER, BARON, 4, 4);
+    std::vector<std::shared_ptr<state::Cell>> cells = st.getBoard().getCells();
+    cells[0]->setEntity(ent);
+    Player pl;
+    std::shared_ptr<Territory> t(new Territory);
+    t->setSelected(true);
+    pl.addTerritory(t);
+    finish.setCurrentPlayer(pl);
     finish.execute(st);
     BOOST_CHECK_EQUAL(st.getTurn(), turn + 1);
     finish.setCommandTypeId(FINISH_TURN);
@@ -241,9 +250,15 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // SelectTerritoryCommand
   {
     State st;
-    Territory tr;
-    SelectTerritoryCommand selTerr(tr);
+    std::shared_ptr<Territory> tr(new Territory);
+    std::shared_ptr<Territory> tr2(new Territory);
+    SelectTerritoryCommand selTerr(*tr);
     selTerr.serialize();
+    Player pl;
+    pl.addTerritory(tr);
+    pl.addTerritory(tr2);
+    selTerr.setCurrentPlayer(pl);
+    selTerr.execute(st);
     selTerr.execute(st);
   }
 }
