@@ -1,5 +1,5 @@
+#include <boost/filesystem.hpp>
 #include <iostream>
-#include <unistd.h>
 
 #include "Utils.h"
 
@@ -14,7 +14,7 @@ Utils::Utils() {}
  *     - target must be within (-r) ROOT_DIR
  *
  * dependance:
- *  #include <unistd.h> // get_current_dir_name()
+ *  #include <boost/filesystem.hpp>
  *
  * usage:
  *  std::string rp_font_fps =
@@ -23,35 +23,36 @@ Utils::Utils() {}
  * @param target
  * @return std::string
  */
+
 std::string Utils::resolveRelative(std::string target) {
-  std::string out;
-  std::string path = get_current_dir_name();
   std::string root_dir = Utils::getRootDir();
+  boost::filesystem::path path = boost::filesystem::current_path();
+
   // std::cout << "[DEBUG] path : " << path << std::endl;
 
-  size_t found = path.find(root_dir);
-  // std::cout << "[DEBUG] found : " << found << std::endl;
-  if (found != std::string::npos) {
+  std::string out;
 
-    std::string sub_path = path.substr(found + root_dir.size());
-    // std::cout << "[DEBUG] substr : " << sub_path << std::endl;
+  int distance = -1;
+  for (auto it = path.end(); it != path.begin(); --it, ++distance) {
+    // std::cout << "[DEBUG] : " << *it << std::endl;
 
-    // assert that only 1 root_dir was present in the path
-    if (sub_path.find(root_dir) != std::string::npos) {
-      exit(1);
+    if ((it->string()).compare(root_dir) == 0) {
+      // std::cout << "FOUND !" << distance << std::endl;
+
+      std::string out;
+      // prepend with relative parent cd
+      const std::string input = "../";
+      for (int i = 0; i < distance; ++i)
+        out.append(input);
+      // std::cout << "out : " << out << std::endl;
+      // append the target
+      out.append(target);
+      // return the resolved path
+      return out;
     }
-
-    // cout how many '/' are present
-    for (size_t i = 0; i < sub_path.size(); ++i) {
-      if (path[i] == '/')
-        out.append("../");
-    }
-    out.append(target);
-  } else {
-    exit(1);
   }
-  // std::cout << "[DEBUG] resolved path : " << out << std::endl;
-  return out;
+
+  return std::string();
 }
 
 const std::string Utils::getRootDir() { return "PLT_2021"; }
