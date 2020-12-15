@@ -12,11 +12,10 @@ MoveCommand::MoveCommand(state::Soldier &soldierTarget,
 }
 
 void MoveCommand::execute(state::State &state) {
-  std::vector<std::unique_ptr<state::Cell>> &cells =
-      state.getBoard().getCells();
+  std::vector<std::shared_ptr<state::Cell>> cells = state.getBoard().getCells();
 
   if (cellTarget.isAccessible()) {
-    for (std::unique_ptr<state::Cell> &soldier : cells) {
+    for (std::shared_ptr<state::Cell> &soldier : cells) {
       // Catch the cell of the soldier
       if (soldier->getEntity().getUid() == this->soldierTarget.getUid()) {
         // Check if the move is on the same territory
