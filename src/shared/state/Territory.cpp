@@ -50,9 +50,6 @@ void Territory::setSelected(bool selected) { this->selected = selected; }
 bool Territory::isSelected() { return this->selected; }
 
 bool const Territory::operator== (const Territory& t1) {}
-Territory *const Territory::clone() {}
-
-bool const Territory::equals(const Territory &t1) {}
 
 void Territory::addCell(std::shared_ptr<Cell> cell) { cells.push_back(cell); }
 

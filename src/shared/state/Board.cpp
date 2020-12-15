@@ -49,8 +49,6 @@ Board::Board(int nRow, int nCol) {
   this->nCol = nCol;
 }
 
-Board::Board(const Board &board1) {}
-
 Board::~Board() {}
 
 void Board::operator=(const Board &board1) {}

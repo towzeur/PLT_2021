@@ -34,14 +34,6 @@ Board &State::getBoard() { return this->board; }
 
 void State::setBoard(Board& board) { this->board = board; }
 
-std::vector<Territory> &State::getTerritories() { return territories; }
-
-size_t State::addTerritory(Territory *t) {
-  territories.push_back(*t);
-  return territories.size();
-}
-
-std::vector<Player> &State::getPlayers() { return players; }
 std::vector<std::shared_ptr<Player>> State::getPlayers() { return players; }
 
 void State::addPlayer(std::shared_ptr<Player> p) { players.push_back(move(p)); }
