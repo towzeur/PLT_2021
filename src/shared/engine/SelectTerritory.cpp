@@ -16,7 +16,11 @@ void SelectTerritoryCommand::execute(state::State &state) {
   for (auto &territory : move(territories)) {
 
     if (territory->getUid() == this->target.getUid()) {
-      territory->setSelected(true);
+      if (territory->isSelected() == true) {
+        territory->setSelected(false);
+      } else {
+        territory->setSelected(true);
+      }
     } else {
       territory->setSelected(false);
     }
