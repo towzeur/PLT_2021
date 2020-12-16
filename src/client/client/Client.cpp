@@ -114,8 +114,8 @@ void Client::run() {
   // button->setSize(100, 30);
   button->connect("pressed",
                   [=]() { std::cout << "button - end turn" << std::endl; });
-  button->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
-  button->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+  // button->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
+  // button->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
   layout->add(button);
 
   // ---------------------------------------------------------------------------
