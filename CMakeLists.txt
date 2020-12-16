@@ -102,6 +102,20 @@ if(NOT ${MACHINE_ENSEA})
   set(SFML_LIBRARIES sfml-graphics sfml-network sfml-window sfml-system sfml-audio)
 endif()
 
+message([****] "${SFML_LIBRARIES}")
+message([****] "${SFML_INCLUDE_DIR}")
+
+# TGUI
+set(TGUI_ROOT "${PROJECT_SOURCE_DIR}/extern/TGUI-0.7.8")
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/extern/TGUI-0.7.8/cmake/Modules" ${CMAKE_MODULE_PATH})
+add_subdirectory(extern/TGUI-0.7.8)
+#Find any version 0.7.X of TGUI
+#See the FindSTGUI.cmake file for additional details and instructions
+find_package(TGUI 0.7)
+if(NOT TGUI_FOUND)
+  message(FATAL_ERROR "Could not find TGUI")
+endif()
+
 # Find library libmicrohttpd
 find_library(
   MHD_LIBRARY
