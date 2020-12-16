@@ -3,7 +3,9 @@
   "window": {
     "width": 800,
     "height": 580,
-    "icon_path": "res/icons/220x220w.png"
+    "icon_path": "res/icons/220x220w.png",
+    "menu_height": 24,
+    "right_panel_width": 140
   },
   "entity": {
     "width": 20,
@@ -27,9 +29,9 @@
   },
   "background": {
     "color": "#FF0000",
-    "enable": false,
-    "image_path": "res/texture/water_redfire.png",
-    "animated": false,
+    "enable": true,
+    "image_path": "res/texture/water.png",
+    "animated": true,
     "fps": 4
   },
   "fps_counter": {

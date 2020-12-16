@@ -56,8 +56,9 @@ void RenderConfig::load(std::string skin_name) {
 
   // ======== window ========
   node = root["window"];
-  window_width = node["width"].asInt();
-  window_height = node["height"].asInt();
+  // window_width = node["width"].asInt();
+  // window_height = node["height"].asInt();
+  window_size = sf::Vector2u(node["width"].asInt(), node["height"].asInt());
   window_icon = sf::Image{};
   tmp = utils::Utils::resolveRelative(node["icon_path"].asString());
   if (!window_icon.loadFromFile(tmp)) {
@@ -65,6 +66,8 @@ void RenderConfig::load(std::string skin_name) {
     std::cout << "[ERROR] window_icon_path" << std::endl;
     exit(1);
   }
+  window_menu_height = node["menu_height"].asInt();
+  window_right_panel_width = node["right_panel_width"].asInt();
 
   // ======== entity ========
   node = root["entity"];

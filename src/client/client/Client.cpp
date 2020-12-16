@@ -109,11 +109,13 @@ void Client::run() {
   layout->add(label);
 
   tgui::Button::Ptr button = theme->load("button");
-  // button->setPosition(75, 70);
+  button->setPosition(75, 70);
   button->setText("Fin de Tour");
   // button->setSize(100, 30);
   button->connect("pressed",
                   [=]() { std::cout << "button - end turn" << std::endl; });
+  button->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
+  button->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
   layout->add(button);
 
   // ---------------------------------------------------------------------------
