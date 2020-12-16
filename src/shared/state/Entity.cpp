@@ -65,6 +65,19 @@ EntityTypeId const Entity::getEntityTypeId() { return this->entityTypeId; }
 void Entity::setPA (int PA){ this->PA = PA;}
 int Entity::getPA (){return this->PA; }
 
-bool const Entity::equals(const Entity & element) {}
+bool const Entity::equals(const Entity & element) {
+  if(this->uid!=element.uid)
+		return false;
+	else if(this->attack!=element.attack)
+		return false;
+	else if(this->defense!=element.defense)
+		return false;
+	else if(this->income!=element.income)
+		return false;
+	else if(this->subTypeId!=element.subTypeId)
+		return false;
+	else
+		return true;
+}
 
 Entity *const Entity::clone() {}
