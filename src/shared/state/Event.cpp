@@ -6,10 +6,6 @@ Event::~Event() {
     
 }
 
-EventTypeId const Event::getEventType () {
+EventTypeId const Event::getEventType () {}
 
-}
-
-Event* const Event::clone () {
-
-}
+Event* const Event::clone () {}

@@ -6,9 +6,7 @@ EventState::EventState() {
     
 }
 
-EventTypeId const EventState::getEventType() {
-    
-}
+EventTypeId const EventState::getEventType() { return EVENT_STATE; }
 
 Event* const EventState::clone() {
     
