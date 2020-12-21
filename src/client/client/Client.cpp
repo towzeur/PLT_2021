@@ -12,6 +12,17 @@
 
 using namespace client;
 
+void handle_menu_click(sf::String menu_name) {
+  std::cout << "menu clicked : " << menu_name.toAnsiString() << std::endl;
+  if (menu_name == "Load") {
+  } else if (menu_name == "Save") {
+  } else if (menu_name == "Exit") {
+  } else if (menu_name == "Copy") {
+  } else if (menu_name == "Paste") {
+  } else if (menu_name == "About") {
+  }
+}
+
 // =============================================================================
 // CLIENT
 // =============================================================================
@@ -89,7 +100,7 @@ void Client::run() {
   // signalNames	Name of the signal, or multiple names split by spaces
   // func	The function to connect
   // args	The arguments that should be bound to the function
-  menu->connect("MenuItemClicked", [&]() { window.close(); });
+  menu->connect("MenuItemClicked", handle_menu_click);
 
   gui.add(menu);
 
