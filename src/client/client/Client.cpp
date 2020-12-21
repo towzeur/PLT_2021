@@ -42,6 +42,11 @@ void Client::run() {
 
   window.setVerticalSyncEnabled(true);
 
+  // center the window
+  window.setPosition(sf::Vector2i(
+      (sf::VideoMode::getDesktopMode().width - window.getSize().x) / 2,
+      (sf::VideoMode::getDesktopMode().height - window.getSize().y) / 2));
+
   // set window's icon
   window.setIcon(config.window_icon.getSize().x, config.window_icon.getSize().y,
                  config.window_icon.getPixelsPtr());
@@ -105,10 +110,9 @@ void Client::run() {
   layout->add(label);
 
   tgui::Button::Ptr button = theme->load("button");
-  button->setPosition(10, config.window_size.y - 50 - 10);
+  button->setPosition(10, config.window_size.y - 50 * 1.5 - 10);
   button->setSize(config.window_right_panel_width - 2 * 10, 50);
   button->setText("Fin de Tour");
-  // button->setSize(100, 30);
   button->connect("pressed",
                   [=]() { std::cout << "button - end turn" << std::endl; });
   // button->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
@@ -208,7 +212,6 @@ void Client::run() {
   sf::Event event;
 
   while (window.isOpen()) {
-
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) {
         window.close();
