@@ -16,10 +16,6 @@ using namespace client;
 // CLIENT
 // =============================================================================
 
-// =============================================================================
-// CLIENT
-// =============================================================================
-
 Client::Client() {}
 
 void Client::run() {
@@ -109,7 +105,8 @@ void Client::run() {
   layout->add(label);
 
   tgui::Button::Ptr button = theme->load("button");
-  button->setPosition(75, 70);
+  button->setPosition(10, config.window_size.y - 50 - 10);
+  button->setSize(config.window_right_panel_width - 2 * 10, 50);
   button->setText("Fin de Tour");
   // button->setSize(100, 30);
   button->connect("pressed",
