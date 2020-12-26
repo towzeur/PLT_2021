@@ -5,7 +5,8 @@
     "height": 580,
     "icon_path": "res/icons/220x220w.png",
     "menu_height": 24,
-    "right_panel_width": 140
+    "right_panel_width": 140,
+    "right_panel_padding": 10
   },
   "entity": {
     "width": 20,

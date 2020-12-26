@@ -68,6 +68,7 @@ void RenderConfig::load(std::string skin_name) {
   }
   window_menu_height = node["menu_height"].asInt();
   window_right_panel_width = node["right_panel_width"].asInt();
+  window_right_panel_padding = node["right_panel_padding"].asInt();
 
   // ======== entity ========
   node = root["entity"];

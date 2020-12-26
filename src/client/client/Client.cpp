@@ -121,8 +121,11 @@ void Client::run() {
   layout->add(label);
 
   tgui::Button::Ptr button = theme->load("button");
-  button->setPosition(10, config.window_size.y - 50 * 1.5 - 10);
-  button->setSize(config.window_right_panel_width - 2 * 10, 50);
+  button->setPosition(10, config.window_size.y - 50 * 1.5 -
+                              config.window_right_panel_padding);
+  button->setSize(config.window_right_panel_width -
+                      2 * config.window_right_panel_padding,
+                  50);
   button->setText("Fin de Tour");
   button->connect("pressed",
                   [=]() { std::cout << "button - end turn" << std::endl; });
@@ -282,11 +285,11 @@ void Client::run() {
 
     window.clear(); // clear the screen (not necessary)
     // DRAW : start -------------------------------------------------------
-    window.draw(bg);  // background
-    window.draw(hm);  // hexa map
-    window.draw(he);  // entities
-    window.draw(fps); // Territory toolstip
+    window.draw(bg); // background
+    window.draw(hm); // hexa map
+    window.draw(he); // entities
     gui.draw();
+    window.draw(fps); // fps
 
     // DRAW : end   -------------------------------------------------------
     window.display();

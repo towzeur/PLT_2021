@@ -13,12 +13,12 @@ Fps::Fps(RenderConfig &conf) : conf(conf) {
 
 void Fps::update() {
   if (clk.getElapsedTime().asSeconds() > 1.f) {
+    text.setString(std::to_string(frames));
+
     int w = text.getLocalBounds().width;
     int h = text.getLocalBounds().height;
-    int x = conf.window_size.x - w - 10; // config.window_right_panel_width
-    int y = 0;
-
-    text.setString(std::to_string(frames));
+    int x = conf.window_size.x - w - conf.window_right_panel_padding;
+    int y = 0; // conf.window_menu_height;
     text.setPosition(x, y);
 
     clk.restart();
