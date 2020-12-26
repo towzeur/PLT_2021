@@ -140,19 +140,6 @@ void Client::run() {
   //                                    FPS
   // ---------------------------------------------------------------------------
 
-  int frame = 0;
-  sf::Clock clock;
-  sf::Time time_curr; //, time_prev = clock.getElapsedTime();
-
-  sf::Text text;
-  text.setFont(config.fps_font);
-  text.setString("60");
-  // sf::FloatRect blabla = text.getLocalBounds();
-  text.setPosition(config.window_size.x - text.getLocalBounds().width - 10, 0);
-  text.setCharacterSize(30); // in pixel !
-  text.setFillColor(sf::Color::Yellow);
-  // text.setStyle(sf::Text::Bold | sf::Text::Underlined);
-
   // ---------------------------------------------------------------------------
   //                              SOUND TEST
   // ---------------------------------------------------------------------------
@@ -191,10 +178,10 @@ void Client::run() {
   he.setPosition(map_offset_x, map_offset_y);
 
   // ---------------------------------------------------------------------------
-  //                              ENTITTY
+  //                              FPS
   // ---------------------------------------------------------------------------
 
-  render::TerritoryTooltips tt = render::TerritoryTooltips(config);
+  render::Fps fps = render::Fps(config);
 
   // ---------------------------------------------------------------------------
   //                              init map
@@ -295,31 +282,17 @@ void Client::run() {
 
     window.clear(); // clear the screen (not necessary)
     // DRAW : start -------------------------------------------------------
-
-    window.draw(bg);   // background
-    window.draw(hm);   // hexa map
-    window.draw(he);   // entities
-    window.draw(text); // fps counter
+    window.draw(bg);  // background
+    window.draw(hm);  // hexa map
+    window.draw(he);  // entities
+    window.draw(fps); // Territory toolstip
     gui.draw();
 
     // DRAW : end   -------------------------------------------------------
     window.display();
 
-    // performance measurement
-    // time_curr = clock.getElapsedTime();
-    // fps = 1.0f / (time_curr.asSeconds() - time_prev.asSeconds()); // the
-    // asSeconds returns a float time_prev = time_curr;
-
     he.update();
     bg.update();
-
-    frame++;
-    if (clock.getElapsedTime().asSeconds() > 1.f) {
-      clock.restart();
-      text.setString(std::to_string(frame));
-      text.setPosition(config.window_size.x - text.getLocalBounds().width - 10,
-                       0);
-      frame = 0;
-    }
+    fps.update();
   }
 }
