@@ -10,10 +10,10 @@ FinishTurnCommand::FinishTurnCommand() { this->commandTypeId = FINISH_TURN; }
 void FinishTurnCommand::execute(state::State &state) {
 
   std::vector<std::shared_ptr<state::Cell>> cells = state.getBoard().getCells();
-  for (std::shared_ptr<state::Cell> &soldier : cells) {
-    if (soldier->getEntity().isSoldier() && soldier->isAccessible()) {
+  for (std::shared_ptr<state::Cell> &cell : cells) {
+    if (cell->getEntity().isSoldier()) {
       // Reset PA of all soldiers at the end of the turn
-      soldier->getEntity().setPA(1);
+      cell->getEntity().setPA(1);
     }
   }
 
