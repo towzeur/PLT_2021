@@ -12,6 +12,7 @@ BuyEntityCommand::BuyEntityCommand(state::Entity &target) : target(target) {
 }
 
 void BuyEntityCommand::execute(state::State &state) {
+  currentPlayer = *(state.getPlayers()[state.getCurrentPlayerId()]);
   bool territorySelected = false;
   bool emptyCell = false;
   // check if a territory is selected
@@ -43,4 +44,14 @@ void BuyEntityCommand::execute(state::State &state) {
   if (emptyCell == false) {
     std::cout << "No empty cell avalaible" << std::endl;
   }
+}
+
+Json::Value BuyEntityCommand::serialize() {
+  Json::Value newCommand;
+  newCommand["id"] = this->commandTypeId;
+  newCommand["entityUid"] = target.getUid();
+  // newCommand["targetRow"] = cellTarget.getRow();
+  // newCommand["targetCol"] = cellTarget.getCol();
+
+  return newCommand;
 }
