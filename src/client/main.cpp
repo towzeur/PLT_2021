@@ -109,11 +109,54 @@ int main(int argc, char *argv[]) {
       render::StateLayer layer(ngine.getCurrentState(), window);
       layer.initSurfaces(ngine.getCurrentState());
 
+      render::StateLayer *ptr_layer = &layer;
+      ngine.getCurrentState().registerObserver(ptr_layer);
+
+      bool once = true;
       while (window.isOpen()) {
         sf::Event event;
+        if (once) {
+          layer.draw(window, ngine.getCurrentState());
+          once = false;
+          std::cout << "ATENTION!! push some key to trigger a turn..."
+                    << std::endl;
+        }
         while (window.pollEvent(event)) {
           if (event.type == sf::Event::Closed)
             window.close();
+          else if (event.type == sf::Event::KeyPressed) {
+            std::cout << "key pressed !" << std::endl;
+            std::cout << std::endl
+                      << "#########################################"
+                      << std::endl;
+
+            for (int turn = 1; turn < 9; turn++) {
+              if (turn == 1) {
+                // select territory
+                auto player = ngine.getCurrentState()
+                                  .getPlayers()[ngine.getCurrentState()
+                                                    .getCurrentPlayerId()];
+
+                auto territory = player->getTerritories()[0];
+                std::unique_ptr<engine::Command> ptr_st(
+                    new engine::SelectTerritoryCommand(*territory));
+                ptr_st->execute(ngine.getCurrentState());
+
+                state::Soldier sldr(state::SOLDIER, state::PEASANT, 1, 1);
+                std::unique_ptr<engine::Command> ptr_be(
+                    new engine::BuyEntityCommand(sldr));
+                ptr_be->execute(ngine.getCurrentState());
+
+                // sleep(10);
+              }
+            }
+            /*
+                        sleep(2);
+                        std::cout << "No more turns left" << std::endl;
+                        std::cout << "ENGINE SHOW finished, closing window" <<
+               std::endl; window.close();
+                        */
+          }
         }
         // render
         layer.draw(window, ngine.getCurrentState());
