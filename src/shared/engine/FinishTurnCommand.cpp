@@ -25,6 +25,11 @@ void FinishTurnCommand::execute(state::State &state) {
   }
 
   state.setTurn(state.getTurn() + 1);
+  if (state.getCurrentPlayerId() == state.getPlayers().size()) {
+    state.setCurrentPlayerId(1);
+  } else {
+    state.setCurrentPlayerId(state.getCurrentPlayerId() + 1);
+  }
 }
 
 Json::Value FinishTurnCommand::serialize() {
