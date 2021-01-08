@@ -11,7 +11,7 @@ SelectTerritoryCommand::SelectTerritoryCommand(state::Territory &target)
 }
 
 void SelectTerritoryCommand::execute(state::State &state) {
-
+  currentPlayer = *(state.getPlayers()[state.getCurrentPlayerId()]);
   for (auto &territory : currentPlayer.getTerritories()) {
 
     if (territory->getUid() == this->target.getUid()) {
