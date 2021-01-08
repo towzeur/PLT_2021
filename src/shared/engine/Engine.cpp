@@ -3,6 +3,12 @@
 #include <iostream>
 #include <unistd.h>
 
+#define CELL_INCOME 3
+#define PEASANT_COST 2
+#define SPEARMAN_COST 5
+#define KNIGHT_COST 10
+#define BARON_COST 15
+
 using namespace engine;
 
 Engine::Engine() {}
@@ -106,6 +112,41 @@ void Engine::init() {
   }
 
   this->currentState.setTurn(1);
+
+  // update data
+  for (auto player : currentState.getPlayers()) {
+    for (auto territory : player->getTerritories()) {
+      size_t cellNb = territory->getCells().size();
+      territory->setIncome(CELL_INCOME * cellNb);
+
+      size_t peasantNb = 0;
+      size_t spearmanNb = 0;
+      size_t knightNb = 0;
+      size_t baronNb = 0;
+      for (auto cell : territory->getCells()) {
+        if (cell->getEntity().getEntityTypeId() == state::SOLDIER) {
+          if (cell->getEntity().getSubTypeId() == 1) {
+            peasantNb++;
+          } else if (cell->getEntity().getSubTypeId() == 2) {
+            spearmanNb++;
+          } else if (cell->getEntity().getSubTypeId() == 3) {
+            knightNb++;
+          } else if (cell->getEntity().getSubTypeId() == 4) {
+            baronNb++;
+          } else {
+            std::cout << "Error subtypeId" << std::endl;
+          }
+        }
+      }
+
+      territory->setWages(peasantNb * PEASANT_COST +
+                          spearmanNb * SPEARMAN_COST + knightNb * KNIGHT_COST +
+                          baronNb * BARON_COST);
+
+      territory->setSavings(territory->getSavings() + territory->getIncome() -
+                            territory->getWages());
+    }
+  }
 }
 
 void Engine::setCurrentState(state::State currentState) {
