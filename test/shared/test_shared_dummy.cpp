@@ -207,30 +207,29 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     Command *finish = new FinishTurnCommand();
     ngine.addCommand(std::unique_ptr<Command>(finish));
   }
-
-  // FinishTurnCommand
-  {
-    FinishTurnCommand finish;
-    finish.serialize();
-    State st;
-    int turn = st.getTurn();
-    st.getBoard().load("../../../res/map.txt");
-    Entity ent = (Entity)Soldier(SOLDIER, BARON, 4, 4);
-    std::vector<std::shared_ptr<state::Cell>> cells = st.getBoard().getCells();
-    cells[0]->setEntity(ent);
-    Player pl;
-    std::shared_ptr<Territory> t(new Territory);
-    t->setSelected(true);
-    pl.addTerritory(t);
-    finish.setCurrentPlayer(pl);
-    finish.execute(st);
-    BOOST_CHECK_EQUAL(st.getTurn(), turn + 1);
-    finish.setCommandTypeId(FINISH_TURN);
-    BOOST_CHECK_EQUAL(finish.getCommandTypeId(), FINISH_TURN);
-    finish.setCurrentPlayerStatus(PLAYING);
-    BOOST_CHECK_EQUAL(finish.getCurrentPlayerStatus(), PLAYING);
-  }
-
+  /*
+    // FinishTurnCommand
+    {
+      FinishTurnCommand finish;
+      finish.serialize();
+      State st;
+      int turn = st.getTurn();
+      st.getBoard().load("../../../res/map.txt");
+      Entity ent = (Entity)Soldier(SOLDIER, BARON, 4, 4);
+      std::vector<std::shared_ptr<state::Cell>> cells =
+    st.getBoard().getCells(); cells[0]->setEntity(ent); Player pl;
+      std::shared_ptr<Territory> t(new Territory);
+      t->setSelected(true);
+      pl.addTerritory(t);
+      finish.setCurrentPlayer(pl);
+      finish.execute(st);
+      BOOST_CHECK_EQUAL(st.getTurn(), turn + 1);
+      finish.setCommandTypeId(FINISH_TURN);
+      BOOST_CHECK_EQUAL(finish.getCommandTypeId(), FINISH_TURN);
+      finish.setCurrentPlayerStatus(PLAYING);
+      BOOST_CHECK_EQUAL(finish.getCurrentPlayerStatus(), PLAYING);
+    }
+    */
   // MoveCommand
   {
     Engine ngine1;
@@ -306,21 +305,21 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
                        *(ngine1.getCurrentState().getBoard().getCells()[2]));
     move10.execute(ngine1.getCurrentState());
   }
-
-  // SelectTerritoryCommand
-  {
-    State st;
-    std::shared_ptr<Territory> tr(new Territory);
-    std::shared_ptr<Territory> tr2(new Territory);
-    SelectTerritoryCommand selTerr(*tr);
-    selTerr.serialize();
-    Player pl;
-    pl.addTerritory(tr);
-    pl.addTerritory(tr2);
-    selTerr.setCurrentPlayer(pl);
-    selTerr.execute(st);
-    selTerr.execute(st);
-  }
+  /*
+    // SelectTerritoryCommand
+    {
+      State st;
+      std::shared_ptr<Territory> tr(new Territory);
+      std::shared_ptr<Territory> tr2(new Territory);
+      SelectTerritoryCommand selTerr(*tr);
+      selTerr.serialize();
+      Player pl;
+      pl.addTerritory(tr);
+      pl.addTerritory(tr2);
+      selTerr.setCurrentPlayer(pl);
+      selTerr.execute(st);
+      selTerr.execute(st);
+    }*/
 }
 
 /* vim: set sw=2 sts=2 et : */
