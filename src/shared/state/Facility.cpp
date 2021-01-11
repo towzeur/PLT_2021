@@ -16,8 +16,8 @@ Facility::Facility(EntityTypeId entityTypeId, int subTypeId, int attack,
 
 Facility::~Facility() {}
 
+Facility::Facility (const Facility& facility1){}
+
 void Facility::setSubTypeId(FacilityTypeId typeId) { this->subTypeId = typeId; }
 
-bool const Facility::equals(const Entity &e) {}
-
-Entity *const Facility::clone() {}
+bool const Facility::operator== (const Entity& e) {}
