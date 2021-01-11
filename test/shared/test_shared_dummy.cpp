@@ -43,7 +43,10 @@ BOOST_AUTO_TEST_CASE(TestState) {
     turn = st.getTurn();
     BOOST_CHECK_EQUAL(st.nextTurn(), turn + 1);
 
-    // getBoard TO DO
+    // getBoard
+    //Board brd;
+    //st.setBoard(brd);
+    //BOOST_CHECK_EQUAL(st.getBoard(), brd);
 
     // getPlayer and addPlayer
     int playersSize = st.getPlayers().size();
@@ -109,7 +112,11 @@ BOOST_AUTO_TEST_CASE(TestState) {
     pl.setPlaying(true);
     BOOST_CHECK(pl.getPlaying());
 
-    // Status TO DO
+    // Status
+    PlayerStatus status = PLAYING;
+    pl.setStatus(status);
+    BOOST_CHECK_EQUAL(pl.getStatus(), PLAYING);
+
   }
 
   // Board
@@ -170,6 +177,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
   // InnaccessibleCell
   {
     InaccessibleCell iCell;
+    Cell c;
 
     BOOST_CHECK(!iCell.isAccessible());
   }
