@@ -40,7 +40,7 @@ distclean: clean
 
 # configure and compile external dependency
 extern: #bin/dia2code bin/tgui
-	@echo [DEBUG] Root Makefile : extern
+	#@echo [DEBUG] Root Makefile : extern
 
 #bin/dia2code:
 #	@$(MAKE) -s -C extern dia2code
