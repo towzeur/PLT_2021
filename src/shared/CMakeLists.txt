@@ -15,6 +15,12 @@ message(STATUS "Boost include directory: ${Boost_INCLUDE_DIRS}")
 # Find all source files to compile into a library
 file(GLOB_RECURSE shared_sources *.cpp)
 
+# Find library Boost
+find_package(Boost 1.50 COMPONENTS system filesystem REQUIRED)
+message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
+message(STATUS "Boost include directory: ${Boost_INCLUDE_DIRS}")
+
+
 # Build the "shared" library and add required includes
 add_library(${lib_shared_target} STATIC ${shared_sources} ${jsoncpp_sources})
 add_dependencies(${lib_shared_target} generate-headers)

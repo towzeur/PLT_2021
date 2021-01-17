@@ -11,12 +11,13 @@ Engine::~Engine() {}
 
 void Engine::init() {
 
-  std::string texts[] = {"Badisse", "Nico", "Hicham", "Kaan"};
-  state::Player p;
-  for (const std::string &text : texts) {
-    p = state::Player();
-    p.setName(text);
-    this->currentState.addPlayer(&p);
+  std::string names[] = {"Badisse", "Nico", "Hicham", "Kaan"};
+  bool neighborCellExist = true;
+
+  for (auto &name : names) {
+    std::shared_ptr<state::Player> p(new state::Player);
+    p->setName(name);
+    this->currentState.addPlayer(p);
   }
 
   try {
@@ -26,8 +27,85 @@ void Engine::init() {
     this->currentState.getBoard().load("res/map.txt");
   }
 
+  // Init Territories
+  // Creation
+
+  std::vector<std::shared_ptr<state::Player>> players =
+      this->currentState.getPlayers();
+  for (auto &c : this->currentState.getBoard().getCells()) {
+    if (c->getEntity().getEntityTypeId() == state::EntityTypeId::FACILITY) {
+      std::shared_ptr<state::Player> p = players[c->getPlayerId() - 1];
+      if (c->getPlayerId() - 1 == 0) {
+        p->setStatus(state::PLAYING);
+      }
+      std::shared_ptr<state::Territory> newTerritory(new state::Territory);
+      int uid = newTerritory->getUid();
+      newTerritory->setCapitalCoords(c->getRow(), c->getCol());
+      newTerritory->addCell(c);
+      p->addTerritory(newTerritory);
+      c->setTerritoryId(uid);
+    }
+  }
+  // Adding cells which compose the territory
+  for (auto &p : this->currentState.getPlayers()) {
+    neighborCellExist = true;
+    std::vector<std::shared_ptr<state::Cell>> allPlayerCells;
+
+    for (auto &c : this->currentState.getBoard().getCells()) {
+      if (c->getPlayerId() == p->getUid()) {
+        allPlayerCells.push_back(c);
+      }
+    }
+
+    while (neighborCellExist) {
+
+      if (allPlayerCells.size() == 0) {
+        neighborCellExist = false;
+      }
+      for (size_t i = 0; i < allPlayerCells.size(); i++) {
+        if (p->getTerritories()[0]->getCells().size() == 0) {
+          neighborCellExist = false;
+        }
+        for (auto &cp : p->getTerritories()[0]->getCells()) {
+          printf("cpCol: %d   cpRow: %d\ncCol: %d   cRow: %d\n", cp->getCol(),
+                 cp->getRow(), allPlayerCells[i]->getCol(),
+                 allPlayerCells[i]->getRow());
+          if (cp->getCol() == allPlayerCells[i]->getCol() &&
+              cp->getRow() == allPlayerCells[i]->getRow()) {
+            printf("same\n");
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
+                     cp->getRow() == allPlayerCells[i]->getRow() + 1) {
+            printf("haut gauche\n");
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() &&
+                     cp->getRow() == allPlayerCells[i]->getRow() - 1) {
+            printf("bas gauche\n");
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
+                     cp->getRow() == allPlayerCells[i]->getRow() - 1) {
+            printf("haut droite\n");
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
+                     cp->getRow() == allPlayerCells[i]->getRow() + 1) {
+            printf("bas droite\n");
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() + 1 &&
+                     cp->getRow() == allPlayerCells[i]->getRow()) {
+            printf("droite\n");
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+          } else if (cp->getCol() == allPlayerCells[i]->getCol() - 1 &&
+                     cp->getRow() == allPlayerCells[i]->getRow()) {
+            printf("gauche\n");
+            p->getTerritories()[0]->addCell(allPlayerCells[i]);
+          } else {
+            neighborCellExist = false;
+          }
+        }
+      }
+    }
+  }
+
   this->currentState.setTurn(1);
-  this->currentState.getPlayers()[0].setStatus(state::PLAYING);
 }
 
 void Engine::setCurrentState(state::State currentState) {

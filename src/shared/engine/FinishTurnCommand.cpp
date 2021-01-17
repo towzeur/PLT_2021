@@ -1,5 +1,5 @@
 #include "FinishTurnCommand.h"
-#include "engine.h"
+//#include "engine.h"
 #include <iostream>
 #include <unistd.h>
 
@@ -9,23 +9,19 @@ FinishTurnCommand::FinishTurnCommand() { this->commandTypeId = FINISH_TURN; }
 
 void FinishTurnCommand::execute(state::State &state) {
 
-  std::vector<std::unique_ptr<state::Cell>> &cells =
-      state.getBoard().getCells();
-  for (std::unique_ptr<state::Cell> &soldier : cells) {
-    if (soldier->getEntity().isSoldier()) {
-      state::Soldier &s = dynamic_cast<state::Soldier &>(soldier->getEntity());
+  std::vector<std::shared_ptr<state::Cell>> cells = state.getBoard().getCells();
+  for (std::shared_ptr<state::Cell> &soldier : cells) {
+    if (soldier->getEntity().isSoldier() && soldier->isAccessible()) {
       // Reset PA of all soldiers at the end of the turn
-      if (s.getPA() == 0) {
-        s.setPA(0);
-      }
+      soldier->getEntity().setPA(1);
     }
   }
 
-  std::vector<state::Territory> &territories = currentPlayer.getTerritories();
-
-  for (state::Territory &territory : territories) {
+  std::vector<std::shared_ptr<state::Territory>> territories =
+      currentPlayer.getTerritories();
+  for (auto &territory : territories) {
     // Reset selected
-    territory.setSelected(false);
+    territory->setSelected(false);
   }
 
   state.setTurn(state.getTurn() + 1);

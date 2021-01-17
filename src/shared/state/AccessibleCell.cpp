@@ -9,6 +9,8 @@ AccessibleCell::AccessibleCell(int row, int col) : Cell() {
   this->row = row;
 }
 
+AccessibleCell::AccessibleCell (const AccessibleCell& accessCell1){}
+
 AccessibleCell::~AccessibleCell(){};
 
 int AccessibleCell::getPlayerId() { return this->playerId; }
@@ -25,8 +27,6 @@ Entity &AccessibleCell::getEntity() { return this->entity; }
 
 void AccessibleCell::setEntity(Entity &entity) { this->entity = entity; }
 
-bool const AccessibleCell::equals(const Cell &cell1) {}
-
-Cell *const AccessibleCell::clone() {}
+bool const AccessibleCell::operator== (const Cell &cell1) {}
 
 bool const AccessibleCell::isAccessible() { return true; }

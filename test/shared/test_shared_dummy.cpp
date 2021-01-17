@@ -1,5 +1,6 @@
 #include "../../src/shared/engine.h"
 #include "../../src/shared/state.h"
+#include "../../src/shared/utils.h"
 #include <boost/test/unit_test.hpp>
 #include <fstream>
 #include <iostream>
@@ -19,11 +20,9 @@ BOOST_AUTO_TEST_CASE(TestState) {
     bool go = st.getGameOver();
     int turn = st.getTurn();
     int cpi = st.getCurrentPlayerId();
-    int np = st.getNbPlayers();
     BOOST_CHECK_EQUAL(go, false);
     BOOST_CHECK_EQUAL(turn, 0);
     BOOST_CHECK_EQUAL(cpi, 0);
-    BOOST_CHECK_EQUAL(np, 0);
 
     // gameOver setter
     go = true;
@@ -40,21 +39,20 @@ BOOST_AUTO_TEST_CASE(TestState) {
     st.setCurrentPlayerId(cpi);
     BOOST_CHECK_EQUAL(st.getCurrentPlayerId(), cpi);
 
-    // nbPlayers setter
-    np = 2;
-    st.setNbPlayers(np);
-    BOOST_CHECK_EQUAL(st.getNbPlayers(), np);
-
     // nextTurn
     turn = st.getTurn();
     BOOST_CHECK_EQUAL(st.nextTurn(), turn + 1);
 
-    // getBoard TO DO
+    // getBoard
+    //Board brd;
+    //st.setBoard(brd);
+    //BOOST_CHECK_EQUAL(st.getBoard(), brd);
 
     // getPlayer and addPlayer
     int playersSize = st.getPlayers().size();
-    Player p;
-    BOOST_CHECK_EQUAL(st.addPlayer(&p), playersSize + 1);
+    std::unique_ptr<Player> p;
+    st.addPlayer(move(p));
+    BOOST_CHECK_EQUAL(st.getPlayers().size(), playersSize + 1);
   }
 
   // Territory
@@ -103,7 +101,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
     Player pl;
 
     // getUid
-    BOOST_CHECK_EQUAL(pl.getUid(), 1); // Second player created: uid = 1
+    pl.getUid();
 
     // Name getter and setter
     std::string name = "Luffy";
@@ -114,7 +112,11 @@ BOOST_AUTO_TEST_CASE(TestState) {
     pl.setPlaying(true);
     BOOST_CHECK(pl.getPlaying());
 
-    // Status TO DO
+    // Status
+    PlayerStatus status = PLAYING;
+    pl.setStatus(status);
+    BOOST_CHECK_EQUAL(pl.getStatus(), PLAYING);
+
   }
 
   // Board
@@ -175,6 +177,7 @@ BOOST_AUTO_TEST_CASE(TestState) {
   // InnaccessibleCell
   {
     InaccessibleCell iCell;
+    Cell c;
 
     BOOST_CHECK(!iCell.isAccessible());
   }
@@ -186,6 +189,14 @@ BOOST_AUTO_TEST_CASE(TestState) {
     sld.setPA(1);
     BOOST_CHECK_EQUAL(sld.getPA(), 1);
   }
+
+  // Tree
+  {
+    Tree tree;
+
+    tree.setSubTypeId(PINE);
+    BOOST_CHECK_EQUAL(tree.getSubTypeId(), PINE);
+  }
 }
 
 BOOST_AUTO_TEST_CASE(TestEngine) {
@@ -193,7 +204,7 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
   // Engine
   {
     Engine ngine;
-    ngine.init(); // To do (issue with file read ?)
+    ngine.init();
     State st;
     ngine.setCurrentState(st);
     ngine.getCurrentState();
@@ -211,6 +222,15 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     finish.serialize();
     State st;
     int turn = st.getTurn();
+    st.getBoard().load("../../../res/map.txt");
+    Entity ent = (Entity)Soldier(SOLDIER, BARON, 4, 4);
+    std::vector<std::shared_ptr<state::Cell>> cells = st.getBoard().getCells();
+    cells[0]->setEntity(ent);
+    Player pl;
+    std::shared_ptr<Territory> t(new Territory);
+    t->setSelected(true);
+    pl.addTerritory(t);
+    finish.setCurrentPlayer(pl);
     finish.execute(st);
     BOOST_CHECK_EQUAL(st.getTurn(), turn + 1);
     finish.setCommandTypeId(FINISH_TURN);
@@ -221,25 +241,32 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
 
   // MoveCommand
   {
-    State st;
-    st.getBoard().load("../../../res/map.txt");
+    State ste;
+    // Board &bd = ste.getBoard();
+    // utils::PathUtils path_u = utils::PathUtils();
+    // bd.load(path_u.resolveRelative("res/map.txt"));    // Issue on Jenkins
     Soldier soldier;
-    AccessibleCell origin;
-    origin.setEntity(soldier);
-    std::vector<std::unique_ptr<state::Cell>> &cells = st.getBoard().getCells();
-    cells[1]->setEntity(soldier);
+    // std::vector<std::unique_ptr<state::Cell>> &cells =
+    // st.getBoard().getCells();
+    // cells[1]->setEntity(soldier);
     AccessibleCell destination;
     MoveCommand move(soldier, destination);
     move.serialize();
-    move.execute(st);
+    move.execute(ste);
   }
 
   // SelectTerritoryCommand
   {
     State st;
-    Territory tr;
-    SelectTerritoryCommand selTerr(tr);
+    std::shared_ptr<Territory> tr(new Territory);
+    std::shared_ptr<Territory> tr2(new Territory);
+    SelectTerritoryCommand selTerr(*tr);
     selTerr.serialize();
+    Player pl;
+    pl.addTerritory(tr);
+    pl.addTerritory(tr2);
+    selTerr.setCurrentPlayer(pl);
+    selTerr.execute(st);
     selTerr.execute(st);
   }
 }

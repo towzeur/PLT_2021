@@ -62,6 +62,9 @@ void Entity::setEntityTypeId(EntityTypeId entityTypeId) {
 
 EntityTypeId const Entity::getEntityTypeId() { return this->entityTypeId; }
 
-bool const Entity::equals(const Entity &e) {}
+void Entity::setPA (int PA){ this->PA = PA;}
+int Entity::getPA (){return this->PA; }
+
+bool const Entity::equals(const Entity & element) {}
 
 Entity *const Entity::clone() {}

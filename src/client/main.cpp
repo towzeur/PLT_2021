@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 #include "client.h"
+#include "engine.h"
 #include "render.h"
 #include "state.h"
 
@@ -52,11 +53,11 @@ int main(int argc, char *argv[]) {
 
       // add a few player
       std::string texts[] = {"Badisse", "Nico", "Hicham", "Kaan"};
-      state::Player p;
+
       for (const std::string &text : texts) {
-        p = state::Player();
-        p.setName(text);
-        state.addPlayer(&p);
+        std::unique_ptr<state::Player> p(new state::Player);
+        p->setName(text);
+        state.addPlayer(move(p));
       }
 
       try {
@@ -94,6 +95,29 @@ int main(int argc, char *argv[]) {
 
       client::Client clt = client::Client(); // = client::Client();
       clt.run();
+
+    } else if (arg1 == "engine") {
+      // -----------------------------------------------------------------------
+      //                               ENGINE
+      // -----------------------------------------------------------------------
+      std::cout << "ENGINE" << std::endl;
+
+      engine::Engine ngine;
+      ngine.init();
+
+      sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
+      render::StateLayer layer(ngine.getCurrentState(), window);
+      layer.initSurfaces(ngine.getCurrentState());
+
+      while (window.isOpen()) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+          if (event.type == sf::Event::Closed)
+            window.close();
+        }
+        // render
+        layer.draw(window, ngine.getCurrentState());
+      }
 
     } else {
       // std::cout << "Unknown command" << std::endl;

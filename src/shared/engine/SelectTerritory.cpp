@@ -11,14 +11,20 @@ SelectTerritoryCommand::SelectTerritoryCommand(state::Territory &target)
 }
 
 void SelectTerritoryCommand::execute(state::State &state) {
-  std::vector<state::Territory> &territories = currentPlayer.getTerritories();
 
-  for (state::Territory &territory : territories) {
+  for (auto &territory : currentPlayer.getTerritories()) {
 
-    if (territory.getUid() == this->target.getUid()) {
-      territory.setSelected(true);
+    if (territory->getUid() == this->target.getUid()) {
+      if (territory->isSelected() == true) {
+        territory->setSelected(false);
+        printf("oo\n");
+      } else {
+        territory->setSelected(true);
+        printf("pp\n");
+      }
     } else {
-      territory.setSelected(false);
+      territory->setSelected(false);
+      printf("cc\n");
     }
   }
 }

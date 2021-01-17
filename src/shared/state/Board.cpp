@@ -41,12 +41,13 @@ enum TOKENS {
 
 Board::Board() {}
 
+Board::Board (const Board& board1): nRow(board1.nRow),
+nCol(board1.nCol) {}
+
 Board::Board(int nRow, int nCol) {
   this->nRow = nRow;
   this->nCol = nCol;
 }
-
-Board::Board(const Board &board1) {}
 
 Board::~Board() {}
 
@@ -89,7 +90,7 @@ void Board::resize(int nRow, int nCol) {
  *
  * @param token
  */
-std::unique_ptr<Cell> detokenize(std::string token) {
+std::shared_ptr<Cell> detokenize(std::string token) {
   int a = std::stoi(token.substr(0, 1));
   int b = std::stoi(token.substr(1, 1));
   int c = std::stoi(token.substr(2, 1));
@@ -97,7 +98,7 @@ std::unique_ptr<Cell> detokenize(std::string token) {
   // if the cell is inacessible
   if (a == 0) {
     std::cout << "... ";
-    return std::unique_ptr<Cell>(new InaccessibleCell());
+    return std::shared_ptr<Cell>(new InaccessibleCell());
     // return std::make_unique((Cell)InaccessibleCell()) // C++14
   }
 
@@ -125,7 +126,7 @@ std::unique_ptr<Cell> detokenize(std::string token) {
     entity = (Entity)Tree(TREE, PALM);
     break;
   case TOKEN_SOLIDER_GRAVESTONE:
-    entity = (Entity)Soldier(FACILITY, GRAVESTONE);
+    entity = (Entity)Facility(FACILITY, GRAVESTONE);
     break;
   case TOKEN_SOLIDER_BARON:
     entity =
@@ -149,7 +150,7 @@ std::unique_ptr<Cell> detokenize(std::string token) {
   }
   acell->setEntity(entity);
 
-  return std::unique_ptr<Cell>(acell);
+  return std::shared_ptr<Cell>(acell);
 }
 
 void tokenize(std::string token) {}
@@ -182,7 +183,7 @@ void Board::load(const std::string &filename) {
 
   // read each line
   int r = 0, c = 0, index;
-  std::unique_ptr<state::Cell> cell_ptr;
+  std::shared_ptr<state::Cell> cell_ptr;
 
   for (r = 0; r < n_row; ++r) {
     // get line
@@ -193,6 +194,8 @@ void Board::load(const std::string &filename) {
       std::getline(sstream, tmp_str, MAP_TXT_SEP);
       index = c + n_col * r;
       cell_ptr = detokenize(tmp_str);
+      cell_ptr->setCol(c);
+      cell_ptr->setRow(r);
       cells.push_back(std::move(cell_ptr));
     }
     std::cout << std::endl;
@@ -211,8 +214,6 @@ int Board::getNCol() { return nCol; }
 
 int Board::getNRow() { return nRow; }
 
-std::vector<std::unique_ptr<Cell>> &Board::getCells() { return this->cells; }
+std::vector<std::shared_ptr<Cell>> &Board::getCells() { return this->cells; }
 
-Board *const Board::clone() {}
-
-bool const Board::equals(const Board &board1) {}
+bool const Board::operator== (const Board& board1) {}
