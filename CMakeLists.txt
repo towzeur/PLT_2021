@@ -101,6 +101,37 @@ find_package(SFML 2 COMPONENTS graphics network window system audio)
 if(NOT ${MACHINE_ENSEA})
   set(SFML_LIBRARIES sfml-graphics sfml-network sfml-window sfml-system sfml-audio)
 endif()
+message([****] "${SFML_LIBRARIES}")
+message([****] "${SFML_INCLUDE_DIR}")
+
+# ------------------------------------------------------------------------------
+# TGUI
+# ------------------------------------------------------------------------------
+
+# build
+execute_process ( 
+  COMMAND cmake -E make_directory ${PROJECT_SOURCE_DIR}/build/extern/TGUI-0.7.8
+)
+execute_process ( 
+  COMMAND cmake ${PROJECT_SOURCE_DIR}/extern/TGUI-0.7.8
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/build/extern/TGUI-0.7.8
+)
+execute_process (
+  COMMAND cmake --build . -j 4
+  WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/build/extern/TGUI-0.7.8
+)
+#Find any version 0.7.X of TGUI
+#See the FindTGUI.cmake file for additional details and instructions
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/extern/TGUI-0.7.8/cmake/Modules" ${CMAKE_MODULE_PATH})
+set(TGUI_ROOT "${PROJECT_SOURCE_DIR}/build/extern/TGUI-0.7.8")
+find_package(TGUI 0.7)  
+if(NOT TGUI_FOUND)
+  message(FATAL_ERROR "TGUI NOT FOUND !")
+  #add_subdirectory(extern/TGUI-0.7.8 extern/TGUI-0.7.8)
+endif()
+set(TGUI_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/extern/TGUI-0.7.8/include")
+
+# ------------------------------------------------------------------------------
 
 # Find library libmicrohttpd
 find_library(

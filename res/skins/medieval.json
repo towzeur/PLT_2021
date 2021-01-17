@@ -1,0 +1,62 @@
+{
+  "name": "medieval",
+  "window": {
+    "width": 800,
+    "height": 580,
+    "icon_path": "res/icons/220x220w.png",
+    "menu_height": 24,
+    "right_panel_width": 140,
+    "right_panel_padding": 10
+  },
+  "entity": {
+    "width": 20,
+    "height": 30,
+    "frames": 4,
+    "tileset_path": "res/texture/skins/medieval.png",
+    "mapping": {
+      "empty_void": 0,
+      "tree_pine": 1,
+      "tree_palm": 2,
+      "facility_capital_on": 3,
+      "facility_capital_off": 4,
+      "facility_castle": 5,
+      "facility_gravestone": 6,
+      "soldier_peasant": 7,
+      "soldier_spearman": 8,
+      "soldier_knight": 9,
+      "soldier_baron": 10
+    },
+    "fps": 4
+  },
+  "background": {
+    "color": "#FF0000",
+    "enable": true,
+    "image_path": "res/texture/water.png",
+    "animated": true,
+    "fps": 4
+  },
+  "fps_counter": {
+    "enable": true,
+    "font_path": "res/fonts/Square.ttf"
+  },
+  "hexamap": {
+    "n_row": 22,
+    "n_col": 30,
+    "hexa_r": 14,
+    "outline_color": "#000000",
+    "colors": [
+      "#00ff00",
+      "#c0c000",
+      "#008000",
+      "#ffff00",
+      "#00c000",
+      "#808000"
+    ]
+  },
+  "territory_tooltips": {
+    "width": 128,
+    "height": 120,
+    "margin_x": 8,
+    "margin_y": 0
+  }
+}
