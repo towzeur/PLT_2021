@@ -170,7 +170,6 @@ void Client::run() {
   int map_offset_x = 0 + (map_full_width - hm.get_width()) / 2;
   int map_offset_y =
       config.window_menu_height + (map_full_height - hm.get_height()) / 2;
-
   hm.setPosition(map_offset_x, map_offset_y);
 
   // ---------------------------------------------------------------------------
