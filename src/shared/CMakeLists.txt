@@ -7,6 +7,11 @@ generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../engine.dia")
 generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../utils.dia")
 generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../ai.dia")
 
+# Find library Boost
+find_package(Boost 1.50 COMPONENTS system filesystem REQUIRED)
+message(STATUS "Boost libraries: ${Boost_LIBRARIES}")
+message(STATUS "Boost include directory: ${Boost_INCLUDE_DIRS}")
+
 # Find all source files to compile into a library
 file(GLOB_RECURSE shared_sources *.cpp)
 
