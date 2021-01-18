@@ -1,24 +1,18 @@
-
-#include "Board.h"
-#include "AccessibleCell.h"
-#include "InaccessibleCell.h"
-
-#include "Empty.h"
-#include "Facility.h"
-#include "Soldier.h"
-#include "Tree.h"
-
 #include <fstream>
 #include <iostream>
 #include <sstream> // stringstream
+
+#include "AccessibleCell.h"
+#include "Board.h"
+#include "InaccessibleCell.h"
 
 using namespace state;
 
 // -----------------------------------------------------------------------------
 
-#define NB_PLAYER_MAX 6
-#define MAP_TEXT_OFFSET 2
-#define NEXT_PLAYER_TILECODE_OFFSET 10
+//#define NB_PLAYER_MAX 6
+//#define MAP_TEXT_OFFSET 2
+//#define NEXT_PLAYER_TILECODE_OFFSET 10
 #define MAP_TXT_SEP ','
 
 const int ENTITY_ATTACK[5] = {0, 1, 2, 3, 4};
@@ -37,12 +31,17 @@ enum TOKENS {
   TOKEN_SOLIDER_PEASANT = 9
 };
 
+const TOKENS all[] = {
+    TOKEN_VOID,           TOKEN_FACILITY_CASTLE, TOKEN_FACILITY_CAPITAL,
+    TOKEN_TREE_PINE,      TOKEN_TREE_PALM,       TOKEN_SOLIDER_GRAVESTONE,
+    TOKEN_SOLIDER_BARON,  TOKEN_SOLIDER_KNIGHT,  TOKEN_SOLIDER_SPEARMAN,
+    TOKEN_SOLIDER_PEASANT};
+
 // -----------------------------------------------------------------------------
 
 Board::Board() {}
 
-Board::Board (const Board& board1): nRow(board1.nRow),
-nCol(board1.nCol) {}
+Board::Board(const Board &board1) : nRow(board1.nRow), nCol(board1.nCol) {}
 
 Board::Board(int nRow, int nCol) {
   this->nRow = nRow;
@@ -54,11 +53,11 @@ Board::~Board() {}
 void Board::operator=(const Board &board1) {}
 
 void Board::resize(int nRow, int nCol) {
-  this->nCol = nCol;
   this->nRow = nRow;
+  this->nCol = nCol;
   // set up cells vector
   cells.clear();
-  // cells.resize(nCol * nRow);
+  cells.resize(nCol * nRow);
 }
 
 /**
@@ -78,15 +77,15 @@ void Board::resize(int nRow, int nCol) {
  *
  * - C => Entity:
  *          - 0 = VOID
- *          - 1 = CASTLE
- *          - 2 = CAPITAL
- *          - 3 = PINE
- *          - 4 = PALM
+ *          - 1 = PINE
+ *          - 2 = PALM
+ *          - 3 = CAPITAL
+ *          - 4 = CASTLE
  *          - 5 = GRAVESTONE
- *          - 6 = BARON
- *          - 7 = KNIGHT
- *          - 8 = SPEARMAN
- *          - 9 = PEASANT
+ *          - 6 = PEASANT
+ *          - 7 = SPEARMAN
+ *          - 8 = KNIGHT
+ *          - 9 = BARON
  *
  * @param token
  */
@@ -97,59 +96,18 @@ std::shared_ptr<Cell> detokenize(std::string token) {
 
   // if the cell is inacessible
   if (a == 0) {
-    std::cout << "... ";
+    // std::cout << "... ";
     return std::shared_ptr<Cell>(new InaccessibleCell());
     // return std::make_unique((Cell)InaccessibleCell()) // C++14
   }
 
   // cell is accessible
-  std::cout << a << b << c << " ";
+  // std::cout << a << b << c << " ";
   AccessibleCell *acell = new AccessibleCell();
   acell->setPlayerId(b);
 
-  // parse c : entity
-  Entity entity;
-  switch (c) {
-  case TOKEN_VOID:
-    entity = (Entity)Empty(EMPTY, VOID);
-    break;
-  case TOKEN_FACILITY_CASTLE:
-    entity = (Entity)Facility(FACILITY, CASTLE);
-    break;
-  case TOKEN_FACILITY_CAPITAL:
-    entity = (Entity)Facility(FACILITY, CAPITAL);
-    break;
-  case TOKEN_TREE_PINE:
-    entity = (Entity)Tree(TREE, PINE);
-    break;
-  case TOKEN_TREE_PALM:
-    entity = (Entity)Tree(TREE, PALM);
-    break;
-  case TOKEN_SOLIDER_GRAVESTONE:
-    entity = (Entity)Facility(FACILITY, GRAVESTONE);
-    break;
-  case TOKEN_SOLIDER_BARON:
-    entity =
-        (Entity)Soldier(SOLDIER, BARON, ENTITY_ATTACK[4], ENTITY_DEFENSE[4]);
-    break;
-  case TOKEN_SOLIDER_KNIGHT:
-    entity =
-        (Entity)Soldier(SOLDIER, KNIGHT, ENTITY_ATTACK[3], ENTITY_DEFENSE[3]);
-    break;
-  case TOKEN_SOLIDER_SPEARMAN:
-    entity =
-        (Entity)Soldier(SOLDIER, SPEARMAN, ENTITY_ATTACK[2], ENTITY_DEFENSE[2]);
-    break;
-  case TOKEN_SOLIDER_PEASANT:
-    entity =
-        (Entity)Soldier(SOLDIER, PEASANT, ENTITY_ATTACK[1], ENTITY_DEFENSE[0]);
-    break;
-  default:
-    std::cout << "default\n";
-    break;
-  }
+  state::Entity entity(static_cast<state::EntitySubTypeId>(c));
   acell->setEntity(entity);
-
   return std::shared_ptr<Cell>(acell);
 }
 
@@ -179,7 +137,7 @@ void Board::load(const std::string &filename) {
     n_col = std::stoi(tmp_str);
   }
   resize(n_row, n_col);
-  std::cout << n_row << " " << n_col << std::endl;
+  // std::cout << n_row << " " << n_col << std::endl;
 
   // read each line
   int r = 0, c = 0, index;
@@ -192,19 +150,25 @@ void Board::load(const std::string &filename) {
     // loop through str token
     for (c = 0; c < n_col; ++c) {
       std::getline(sstream, tmp_str, MAP_TXT_SEP);
-      index = c + n_col * r;
+
       cell_ptr = detokenize(tmp_str);
       cell_ptr->setCol(c);
       cell_ptr->setRow(r);
-      cells.push_back(std::move(cell_ptr));
+
+      // add it to the cells vector
+      index = c + n_col * r;
+      cells[index] = std::move(cell_ptr);
     }
-    std::cout << std::endl;
+    // std::cout << std::endl;
   }
 
   ifs.close();
 }
 
-Cell *const Board::get(int r, int c) {}
+std::shared_ptr<Cell> Board::get(int r, int c) {
+  int index = r * nCol + c;
+  return cells[index];
+}
 
 void Board::set(int r, int c, Cell *cell) {}
 
@@ -216,4 +180,4 @@ int Board::getNRow() { return nRow; }
 
 std::vector<std::shared_ptr<Cell>> &Board::getCells() { return this->cells; }
 
-bool const Board::operator== (const Board& board1) {}
+bool const Board::operator==(const Board &board1) {}
