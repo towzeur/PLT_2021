@@ -133,7 +133,7 @@ bool StateLayer::printText(state::State &state) {
   std::vector<std::shared_ptr<state::Player>> players = state.getPlayers();
 
   // add text for players
-  for (unsigned int i = 0; i < players.size(); i++) {
+  for (unsigned int i = 1; i < players.size(); i++) {
     std::vector<std::shared_ptr<state::Territory>> territories =
         players[i]->getTerritories();
     std::shared_ptr<state::Territory> selectedTerritory(new state::Territory);
