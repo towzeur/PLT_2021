@@ -1,7 +1,9 @@
-#include "Engine.h"
-#include "engine.h"
 #include <iostream>
 #include <unistd.h>
+
+#include "Engine.h"
+//#include "engine.h"
+#include "utils/Utils.h"
 
 using namespace engine;
 
@@ -11,25 +13,20 @@ Engine::~Engine() {}
 
 void Engine::init() {
 
-  std::string names[] = {"Badisse", "Nico", "Hicham", "Kaan"};
-  bool neighborCellExist = true;
+  // load the map
+  std::string rpath_map = utils::Utils::resolveRelative("res/map.txt");
+  this->currentState.getBoard().load(rpath_map);
 
+  // set names
+  std::string names[] = {"Badisse", "Nico", "Hicham", "Kaan"};
   for (auto &name : names) {
     std::shared_ptr<state::Player> p(new state::Player);
     p->setName(name);
     this->currentState.addPlayer(p);
   }
 
-  try {
-    this->currentState.getBoard().load("../../../res/map.txt");
-  } catch (const std::exception &e) {
-    std::cerr << e.what() << '\n';
-    this->currentState.getBoard().load("res/map.txt");
-  }
-
   // Init Territories
   // Creation
-
   std::vector<std::shared_ptr<state::Player>> players =
       this->currentState.getPlayers();
   for (auto &c : this->currentState.getBoard().getCells()) {
@@ -47,6 +44,7 @@ void Engine::init() {
     }
   }
   // Adding cells which compose the territory
+  bool neighborCellExist = true;
   for (auto &p : this->currentState.getPlayers()) {
     neighborCellExist = true;
     std::vector<std::shared_ptr<state::Cell>> allPlayerCells;
