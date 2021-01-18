@@ -8,6 +8,7 @@
 #include <SFML/Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 
+#include "state/Entity.h"
 #include "utils/Utils.h"
 
 using namespace client;
