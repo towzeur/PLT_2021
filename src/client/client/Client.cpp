@@ -1,26 +1,27 @@
 #include "Client.h"
 
-//#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
+#include <cstdlib>
+#include <fstream>
 #include <iostream>
 #include <time.h>
 
-#include "state.h"
-#include "utils.h"
+#include <SFML/Graphics.hpp>
+#include <TGUI/TGUI.hpp>
+
+#include "utils/Utils.h"
 
 using namespace client;
 
-const unsigned int ROW = 22;
-const unsigned int COL = 30;
-const unsigned int BOX_R = 14;
-const unsigned int WIDTH = 800;
-const unsigned int HEIGHT = 580;
-
-// std::string ROOT_DIR = "PLT_2021";
-
-// =============================================================================
-// UTILS TEST FUNCTION
-// =============================================================================
+void handle_menu_click(sf::String menu_name) {
+  std::cout << "menu clicked : " << menu_name.toAnsiString() << std::endl;
+  if (menu_name == "Load") {
+  } else if (menu_name == "Save") {
+  } else if (menu_name == "Exit") {
+  } else if (menu_name == "Copy") {
+  } else if (menu_name == "Paste") {
+  } else if (menu_name == "About") {
+  }
+}
 
 // =============================================================================
 // CLIENT
@@ -29,63 +30,118 @@ const unsigned int HEIGHT = 580;
 Client::Client() {}
 
 void Client::run() {
-
-  utils::PathUtils path_u = utils::PathUtils();
-  std::string rp_background =
-      path_u.resolveRelative("res/texture/skins/background.bmp");
-  std::string rp_font_fps = path_u.resolveRelative("res/fonts/Square.ttf");
-  std::string rp_skins =
-      path_u.resolveRelative("res/texture/skins/medieval.png");
-
-  // ---------------------------------------------------------------------------
-
+  std::cout << "HELLO WORLD" << std::endl;
   srand(time(NULL));
 
-  std::cout << "HELLO WORLD" << std::endl;
-  std::cout << std::endl;
+  render::RenderConfig config = render::RenderConfig();
+  config.load("medieval");
+
+  // ---------------------------------------------------------------------------
+  //                                WINDOWS
+  // ---------------------------------------------------------------------------
 
   sf::ContextSettings settings;
-  // settings.antialiasingLevel = 8;
-  sf::RenderWindow window({WIDTH, HEIGHT}, "Hexagons", sf::Style::Default,
-                          settings);
-  // window.setVerticalSyncEnabled(true);
+  settings.antialiasingLevel = 8;
+  sf::Uint32 style = sf::Style::Titlebar | sf::Style::Close;
+  // Titlebar   = 1 << 0
+  // Resize     = 1 << 1
+  // Close      = 1 << 2
+  // Fullscreen = 1 << 3
+  // Default = Titlebar | Resize | Close
+  sf::RenderWindow window({config.window_size.x, config.window_size.y},
+                          "Hexagons", style, settings);
 
-  // view
-  // sf::View view(sf::FloatRect(200.f, 200.f, 300.f, 200.f));
-  // window.setView(view);
-  // view.setRotation(20.f);
+  window.setVerticalSyncEnabled(true);
+
+  // center the window
+  window.setPosition(sf::Vector2i(
+      (sf::VideoMode::getDesktopMode().width - window.getSize().x) / 2,
+      (sf::VideoMode::getDesktopMode().height - window.getSize().y) / 2));
+
+  // set window's icon
+  window.setIcon(config.window_icon.getSize().x, config.window_icon.getSize().y,
+                 config.window_icon.getPixelsPtr());
+
+  // ---------------------------------------------------------------------------
+  //                                   TGUI
+  // ---------------------------------------------------------------------------
+
+  tgui::Gui gui(window);
+
+  const sf::String &tgui_theme =
+      utils::Utils::resolveRelative("res/tgui/widgets/Black.txt");
+  tgui::Theme::Ptr theme = tgui::Theme::create(tgui_theme);
+
+  tgui::MenuBar::Ptr menu = theme->load("MenuBar");
+  menu->setSize(config.window_size.x, config.window_menu_height);
+
+  // canvas_w = config.window_size.x - config.window_right_panel_width;
+  // canvas_h = config.window_size.y - config.window_menu_height;
+
+  const std::string &tgui_font =
+      // const sf::String &tgui_font =
+      utils::Utils::resolveRelative("res/fonts/Segoe_UI.ttf");
+  menu->setFont(tgui_font);
+  menu->addMenu("File");
+  menu->addMenuItem("File", "Load");
+  menu->addMenuItem("File", "Save");
+  menu->addMenuItem("File", "Exit");
+  menu->addMenu("Moves");
+  menu->addMenuItem("Moves", "Copy");
+  menu->addMenuItem("Moves", "Paste");
+  menu->addMenu("Help");
+  menu->addMenuItem("Help", "About");
+  // Signals: MenuItemClicked
+  // Optional parameter sf::String: name of the item on which you clicked
+  // Optional parameter std::vector<sf::String>: Which menu was open, followed
+  // by which item you clicked on Uses Callback member 'text' (menu item name)
+  // and index' (index of the open menu)
+  //
+  // signalNames	Name of the signal, or multiple names split by spaces
+  // func	The function to connect
+  // args	The arguments that should be bound to the function
+  menu->connect("MenuItemClicked", handle_menu_click);
+
+  gui.add(menu);
+
+  // tgui::VerticalLayout::Ptr layout = tgui::VerticalLayout::create();
+  tgui::Panel::Ptr layout = tgui::Panel::create();
+  layout->setBackgroundColor(sf::Color(0, 0, 0, 150));
+  layout->setSize(140.f, config.window_size.y - config.window_menu_height);
+  layout->setPosition(config.window_size.x - config.window_right_panel_width,
+                      config.window_menu_height);
+  gui.add(layout);
+
+  tgui::Label::Ptr label = theme->load("Label");
+  label->setText("TEST 1");
+  label->setTextSize(10);
+  // label->setPosition(10, 90);
+  label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
+  label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+  layout->add(label);
+
+  tgui::Button::Ptr button = theme->load("button");
+  button->setPosition(10, config.window_size.y - 50 * 1.5 -
+                              config.window_right_panel_padding);
+  button->setSize(config.window_right_panel_width -
+                      2 * config.window_right_panel_padding,
+                  50);
+  button->setText("Fin de Tour");
+  button->connect("pressed",
+                  [=]() { std::cout << "button - end turn" << std::endl; });
+  // button->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
+  // button->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+  layout->add(button);
 
   // ---------------------------------------------------------------------------
   //                                BACKGROUND
   // ---------------------------------------------------------------------------
-  sf::Texture texture;
-  if (!texture.loadFromFile(rp_background)) {
-    // error...
-    exit(1);
-  }
-  texture.setRepeated(true);
-  sf::Sprite sprite(texture, sf::IntRect(0, 0, WIDTH, HEIGHT));
+
+  render::Background bg = render::Background(config);
 
   // ---------------------------------------------------------------------------
   //                                    FPS
   // ---------------------------------------------------------------------------
-
-  int frame = 0;
-  sf::Clock clock;
-  sf::Time time_curr; //, time_prev = clock.getElapsedTime();
-
-  sf::Font font;
-  if (!font.loadFromFile(rp_font_fps))
-    return;
-
-  sf::Text text;
-  text.setFont(font);
-  text.setString("60");
-  // sf::FloatRect blabla = text.getLocalBounds();
-  text.setPosition(WIDTH - text.getLocalBounds().width - 10, 0);
-  text.setCharacterSize(30); // in pixel !
-  text.setFillColor(sf::Color::Yellow);
-  // text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
   // ---------------------------------------------------------------------------
   //                              SOUND TEST
@@ -105,150 +161,140 @@ void Client::run() {
   //                               HEXA MAP
   // ---------------------------------------------------------------------------
 
-  render::HexaMap hm = render::HexaMap(ROW, COL, BOX_R);
-  hm.initialize();
-  hm.update();
-  // window.setSize(sf::Vector2u(hm.width, hm.height));
+  render::HexaMap hm = render::HexaMap(config);
+  std::cout << "hexamap width " << hm.get_width() << std::endl;
+  std::cout << "hexamap height " << hm.get_height() << std::endl;
 
-  int r = ROW, c = COL, hexa_r = BOX_R;
+  int map_full_width = config.window_size.x - config.window_right_panel_width;
+  int map_full_height = config.window_size.y - config.window_menu_height;
+  int map_offset_x = 0 + (map_full_width - hm.get_width()) / 2;
+  int map_offset_y =
+      config.window_menu_height + (map_full_height - hm.get_height()) / 2;
+  hm.setPosition(map_offset_x, map_offset_y);
 
   // ---------------------------------------------------------------------------
   //                              ENTITTY
   // ---------------------------------------------------------------------------
 
-  // 10 entity : rand() % 10,
-  // Declare and load a texture
-  int entity_width = 20, entity_height = 30;
-  sf::Texture entities_textures;
-  if (!entities_textures.loadFromFile(rp_skins)) {
-    exit(1);
+  render::HexaEntity he = render::HexaEntity(config);
+  he.setPosition(map_offset_x, map_offset_y);
+
+  // ---------------------------------------------------------------------------
+  //                              FPS
+  // ---------------------------------------------------------------------------
+
+  render::Fps fps = render::Fps(config);
+
+  // ---------------------------------------------------------------------------
+  //                              init map
+  // ---------------------------------------------------------------------------
+
+  for (int r = 0; r < config.hexamap_n_row; ++r) {
+    for (int c = 0; c < config.hexamap_n_col; ++c) {
+      he.entity_set(r, c, rand() % 11);
+      hm.hex_set_color(r, c, config.hexamap_colors[rand() % 6]);
+
+      if (rand() % 2) {
+        hm.hex_show(r, c);
+        he.entity_set(r, c, rand() % 10);
+        he.entity_show(r, c);
+      } else {
+        hm.hex_hide(r, c);
+        he.entity_set(r, c, 0);
+        he.entity_hide(r, c);
+      }
+    }
   }
-  int i_entity = rand() % 10;
-  int x_e, y_e, w_e, h_e;
-  x_e = 0 * (entity_width) + 1;
-  y_e = (i_entity) * (entity_height - 1) + 1;
-  w_e = entity_width - 2;
-  h_e = entity_height - 2;
-  sf::Sprite entity_sprite(entities_textures, sf::IntRect(x_e, y_e, w_e, h_e));
-  int xc_e, yc_e;
-  sf::Vector2i hc = hm.get_hexa_center(rand() % ROW, rand() % COL);
-  xc_e = hc.x - entity_width / 2.;
-  yc_e = hc.y - entity_height / 2.;
-  entity_sprite.setPosition(xc_e, yc_e);
 
   // ---------------------------------------------------------------------------
   //                              GAME LOOP
   // ---------------------------------------------------------------------------
+  sf::Event event;
+
   while (window.isOpen()) {
-    // event loop
-    sf::Event event;
     while (window.pollEvent(event)) {
-
-      switch (event.type) {
-
-      case sf::Event::Closed:
+      if (event.type == sf::Event::Closed) {
         window.close();
         break;
+      }
 
-      case sf::Event::KeyPressed:
-        // std::cout << "[KEY] ";
+      if (event.type == sf::Event::Resized) {
+        // update the view to the new size of the window
+        sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+        window.setView(sf::View(visibleArea));
+      }
 
+      if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Right) {
           std::cout << "Right" << std::endl;
-          hm.initialize(r, ++c, hexa_r);
-          hm.update();
+          // hm.initialize(r, ++c, hexa_r);
         } else if (event.key.code == sf::Keyboard::Left) {
           std::cout << "Left" << std::endl;
-          hm.initialize(r, --c, hexa_r);
-          hm.update();
+          // hm.initialize(r, --c, hexa_r);
         } else if (event.key.code == sf::Keyboard::Up) {
           std::cout << "Up" << std::endl;
-          hm.initialize(--r, c, hexa_r);
-          hm.update();
+          // hm.initialize(--r, c, hexa_r);
         } else if (event.key.code == sf::Keyboard::Down) {
           std::cout << "Down" << std::endl;
-          hm.initialize(++r, c, hexa_r);
-          hm.update();
+          // hm.initialize(++r, c, hexa_r);
           //} else if (event.key.code == sf::Keyboard::Enter) {
           //  std::cout << "OK" << std::endl;
         } else if (event.key.code == sf::Keyboard::Add) {
           std::cout << "+" << std::endl;
-          hm.initialize(r, c, ++hexa_r);
-          hm.update();
+          // hm.initialize(r, c, ++hexa_r);
         } else if (event.key.code == sf::Keyboard::Subtract) {
           std::cout << "-" << std::endl;
-          hm.initialize(r, c, --hexa_r);
-          hm.update();
+          // hm.initialize(r, c, --hexa_r);
         }
+        // hm.update();
+      }
 
-        else
-          // std::cout << std::endl;
-          break;
+      if (event.type == sf::Event::MouseButtonPressed) {
 
-      case sf::Event::MouseButtonPressed:
         // sf::Event::MouseButtonPressed and sf::Event::MouseButtonReleased
         //  left, right, middle (wheel), extra #1 and extra #2 (side buttons)
         // std::cout << "[MOUSE] ";
+
         if (event.mouseButton.button == sf::Mouse::Right) {
           std::cout << "RIGHT (" << event.mouseButton.x << ", "
                     << event.mouseButton.y << ")" << std::endl;
-        } else if (event.mouseButton.button == sf::Mouse::Left) {
-          std::cout << "LEFT (" << event.mouseButton.x << ", "
-                    << event.mouseButton.y << ")" << std::endl;
-          sf::Vector2u coords =
-              hm.PointToCoord(event.mouseButton.x, event.mouseButton.y);
-          std::cout << "=>" << coords.x << "," << coords.y << std::endl;
-          unsigned int r_click = coords.x, c_click = coords.y;
-          if ((r_click >= 0 && r_click < hm.getN_row()) &&
-              (c_click >= 0 && c_click < hm.getN_col())) {
-            std::cout << "!" << std::endl;
+        }
+
+        if (event.mouseButton.button == sf::Mouse::Left) {
+          sf::Vector2i pos;
+          std::cout << "LEFT (" << event.mouseButton.x << ", ";
+          std::cout << event.mouseButton.y << ")" << std::endl;
+          // convert pixel to position(row, col)
+
+          pos = hm.PointToCoord(event.mouseButton.x, event.mouseButton.y);
+          std::cout << "=>" << pos.x << "," << pos.y << std::endl;
+
+          if ((pos.x >= 0 && pos.x < config.hexamap_n_row) &&
+              (pos.y >= 0 && pos.y < config.hexamap_n_col)) {
             // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
-            hm.hex_toggle_transparency(r_click, c_click);
+            hm.hex_toggle_transparency(pos.x, pos.y);
+            he.entity_toggle_transparency(pos.x, pos.y);
           }
-        } else
-          // std::cout << std::endl;
-          break;
-
-        /*
-        case sf::Event::MouseWheelEvent:
-            break;
-        */
-
-      default:
-        break;
+        }
       }
+
+      // Pass the event to all the widgets
+      gui.handleEvent(event);
     }
 
-    window.clear(sf::Color::Red);
+    window.clear(); // clear the screen (not necessary)
     // DRAW : start -------------------------------------------------------
-
-    // background
-    window.draw(sprite);
-    window.draw(hm);
-    window.draw(entity_sprite);
-    // fps counter
-    window.draw(text);
+    window.draw(bg); // background
+    window.draw(hm); // hexa map
+    window.draw(he); // entities
+    gui.draw();
+    window.draw(fps); // fps
 
     // DRAW : end   -------------------------------------------------------
     window.display();
 
-    // performance measurement
-    // time_curr = clock.getElapsedTime();
-    // fps = 1.0f / (time_curr.asSeconds() - time_prev.asSeconds()); // the
-    // asSeconds returns a float time_prev = time_curr;
-
-    frame++;
-    if (clock.getElapsedTime().asSeconds() > 1.f) {
-      clock.restart();
-
-      // std::cout << "[FPS] " << floor(frame) << std::endl; // flooring it will
-      // make the frame rate a rounded number
-
-      text.setString(std::to_string(frame));
-      text.setPosition(WIDTH - text.getLocalBounds().width - 10, 0);
-      frame = 0;
-    }
+    he.update();
+    bg.update();
+    fps.update();
   }
-
-  std::cout << std::endl;
 }

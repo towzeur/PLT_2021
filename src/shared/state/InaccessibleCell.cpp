@@ -11,8 +11,8 @@ InaccessibleCell::InaccessibleCell(int row, int col) : Cell() {
 
 InaccessibleCell::~InaccessibleCell(){};
 
+InaccessibleCell::InaccessibleCell (const InaccessibleCell& inacCell1){}
+
 bool const InaccessibleCell::isAccessible() { return false; }
 
-bool const InaccessibleCell::equals(const Cell &cell1) {}
-
-Cell *const InaccessibleCell::clone() {}
+bool const InaccessibleCell::operator== (const Cell& cell1) {}
