@@ -34,33 +34,36 @@ bool Surface::load(const std::string &tileset, sf::Vector2u tileSize,
     for (unsigned int j = 0; j < nb_col; ++j) {
 
       std::shared_ptr<state::Cell> cell = cells[i * nb_row + j];
+      state::AccessibleCell *acell = NULL;
+      if (cell->isAccessible())
+        acell = (state::AccessibleCell *)cell.get();
 
       if (surfaceNb == 0) {
         if (!cell->isAccessible()) {
           tileNumber = 0;
         } else {
-          playerId = cell->getPlayerId();
+          playerId = acell->getPlayerId();
           tileNumber = playerId + 1;
         }
       } else if (surfaceNb == 1) {
         if (!cell->isAccessible()) {
           tileNumber = 0;
         } else {
-          entity = cell->getEntity();
+          entity = acell->getEntity();
           if (entity.isEmpty()) {
             tileNumber = 0;
           } else if (entity.isSoldier()) {
-            tileNumber = 10 - entity.getSubTypeId();
+            tileNumber = 10 - entity.getEntitySubTypeId();
           } else if (entity.isFacility()) {
-            if (entity.getSubTypeId() == 1) {
+            if (entity.getEntitySubTypeId() == 1) {
               tileNumber = 2;
-            } else if (entity.getSubTypeId() == 2) {
+            } else if (entity.getEntitySubTypeId() == 2) {
               tileNumber = 1;
-            } else if (entity.getSubTypeId() == 3) {
+            } else if (entity.getEntitySubTypeId() == 3) {
               tileNumber = 5;
             }
           } else if (entity.isTree()) {
-            tileNumber = entity.getSubTypeId() + 2;
+            tileNumber = entity.getEntitySubTypeId() + 2;
           }
         }
       } else {
