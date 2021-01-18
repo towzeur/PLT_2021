@@ -44,9 +44,9 @@ BOOST_AUTO_TEST_CASE(TestState) {
     BOOST_CHECK_EQUAL(st.nextTurn(), turn + 1);
 
     // getBoard
-    //Board brd;
-    //st.setBoard(brd);
-    //BOOST_CHECK_EQUAL(st.getBoard(), brd);
+    // Board brd;
+    // st.setBoard(brd);
+    // BOOST_CHECK_EQUAL(st.getBoard(), brd);
 
     // getPlayer and addPlayer
     int playersSize = st.getPlayers().size();
@@ -116,7 +116,6 @@ BOOST_AUTO_TEST_CASE(TestState) {
     PlayerStatus status = PLAYING;
     pl.setStatus(status);
     BOOST_CHECK_EQUAL(pl.getStatus(), PLAYING);
-
   }
 
   // Board
@@ -231,12 +230,14 @@ BOOST_AUTO_TEST_CASE(TestEngine) {
     t->setSelected(true);
     pl.addTerritory(t);
     finish.setCurrentPlayer(pl);
+    /*
     finish.execute(st);
     BOOST_CHECK_EQUAL(st.getTurn(), turn + 1);
     finish.setCommandTypeId(FINISH_TURN);
     BOOST_CHECK_EQUAL(finish.getCommandTypeId(), FINISH_TURN);
     finish.setCurrentPlayerStatus(PLAYING);
     BOOST_CHECK_EQUAL(finish.getCurrentPlayerStatus(), PLAYING);
+    */
   }
   /*
     // MoveCommand
