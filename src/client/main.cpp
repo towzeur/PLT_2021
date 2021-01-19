@@ -113,21 +113,23 @@ int main(int argc, char *argv[]) {
       // -----------------------------------------------------------------------
       std::cout << "ENGINE" << std::endl;
 
-      engine::Engine ngine;
-      ngine.init();
+      engine::Engine eng;
+      eng.init("res/map.txt");
 
-      sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
-      render::StateLayer layer(ngine.getCurrentState(), window);
-      layer.initSurfaces(ngine.getCurrentState());
+      if (0) {
+        sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
+        render::StateLayer layer(eng.getCurrentState(), window);
+        layer.initSurfaces(eng.getCurrentState());
 
-      while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-          if (event.type == sf::Event::Closed)
-            window.close();
+        while (window.isOpen()) {
+          sf::Event event;
+          while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+              window.close();
+          }
+          // render
+          layer.draw(window, eng.getCurrentState());
         }
-        // render
-        layer.draw(window, ngine.getCurrentState());
       }
 
     } else if (arg1 == "random_ai") {
