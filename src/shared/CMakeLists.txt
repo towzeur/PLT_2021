@@ -5,7 +5,7 @@ set(lib_shared_target shared_static)
 generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../state.dia")
 generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../engine.dia")
 generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../utils.dia")
-#generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../ai.dia")
+generate_dia_header("${CMAKE_CURRENT_SOURCE_DIR}/../ai.dia")
 
 # Find library Boost
 find_package(Boost 1.50 COMPONENTS system filesystem REQUIRED)
