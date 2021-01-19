@@ -12,13 +12,32 @@
 const char *HELP_MESSAGE = R"V0G0N(
 usage: client <command> [<args>]
 
-    hello       Print a Hello World message to the console.
+    hello         Print a Hello World message to the console.
 
-    state       Test the State module
+    state         Test the State module
 
-    render      Display state render
+    render        Display state render
 
-    render2     Display state render v2
+    render2       Display state render v2
+
+    engine        Display a succession of different states on the screen
+
+    random_ai     Display a game played by a random AI
+
+    heuristic_ai  Display a game played by a heuristic AI
+
+    deep_ai       Display a game played by a deep AI
+
+    thread        Display a game played by IAs, with the game engine running in 
+                  a separate thread.
+
+    record        Output a game log to replay.txt played by AIs
+
+    play          plays the games through the record stored in replay.txt
+
+    listen        Respond to the services defined by the API
+
+    network       Allows the client to be added to the list of players.
 
 )V0G0N";
 
@@ -85,15 +104,7 @@ int main(int argc, char *argv[]) {
       // -----------------------------------------------------------------------
       //                               RENDER 2
       // -----------------------------------------------------------------------
-
-      char pBuf[256];
-      size_t len = sizeof(pBuf);
-      size_t bytes = readlink("/proc/self/exe", pBuf, len);
-      if (bytes >= 0 && bytes < len)
-        pBuf[bytes] = '\0';
-      std::cout << pBuf << std::endl;
-
-      client::Client clt = client::Client(); // = client::Client();
+      client::Client clt = client::Client();
       clt.run();
 
     } else if (arg1 == "engine") {
@@ -119,14 +130,27 @@ int main(int argc, char *argv[]) {
         layer.draw(window, ngine.getCurrentState());
       }
 
+    } else if (arg1 == "random_ai") {
+
+    } else if (arg1 == "heuristic_ai") {
+
+    } else if (arg1 == "deep_ai") {
+
+    } else if (arg1 == "thread") {
+
+    } else if (arg1 == "record") {
+
+    } else if (arg1 == "play") {
+
+    } else if (arg1 == "listen") { // 4.2
+
+    } else if (arg1 == "network") {
+
     } else {
-      // std::cout << "Unknown command" << std::endl;
+      std::cout << "Unknown command" << std::endl;
     }
 
   } else {
-    // -------------------------------------------------------------------------
-    //                                  HELP
-    // -------------------------------------------------------------------------
     std::cout << HELP_MESSAGE << std::endl;
   }
 

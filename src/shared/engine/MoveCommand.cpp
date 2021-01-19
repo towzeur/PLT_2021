@@ -5,13 +5,10 @@
 
 using namespace engine;
 
-MoveCommand::MoveCommand(state::Soldier &soldierTarget,
-                         state::AccessibleCell &cellTarget)
-    : soldierTarget(soldierTarget), cellTarget(cellTarget) {
-  this->commandTypeId = MOVE;
-}
+MoveCommand::MoveCommand() { this->commandTypeId = MOVE; }
 
 void MoveCommand::execute(state::State &state) {
+  /*
   std::vector<std::shared_ptr<state::Cell>> cells = state.getBoard().getCells();
 
   if (cellTarget.isAccessible()) {
@@ -119,9 +116,11 @@ void MoveCommand::execute(state::State &state) {
   else {
     std::cout << "Impossible action: innaccessible cell" << std::endl;
   }
+  */
 }
 
 Json::Value MoveCommand::serialize() {
+  /*
   Json::Value newCommand;
   newCommand["id"] = this->commandTypeId;
   newCommand["entityUid"] = soldierTarget.getUid();
@@ -129,4 +128,5 @@ Json::Value MoveCommand::serialize() {
   newCommand["targetCol"] = cellTarget.getCol();
 
   return newCommand;
+  */
 }
