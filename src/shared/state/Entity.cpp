@@ -96,33 +96,6 @@ EntityTypeId Entity::getEntityTypeId() { return this->entityTypeId; }
 
 EntitySubTypeId Entity::getEntitySubTypeId() { return this->entitySubTypeId; }
 
-<<<<<<< HEAD
-bool const Entity::equals(const Entity & element) {
-  if(this->uid!=element.uid)
-		return false;
-	else if(this->attack!=element.attack)
-		return false;
-	else if(this->defense!=element.defense)
-		return false;
-	else if(this->income!=element.income)
-		return false;
-	else if(this->subTypeId!=element.subTypeId)
-		return false;
-	else
-		return true;
-}
-
-Entity *const Entity::clone() {
-  Entity* element=new Entity;
-		element->attack=this->attack;
-		element->defense=this->defense;
-		element->income=this->income;
-		element->subTypeId=this->subTypeId;
-
-		return element;
-}
-=======
 void Entity::setActionPoint(int ap) { this->actionPoint = ap; }
 
 int Entity::getActionPoint() { return this->actionPoint; }
->>>>>>> 0cb2919a7ef55bbc883483b8f52ce834d0f2e64f
