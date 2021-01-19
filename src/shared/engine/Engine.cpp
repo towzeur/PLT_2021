@@ -25,7 +25,7 @@ Engine::Engine() {}
 
 Engine::~Engine() {}
 
-void Engine::init() {
+void Engine::init(std::string map) {
 
   state::Board &board = this->currentState.getBoard();
 
@@ -66,6 +66,8 @@ void Engine::init() {
       if (sid == state::EntitySubTypeId::FACILITY_CAPITAL) { // detect capital
 
         // retrieve the player
+        if (ac->getPlayerId() == 0)
+          continue; // neutral player
         std::shared_ptr<state::Player> p = players[ac->getPlayerId()];
 
         // create a territory
