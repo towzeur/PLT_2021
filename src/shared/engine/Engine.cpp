@@ -87,9 +87,15 @@ void Engine::init() {
 int Engine::propagateTerritory(std::shared_ptr<state::Cell> c0) {
   printf("propagate\n");
 
+  if (!c0->isAccessible())
+    return -1;
+
+  state::AccessibleCell *ac0 = (state::AccessibleCell *)c0.get();
+  const int territory_id = ac0->getTerritoryId();
+  const int player_id = ac0->getPlayerId();
+
   state::Board &board = this->currentState.getBoard();
-  int n_row = board.getNRow();
-  int n_col = board.getNCol();
+  int n_row = board.getNRow(), n_col = board.getNCol();
   // printf("[DEBUG] (%d,%d)\n", n_row, n_col);
 
   // open and close for the tree search
@@ -120,11 +126,21 @@ int Engine::propagateTerritory(std::shared_ptr<state::Cell> c0) {
         // skip if the cell is already explored
         if (CLOSE[index1])
           continue;
-
         // retrieve the cell
         std::shared_ptr<state::Cell> cell = board.get(r1, c1);
         if (!cell->isAccessible()) // skip if not accessible
           continue;
+
+        // convert it to Accessible cell
+        state::AccessibleCell *acell = (state::AccessibleCell *)cell.get();
+
+        if (acell->getPlayerId() == player_id) { // BINGO
+
+          acell->setTerritoryId(territory_id); // set the cell territory
+          // add it to the territory vector
+
+          OPEN.push_back(index1); // add the new node
+        }
 
         // std::shared_ptr<state::AccessibleCell> acell(cell);
       }
