@@ -104,8 +104,11 @@ int main(int argc, char *argv[]) {
       // -----------------------------------------------------------------------
       //                               RENDER 2
       // -----------------------------------------------------------------------
-      client::Client clt = client::Client();
-      clt.run();
+      // client::Client clt = client::Client();
+      // clt.run();
+      render::Render render;
+      render.init("medieval");
+      render.run();
 
     } else if (arg1 == "engine") {
       // -----------------------------------------------------------------------
