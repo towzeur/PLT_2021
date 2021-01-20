@@ -12,6 +12,8 @@ Json::Value ActionEndTurn::serialize() {}
 
 void ActionEndTurn::deserialize(Json::Value &ser) {}
 
+bool ActionEndTurn::isLegal(state::State &s) {}
+
 void ActionEndTurn::execute(state::State &state) {}
 
 void ActionEndTurn::print() {}

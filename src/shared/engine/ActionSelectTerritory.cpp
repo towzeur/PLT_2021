@@ -13,7 +13,9 @@ Json::Value ActionSelectTerritory::serialize() {}
 
 void ActionSelectTerritory::deserialize(Json::Value &ser) {}
 
-void ActionSelectTerritory::execute(state::State &state) {}
+bool ActionSelectTerritory::isLegal(state::State &s) {}
+
+void ActionSelectTerritory::execute(state::State &s) {}
 
 void ActionSelectTerritory::print() {}
 

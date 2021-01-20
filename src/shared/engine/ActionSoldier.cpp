@@ -2,11 +2,12 @@
 #include <unistd.h>
 
 #include "ActionSoldier.h"
-#include "engine.h"
 
 using namespace engine;
 
-ActionSoldier::ActionSoldier() {}
+ActionSoldier::ActionSoldier() {
+  this->sub_action_id = ActionSoldierId::INVALID;
+}
 
 Json::Value ActionSoldier::serialize() {
   Json::Value ser;
@@ -35,10 +36,69 @@ void ActionSoldier::print() {
          r0, c0, r1, c1);
 }
 
+bool ActionSoldier::isLegal(state::State &s) {
+  state::Board &b = s.getBoard();
+  int n_row = b.getNRow(), n_col = b.getNCol();
+
+  // check that the two position are within the map
+  // and that it's not two time the same cell
+  if ((r0 < 0) || (r0 >= n_row) || (c0 < 0) || (c0 >= n_col) || (r1 < 0) ||
+      (r1 >= n_row) || (c1 < 0) || (c1 >= n_col) || (r0 == r1 && c0 == c1))
+    return false;
+
+  // retrieve the two cell
+  state::AccessibleCell *ac0 = b.get(r0, c0)->castAccessible();
+  state::AccessibleCell *ac1 = b.get(r1, c1)->castAccessible();
+  if (!ac0 || !ac1) // assert none of them is Inaccesible
+    return false;
+
+  state::Entity &e0 = ac0->getEntity();
+  state::Entity &e1 = ac1->getEntity();
+
+  if (!e0.isSoldier()) // assert that the first cell is a soldier
+    return false;
+
+  if (ac0->getPlayerId() == ac0->getPlayerId()) { // same player
+
+    // the target cell must be on the same territory
+    if (ac0->getTerritoryId() == ac0->getTerritoryId()) {
+      if (e1.isEmpty())
+        return isLegalMove(s);
+      else if (e1.isTree())
+        return isLegalAttack(s);
+      else if (e1.isFacility())
+        return false;
+      else if (e1.isSoldier())
+        return isLegalFusion(s);
+      throw std::runtime_error("ActionSoldier isLegal : unknow Entity !");
+
+    } else
+      // the two cell bellong to the same player but on different territory
+      return false;
+  }
+
+  // different player
+  return isLegalAttack(s);
+}
+
+bool ActionSoldier::isLegalMove(state::State &s) {
+  this->sub_action_id = ActionSoldierId::MOVE;
+  return true;
+}
+
+bool ActionSoldier::isLegalAttack(state::State &s) {
+  this->sub_action_id = ActionSoldierId::ATTACK;
+}
+
+bool ActionSoldier::isLegalFusion(state::State &s) {
+  this->sub_action_id = ActionSoldierId::FUSION;
+}
+
 /*
 void ActionSoldier::execute(state::State &state) {
 
-  std::vector<std::shared_ptr<state::Cell>> cells = state.getBoard().getCells();
+  std::vector<std::shared_ptr<state::Cell>> cells =
+state.getBoard().getCells();
 
   if (cellTarget.isAccessible()) {
     for (std::shared_ptr<state::Cell> &soldier : cells) {
@@ -80,8 +140,8 @@ void ActionSoldier::execute(state::State &state) {
                 soldier->setEntity(*empty);
               } else if (newAttack == 3 && newDefense == 3) {
                 state::Entity *knight = new state::Soldier(
-                    state::EntityTypeId::SOLDIER, state::SoldierTypeId::KNIGHT,
-                    newAttack, newDefense);
+                    state::EntityTypeId::SOLDIER,
+state::SoldierTypeId::KNIGHT, newAttack, newDefense);
                 this->cellTarget.setEntity(*knight);
                 state::Entity *empty = new state::Empty(
                     state::EntityTypeId::EMPTY, state::EmptyTypeId::VOID);
@@ -108,8 +168,8 @@ void ActionSoldier::execute(state::State &state) {
                 dynamic_cast<state::Soldier &>(soldier->getEntity());
             s.setPA(0);
             this->cellTarget.setEntity(s);
-            state::Entity *empty = new state::Empty(state::EntityTypeId::EMPTY,
-                                                    state::EmptyTypeId::VOID);
+            state::Entity *empty = new
+state::Empty(state::EntityTypeId::EMPTY, state::EmptyTypeId::VOID);
             soldier->setEntity(*empty);
           }
         }
@@ -133,8 +193,8 @@ void ActionSoldier::execute(state::State &state) {
             this->cellTarget.setEntity(s);
             this->cellTarget.setTerritoryId(soldier->getTerritoryId());
             this->cellTarget.setPlayerId(soldier->getPlayerId());
-            state::Entity *empty = new state::Empty(state::EntityTypeId::EMPTY,
-                                                    state::EmptyTypeId::VOID);
+            state::Entity *empty = new
+state::Empty(state::EntityTypeId::EMPTY, state::EmptyTypeId::VOID);
             soldier->setEntity(*empty);
           }
         }

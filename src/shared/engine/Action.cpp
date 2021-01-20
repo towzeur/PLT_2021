@@ -1,4 +1,8 @@
 #include "Action.h"
+#include "ActionBuy.h"
+#include "ActionEndTurn.h"
+#include "ActionSelectTerritory.h"
+#include "ActionSoldier.h"
 
 using namespace engine;
 
@@ -27,6 +31,8 @@ Json::Value Action::serialize() {}
 
 void Action::deserialize(Json::Value &ser) {}
 
-void Action::execute(state::State &state) {}
+bool Action::isLegal(state::State &s) { return false; }
+
+void Action::execute(state::State &s) {}
 
 void Action::print() {}

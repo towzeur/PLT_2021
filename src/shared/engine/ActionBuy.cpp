@@ -12,6 +12,8 @@ Json::Value ActionBuy::serialize() {}
 
 void ActionBuy::deserialize(Json::Value &ser) {}
 
+bool ActionBuy::isLegal(state::State &s) {}
+
 void ActionBuy::execute(state::State &state) {}
 
 void ActionBuy::print() {}
