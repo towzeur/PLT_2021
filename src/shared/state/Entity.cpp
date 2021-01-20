@@ -137,3 +137,21 @@ void Entity::reset() {
   if (this->isSoldier())
     this->actionPoint = 1;
 }
+
+int Entity::getStrength() {
+  if (this->isSoldier()) {
+    switch (entitySubTypeId) {
+    case EntitySubTypeId::SOLDIER_PEASANT:
+      return SOLDIER_PEASANT_STRENGTH;
+    case EntitySubTypeId::SOLDIER_SPEARMAN:
+      return SOLDIER_SPEARMAN_STRENGTH;
+    case EntitySubTypeId::SOLDIER_KNIGHT:
+      return SOLDIER_KNIGHT_STRENGTH;
+    case EntitySubTypeId::SOLDIER_BARON:
+      return SOLDIER_BARON_STRENGTH;
+    default:
+      throw std::runtime_error("getStrength unknow Soldier");
+    }
+  }
+  return 0;
+}
