@@ -207,11 +207,43 @@ bool Engine::action_map_valid(int r0, int c0, int r1, int c1) {
 
 int Engine::action_map(int r0, int c0, int r1, int c1) {
   if (action_map_valid(r0, c0, r1, c1))
-    return 0;
+    return ActionsTypeId::NOTHING;
 
   state::Board &board = this->currentState.getBoard();
-  state::AccessibleCell *acell0 = board.get(r0, c0)->castAccessible();
-  state::AccessibleCell *acell1 = board.get(r1, c1)->castAccessible();
+  state::AccessibleCell *ac0 = board.get(r0, c0)->castAccessible();
+  state::AccessibleCell *ac1 = board.get(r1, c1)->castAccessible();
 
-  return 1;
+  state::Entity &e0 = ac0->getEntity();
+  state::Entity &e1 = ac1->getEntity();
+
+  if (!e0.isSoldier()) // assert that the first cell is a soldier
+    return ActionsTypeId::NOTHING;
+
+  if (ac0->getPlayerId() == ac0->getPlayerId()) { // same player
+    if (e1.isEmpty()) {
+      // must be on the same territory
+      if (ac0->getTerritoryId() == ac0->getTerritoryId()) {
+        return ActionsTypeId::MAP_MOVE;
+      } else
+        return ActionsTypeId::NOTHING;
+    } else if (e1.isTree()) {
+      return ActionsTypeId::MAP_ATTACK;
+    } else if (e1.isFacility()) {
+      return ActionsTypeId::NOTHING;
+    } else if (e1.isSoldier()) {
+      return ActionsTypeId::MAP_FUSION;
+    } else { // ERROR
+    }
+  } else { // different player
+    if (e1.isEmpty()) {
+      return ActionsTypeId::MAP_ATTACK;
+    } else if (e1.isTree()) {
+      return ActionsTypeId::MAP_ATTACK;
+    } else if (e1.isFacility()) {
+      return ActionsTypeId::MAP_ATTACK;
+    } else if (e1.isSoldier()) {
+      return ActionsTypeId::MAP_ATTACK;
+    } else { // ERROR
+    }
+  }
 }
