@@ -40,6 +40,11 @@ bool ActionSoldier::isLegal(state::State &s) {
   state::Board &b = s.getBoard();
   int n_row = b.getNRow(), n_col = b.getNCol();
 
+  // check if its turn and the if he still in game
+  if ((s.getCurrentPlayerId() == this->player_id) &&
+      s.getPlayer(this->player_id)->isPlaying())
+    return false;
+
   // check that the two position are within the map
   // and that it's not two time the same cell
   if ((r0 < 0) || (r0 >= n_row) || (c0 < 0) || (c0 >= n_col) || (r1 < 0) ||
@@ -55,7 +60,8 @@ bool ActionSoldier::isLegal(state::State &s) {
   state::Entity &e0 = ac0->getEntity();
   state::Entity &e1 = ac1->getEntity();
 
-  if (!e0.isSoldier()) // assert that the first cell is a soldier
+  // check that the first cell is a soldier and have sufficient PA
+  if (!e0.isSoldier() || !e0.getActionPoint())
     return false;
 
   if (ac0->getPlayerId() == ac0->getPlayerId()) { // same player
@@ -71,7 +77,6 @@ bool ActionSoldier::isLegal(state::State &s) {
       else if (e1.isSoldier())
         return isLegalFusion(s);
       throw std::runtime_error("ActionSoldier isLegal : unknow Entity !");
-
     } else
       // the two cell bellong to the same player but on different territory
       return false;
@@ -81,6 +86,13 @@ bool ActionSoldier::isLegal(state::State &s) {
   return isLegalAttack(s);
 }
 
+/**
+ * @brief
+ *
+ * @param s
+ * @return true
+ * @return false
+ */
 bool ActionSoldier::isLegalMove(state::State &s) {
   this->sub_action_id = ActionSoldierId::MOVE;
   return true;
@@ -90,8 +102,24 @@ bool ActionSoldier::isLegalAttack(state::State &s) {
   this->sub_action_id = ActionSoldierId::ATTACK;
 }
 
+/**
+ * @brief assert that the resulting man is not stronger than the stronger man
+ *        available (BARON)
+ *
+ *        assertion : c0, c1 valid, same player_id, same territory
+ *
+ * @param s
+ * @return true
+ * @return false
+ */
 bool ActionSoldier::isLegalFusion(state::State &s) {
   this->sub_action_id = ActionSoldierId::FUSION;
+
+  state::Board &b = s.getBoard();
+  state::AccessibleCell *ac0 = b.get(r0, c0)->castAccessible();
+  state::AccessibleCell *ac1 = b.get(r1, c1)->castAccessible();
+
+  return true;
 }
 
 /*
