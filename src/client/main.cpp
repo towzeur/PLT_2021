@@ -116,6 +116,15 @@ int main(int argc, char *argv[]) {
       engine::Engine eng;
       eng.init("res/map.txt");
 
+      Json::Value ser;
+      ser["player_id"] = 1;
+      ser["action_id"] = engine::ActionId::SOLDIER;
+      ser["r0"] = 0;
+      ser["c0"] = 0;
+      ser["r1"] = 1;
+      ser["c1"] = 1;
+      eng.processAction(ser);
+
       if (0) {
         sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
         render::StateLayer layer(eng.getCurrentState(), window);
