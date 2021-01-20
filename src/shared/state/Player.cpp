@@ -6,7 +6,7 @@ int Player::instanceCount = 1;
 
 Player::Player() { this->uid = instanceCount++; }
 
-Player::~Player() { Player::instanceCount = 1; }
+Player::~Player() {}
 
 int Player::getUid() { return uid; }
 
@@ -14,9 +14,7 @@ std::string Player::getName() { return name; }
 
 void Player::setName(std::string name) { this->name = name; }
 
-bool Player::getPlaying() { return playing; }
-
-void Player::setPlaying(bool playing) { this->playing = playing; }
+bool Player::isPlaying() { return status == PlayerStatus::PLAYING; }
 
 PlayerStatus Player::getStatus() { return status; }
 
