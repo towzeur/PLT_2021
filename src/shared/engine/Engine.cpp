@@ -4,6 +4,7 @@
 #include <string>
 #include <unistd.h>
 
+#include "Action.h"
 #include "Engine.h"
 #include "GameRules.h"
 
@@ -169,30 +170,21 @@ void Engine::setRecord(Json::Value record) { this->record = record; }
 
 Json::Value Engine::getRecord() { return this->record; }
 
+/*
 void Engine::addCommand(std::unique_ptr<Command> ptr_cmd) {
   Json::Value newCommand = ptr_cmd->serialize();
   record["CommandArray"][record["Size"].asUInt()] = newCommand;
   record["Size"] = record["Size"].asUInt() + 1;
 }
+*/
 
-void Engine::parse(const std::string &command) {
-  std::vector<std::string> strs;
-  boost::split(strs, command, boost::is_any_of(" "));
+void Engine::processAction(Json::Value &ser) {
+  printf("Engine processAction\n");
 
-  if (strs.size() < 2)
-    throw std::runtime_error("Command have at least 2 tokens !");
+  // retrieve the right action
+  engine::ActionId a_id = (engine::ActionId)ser["action_id"].asInt();
+  Action *action = Action::getAction(a_id);
 
-  state::Board &b = this->currentState.getBoard();
-
-  int player_id = stoi(strs[0]);
-  std::string action_type = strs[1];
-
-  if (action_type == "soldier") {
-    if (strs.size() < 6)
-      throw std::runtime_error("Soldier command needs 6 tokens !");
-    int r0 = stoi(strs[2]), c0 = stoi(strs[3]), r1 = stoi(strs[4]),
-        c1 = stoi(strs[5]);
-
-    GameRules::action_soldier(b, r0, c0, r1, c1);
-  }
+  action->deserialize(ser);
+  action->print();
 }
