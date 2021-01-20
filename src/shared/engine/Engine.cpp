@@ -1,11 +1,17 @@
+#include <boost/algorithm/string.hpp>
 #include <iostream>
+#include <stdexcept>
+#include <string>
 #include <unistd.h>
 
 #include "Engine.h"
+#include "GameRules.h"
 
 //#include "engine.h"
 #include "state.h"
 #include "utils.h"
+
+using namespace engine;
 
 //   NW N NE
 //   W  .  E
@@ -18,8 +24,6 @@ static const int DIRECTIONS[6][2] = {
     {1, 0},   // S
     {0, 1}    // SE
 };
-
-using namespace engine;
 
 Engine::Engine() {}
 
@@ -171,79 +175,24 @@ void Engine::addCommand(std::unique_ptr<Command> ptr_cmd) {
   record["Size"] = record["Size"].asUInt() + 1;
 }
 
-/**
- * @brief check if the move (r0, c0) to (r1, c1) is legal
- *
- * @param r0
- * @param c0
- * @param r1
- * @param c1
- * @return true
- * @return false
- */
-bool Engine::action_soldier_valid(int r0, int c0, int r1, int c1) {
-  state::Board &board = this->currentState.getBoard();
-  int n_row = board.getNRow(), n_col = board.getNCol();
+void Engine::parse(const std::string &command) {
+  std::vector<std::string> strs;
+  boost::split(strs, command, boost::is_any_of(" "));
 
-  // check that the two position are within the map
-  if ((r0 < 0 || r0 >= n_row) || (c0 < 0 || c0 >= n_col))
-    return false;
-  if ((r1 < 0 || r1 >= n_row) || (c1 < 0 || c1 >= n_col))
-    return false;
+  if (strs.size() < 2)
+    throw std::runtime_error("Command have at least 2 tokens !");
 
-  // same cell
-  if (r0 == r1 && c0 == c1)
-    return false;
+  state::Board &b = this->currentState.getBoard();
 
-  // retrieve the two cell
-  std::shared_ptr<state::Cell> cell0 = board.get(r0, c0);
-  std::shared_ptr<state::Cell> cell1 = board.get(r1, c1);
+  int player_id = stoi(strs[0]);
+  std::string action_type = strs[1];
 
-  if (!cell0->isAccessible() || !cell1->isAccessible())
-    return false;
+  if (action_type == "soldier") {
+    if (strs.size() < 6)
+      throw std::runtime_error("Soldier command needs 6 tokens !");
+    int r0 = stoi(strs[2]), c0 = stoi(strs[3]), r1 = stoi(strs[4]),
+        c1 = stoi(strs[5]);
 
-  return true;
-}
-
-int Engine::action_soldier(int r0, int c0, int r1, int c1) {
-  if (action_soldier_valid(r0, c0, r1, c1))
-    return ActionsTypeId::NOTHING;
-
-  state::Board &board = this->currentState.getBoard();
-  state::AccessibleCell *ac0 = board.get(r0, c0)->castAccessible();
-  state::AccessibleCell *ac1 = board.get(r1, c1)->castAccessible();
-
-  state::Entity &e0 = ac0->getEntity();
-  state::Entity &e1 = ac1->getEntity();
-
-  if (!e0.isSoldier()) // assert that the first cell is a soldier
-    return ActionsTypeId::NOTHING;
-
-  if (ac0->getPlayerId() == ac0->getPlayerId()) { // same player
-    // the target cell must be on the same territory
-    if (ac0->getTerritoryId() == ac0->getTerritoryId()) {
-      if (e1.isEmpty()) {
-        return ActionsTypeId::SOLDIER_MOVE;
-      } else if (e1.isTree()) {
-        return ActionsTypeId::SOLDIER_ATTACK;
-      } else if (e1.isFacility()) {
-        return ActionsTypeId::NOTHING;
-      } else if (e1.isSoldier()) {
-        return ActionsTypeId::SOLDIER_FUSION;
-      } else { // ERROR
-      }
-    } else
-      return ActionsTypeId::NOTHING;
-  } else { // different player
-    if (e1.isEmpty()) {
-      return ActionsTypeId::SOLDIER_ATTACK;
-    } else if (e1.isTree()) {
-      return ActionsTypeId::SOLDIER_ATTACK;
-    } else if (e1.isFacility()) {
-      return ActionsTypeId::SOLDIER_ATTACK;
-    } else if (e1.isSoldier()) {
-      return ActionsTypeId::SOLDIER_ATTACK;
-    } else { // ERROR
-    }
+    GameRules::action_soldier(b, r0, c0, r1, c1);
   }
 }
