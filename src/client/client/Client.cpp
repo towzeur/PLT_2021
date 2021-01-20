@@ -138,7 +138,7 @@ void Client::run() {
   //                                BACKGROUND
   // ---------------------------------------------------------------------------
 
-  render::Background bg = render::Background(config);
+  render::Background bg = render::Background(&config);
 
   // ---------------------------------------------------------------------------
   //                                    FPS
@@ -162,7 +162,7 @@ void Client::run() {
   //                               HEXA MAP
   // ---------------------------------------------------------------------------
 
-  render::HexaMap hm = render::HexaMap(config);
+  render::HexaMap hm = render::HexaMap(&config);
   std::cout << "hexamap width " << hm.get_width() << std::endl;
   std::cout << "hexamap height " << hm.get_height() << std::endl;
 
@@ -177,19 +177,20 @@ void Client::run() {
   //                              ENTITTY
   // ---------------------------------------------------------------------------
 
-  render::HexaEntity he = render::HexaEntity(config);
+  render::HexaEntity he = render::HexaEntity(&config);
   he.setPosition(map_offset_x, map_offset_y);
 
   // ---------------------------------------------------------------------------
   //                              FPS
   // ---------------------------------------------------------------------------
 
-  render::Fps fps = render::Fps(config);
+  render::Fps fps = render::Fps(&config);
 
   // ---------------------------------------------------------------------------
   //                              init map
   // ---------------------------------------------------------------------------
 
+  /*
   for (int r = 0; r < config.hexamap_n_row; ++r) {
     for (int c = 0; c < config.hexamap_n_col; ++c) {
       he.entity_set(r, c, rand() % 11);
@@ -206,6 +207,7 @@ void Client::run() {
       }
     }
   }
+  */
 
   // ---------------------------------------------------------------------------
   //                              GAME LOOP
