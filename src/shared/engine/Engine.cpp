@@ -6,7 +6,6 @@
 
 #include "Action.h"
 #include "Engine.h"
-#include "GameRules.h"
 
 //#include "engine.h"
 #include "state.h"
@@ -187,4 +186,6 @@ void Engine::processAction(Json::Value &ser) {
 
   action->deserialize(ser);
   action->print();
+
+  action->isLegal(currentState);
 }
