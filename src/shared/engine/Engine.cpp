@@ -187,5 +187,10 @@ void Engine::processAction(Json::Value &ser) {
   action->deserialize(ser);
   action->print();
 
-  action->isLegal(currentState);
+  if (action->isLegal(currentState)) {
+    action->execute(currentState);
+    printf("legal\n");
+  } else {
+    printf("illegal\n");
+  }
 }
