@@ -181,7 +181,7 @@ void Engine::addCommand(std::unique_ptr<Command> ptr_cmd) {
  * @return true
  * @return false
  */
-bool Engine::action_map_valid(int r0, int c0, int r1, int c1) {
+bool Engine::action_soldier_valid(int r0, int c0, int r1, int c1) {
   state::Board &board = this->currentState.getBoard();
   int n_row = board.getNRow(), n_col = board.getNCol();
 
@@ -205,8 +205,8 @@ bool Engine::action_map_valid(int r0, int c0, int r1, int c1) {
   return true;
 }
 
-int Engine::action_map(int r0, int c0, int r1, int c1) {
-  if (action_map_valid(r0, c0, r1, c1))
+int Engine::action_soldier(int r0, int c0, int r1, int c1) {
+  if (action_soldier_valid(r0, c0, r1, c1))
     return ActionsTypeId::NOTHING;
 
   state::Board &board = this->currentState.getBoard();
@@ -220,29 +220,29 @@ int Engine::action_map(int r0, int c0, int r1, int c1) {
     return ActionsTypeId::NOTHING;
 
   if (ac0->getPlayerId() == ac0->getPlayerId()) { // same player
-    if (e1.isEmpty()) {
-      // must be on the same territory
-      if (ac0->getTerritoryId() == ac0->getTerritoryId()) {
-        return ActionsTypeId::MAP_MOVE;
-      } else
+    // the target cell must be on the same territory
+    if (ac0->getTerritoryId() == ac0->getTerritoryId()) {
+      if (e1.isEmpty()) {
+        return ActionsTypeId::SOLDIER_MOVE;
+      } else if (e1.isTree()) {
+        return ActionsTypeId::SOLDIER_ATTACK;
+      } else if (e1.isFacility()) {
         return ActionsTypeId::NOTHING;
-    } else if (e1.isTree()) {
-      return ActionsTypeId::MAP_ATTACK;
-    } else if (e1.isFacility()) {
+      } else if (e1.isSoldier()) {
+        return ActionsTypeId::SOLDIER_FUSION;
+      } else { // ERROR
+      }
+    } else
       return ActionsTypeId::NOTHING;
-    } else if (e1.isSoldier()) {
-      return ActionsTypeId::MAP_FUSION;
-    } else { // ERROR
-    }
   } else { // different player
     if (e1.isEmpty()) {
-      return ActionsTypeId::MAP_ATTACK;
+      return ActionsTypeId::SOLDIER_ATTACK;
     } else if (e1.isTree()) {
-      return ActionsTypeId::MAP_ATTACK;
+      return ActionsTypeId::SOLDIER_ATTACK;
     } else if (e1.isFacility()) {
-      return ActionsTypeId::MAP_ATTACK;
+      return ActionsTypeId::SOLDIER_ATTACK;
     } else if (e1.isSoldier()) {
-      return ActionsTypeId::MAP_ATTACK;
+      return ActionsTypeId::SOLDIER_ATTACK;
     } else { // ERROR
     }
   }
