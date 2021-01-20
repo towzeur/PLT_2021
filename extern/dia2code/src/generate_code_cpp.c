@@ -659,6 +659,7 @@ struct stdlib_includes {
   int sfmlGraphics;
   int sfmlAudio;
   int jsoncpp;
+  int tgui;
 };
 
 void print_include_stdlib(struct stdlib_includes *si, char *name) {
@@ -761,6 +762,10 @@ void print_include_stdlib(struct stdlib_includes *si, char *name) {
     if (!si->jsoncpp && (strstr(name, "Json::") == name)) {
       print("#include <json/json.h>\n");
       si->jsoncpp = 1;
+    }
+    if (!si->tgui && (strstr(name, "tgui::Gui") == name)) {
+      print("#include <TGUI/TGUI.hpp>\n");
+      si->tgui = 1;
     }
   }
 }
