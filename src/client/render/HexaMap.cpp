@@ -40,6 +40,13 @@ HexaMap::HexaMap(RenderConfig *conf) : conf(conf) {
       sf::Vector2f(+hexa_w_2 / 2, -hexa_h_2),
   };
 
+  // default color
+  sf::Color default_col;
+  if (conf->hexamap_colors.size())
+    default_col = conf->hexamap_colors[0];
+  else
+    default_col = sf::Color::White;
+
   // fill vertex array
   for (int r = 0; r < conf->hexamap_n_row; ++r) {
     for (int c = 0; c < conf->hexamap_n_col; ++c) {
@@ -55,14 +62,14 @@ HexaMap::HexaMap(RenderConfig *conf) : conf(conf) {
         // upper rectangle
         int i_q0 = idx + i;
         m_vertices[i_q0].position = hc + hexa_offsets[i];
-        // m_vertices[i_q0].color = col;
-        m_vertices[i_q0].color.a = 0; // default : transparent
+        m_vertices[i_q0].color = default_col; // default : config[0]
+        m_vertices[i_q0].color.a = 0;         // default : transparent
 
         // lower rectangle
         int i_q1 = i_q0 + 4;
         m_vertices[i_q1].position = hc + hexa_offsets[(i + 3) % 6];
-        // m_vertices[i_q1].color = col;
-        m_vertices[i_q1].color.a = 0; // default : transparent
+        m_vertices[i_q1].color = default_col; // default : config[0]
+        m_vertices[i_q1].color.a = 0;         // default : transparent
       }
 
       // set hexa's outline vertex
@@ -89,6 +96,16 @@ HexaMap::~HexaMap() {
   //  delete hexa_centers_x;
   // if (hexa_centers_y)
   //  delete hexa_centers_y;
+}
+
+void HexaMap::hex_set_player(int r, int c, int player_id) {
+  sf::Color col;
+  if (player_id < conf->hexamap_colors.size()) {
+    col = sf::Color::Red; // throw error
+  }
+  col = conf->hexamap_colors[player_id];
+  hex_set_color(r, c, col);
+  hex_show(r, c);
 }
 
 void HexaMap::hex_set_color(int r, int c, sf::Color col) {
