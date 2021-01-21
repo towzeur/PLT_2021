@@ -34,7 +34,7 @@ void Engine::init(std::string map) {
   state::Board &board = this->currentState.getBoard();
 
   // load the map
-  std::string rpath_map = utils::Utils::resolveRelative("res/map.txt");
+  std::string rpath_map = utils::Utils::resolveRelative(map);
   board.load(rpath_map);
 
   // set the turn
