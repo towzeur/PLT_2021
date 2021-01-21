@@ -8,7 +8,12 @@
 
 #include "Render.h"
 
+#include "state/AccessibleCell.h"
+#include "state/Board.h"
+#include "state/Cell.h"
 #include "state/Entity.h"
+#include "state/State.h"
+
 #include "utils/Utils.h"
 
 using namespace render;
@@ -311,3 +316,32 @@ void Render::handle_menu(sf::String menu_name) {
 }
 
 void Render::handle_endturn() { std::cout << "button - end turn" << std::endl; }
+
+void Render::display_map(state::State &s) {
+  state::Board &b = s.getBoard();
+
+  std::shared_ptr<state::Cell> cell;
+  state::AccessibleCell *acell;
+  state::Entity entity;
+  for (int r = 0; r < config.hexamap_n_row; ++r) {
+    for (int c = 0; c < config.hexamap_n_col; ++c) {
+      cell = b.get(r, c);
+
+      if (cell->isAccessible()) { // accessible
+        acell = cell->castAccessible();
+        hm->hex_set_player(r, c, acell->getPlayerId());
+
+        printf("%d-", (int)entity.getEntityTypeId());
+
+        entity = acell->getEntity();
+        he->entity_set(r, c, entity.getEntitySubTypeId());
+        he->entity_show(r, c);
+
+      } else { // inaccessible
+        hm->hex_hide(r, c);
+        he->entity_hide(r, c);
+      }
+    }
+    printf("\n");
+  }
+}
