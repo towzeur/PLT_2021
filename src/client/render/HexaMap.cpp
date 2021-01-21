@@ -56,11 +56,13 @@ HexaMap::HexaMap(RenderConfig *conf) : conf(conf) {
         int i_q0 = idx + i;
         m_vertices[i_q0].position = hc + hexa_offsets[i];
         // m_vertices[i_q0].color = col;
+        m_vertices[i_q0].color.a = 0; // default : transparent
 
         // lower rectangle
         int i_q1 = i_q0 + 4;
         m_vertices[i_q1].position = hc + hexa_offsets[(i + 3) % 6];
         // m_vertices[i_q1].color = col;
+        m_vertices[i_q1].color.a = 0; // default : transparent
       }
 
       // set hexa's outline vertex
@@ -71,9 +73,12 @@ HexaMap::HexaMap(RenderConfig *conf) : conf(conf) {
         // start
         m_vertices_2[i0].position = hc + hexa_offsets[i];
         m_vertices_2[i0].color = conf->hexamap_outline_color;
+        m_vertices_2[i0].color.a = 0; // default : transparent
+
         // end
         m_vertices_2[i1].position = hc + hexa_offsets[(i + 1) % 6];
         m_vertices_2[i1].color = conf->hexamap_outline_color;
+        m_vertices_2[i1].color.a = 0; // default : transparent
       }
     }
   }
