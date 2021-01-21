@@ -117,7 +117,9 @@ int main(int argc, char *argv[]) {
       std::cout << "ENGINE" << std::endl;
 
       engine::Engine eng;
-      eng.init("res/map.txt");
+      eng.init("res/map_22_30.txt");
+      state::Board &b = eng.getCurrentState().getBoard();
+      printf("%d %d  \n", b.getNRow(), b.getNCol());
 
       Json::Value ser;
       ser["player_id"] = 1;
@@ -127,22 +129,6 @@ int main(int argc, char *argv[]) {
       ser["r1"] = 1;
       ser["c1"] = 1;
       eng.processAction(ser);
-
-      if (0) {
-        sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
-        render::StateLayer layer(eng.getCurrentState(), window);
-        layer.initSurfaces(eng.getCurrentState());
-
-        while (window.isOpen()) {
-          sf::Event event;
-          while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-              window.close();
-          }
-          // render
-          layer.draw(window, eng.getCurrentState());
-        }
-      }
 
     } else if (arg1 == "random_ai") {
 
