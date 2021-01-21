@@ -32,9 +32,11 @@ void State::setCurrentPlayerId(int cpi) { currentPlayerId = cpi; }
 
 Board &State::getBoard() { return this->board; }
 
-void State::setBoard(Board& board) { this->board = board; }
+void State::setBoard(Board &board) { this->board = board; }
 
 std::vector<std::shared_ptr<Player>> State::getPlayers() { return players; }
+
+std::shared_ptr<Player> State::getPlayer(int playerId) { players[playerId]; }
 
 void State::addPlayer(std::shared_ptr<Player> p) { players.push_back(move(p)); }
 

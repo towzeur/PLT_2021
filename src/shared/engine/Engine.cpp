@@ -1,11 +1,17 @@
+#include <boost/algorithm/string.hpp>
 #include <iostream>
+#include <stdexcept>
+#include <string>
 #include <unistd.h>
 
+#include "Action.h"
 #include "Engine.h"
 
 //#include "engine.h"
 #include "state.h"
 #include "utils.h"
+
+using namespace engine;
 
 //   NW N NE
 //   W  .  E
@@ -19,18 +25,16 @@ static const int DIRECTIONS[6][2] = {
     {0, 1}    // SE
 };
 
-using namespace engine;
-
 Engine::Engine() {}
 
 Engine::~Engine() {}
 
-void Engine::init() {
+void Engine::init(std::string map) {
 
   state::Board &board = this->currentState.getBoard();
 
   // load the map
-  std::string rpath_map = utils::Utils::resolveRelative("res/map.txt");
+  std::string rpath_map = utils::Utils::resolveRelative(map);
   board.load(rpath_map);
 
   // set the turn
@@ -66,6 +70,8 @@ void Engine::init() {
       if (sid == state::EntitySubTypeId::FACILITY_CAPITAL) { // detect capital
 
         // retrieve the player
+        if (ac->getPlayerId() == 0)
+          continue; // neutral player
         std::shared_ptr<state::Player> p = players[ac->getPlayerId()];
 
         // create a territory
@@ -87,9 +93,15 @@ void Engine::init() {
 int Engine::propagateTerritory(std::shared_ptr<state::Cell> c0) {
   printf("propagate\n");
 
+  if (!c0->isAccessible())
+    return -1;
+
+  state::AccessibleCell *ac0 = (state::AccessibleCell *)c0.get();
+  const int territory_id = ac0->getTerritoryId();
+  const int player_id = ac0->getPlayerId();
+
   state::Board &board = this->currentState.getBoard();
-  int n_row = board.getNRow();
-  int n_col = board.getNCol();
+  int n_row = board.getNRow(), n_col = board.getNCol();
   // printf("[DEBUG] (%d,%d)\n", n_row, n_col);
 
   // open and close for the tree search
@@ -120,11 +132,21 @@ int Engine::propagateTerritory(std::shared_ptr<state::Cell> c0) {
         // skip if the cell is already explored
         if (CLOSE[index1])
           continue;
-
         // retrieve the cell
         std::shared_ptr<state::Cell> cell = board.get(r1, c1);
         if (!cell->isAccessible()) // skip if not accessible
           continue;
+
+        // convert it to Accessible cell
+        state::AccessibleCell *acell = (state::AccessibleCell *)cell.get();
+
+        if (acell->getPlayerId() == player_id) { // BINGO
+
+          acell->setTerritoryId(territory_id); // set the cell territory
+          // add it to the territory vector
+
+          OPEN.push_back(index1); // add the new node
+        }
 
         // std::shared_ptr<state::AccessibleCell> acell(cell);
       }
@@ -147,8 +169,28 @@ void Engine::setRecord(Json::Value record) { this->record = record; }
 
 Json::Value Engine::getRecord() { return this->record; }
 
+/*
 void Engine::addCommand(std::unique_ptr<Command> ptr_cmd) {
   Json::Value newCommand = ptr_cmd->serialize();
   record["CommandArray"][record["Size"].asUInt()] = newCommand;
   record["Size"] = record["Size"].asUInt() + 1;
+}
+*/
+
+void Engine::processAction(Json::Value &ser) {
+  printf("Engine processAction\n");
+
+  // retrieve the right action
+  engine::ActionId a_id = (engine::ActionId)ser["action_id"].asInt();
+  Action *action = Action::getAction(a_id);
+
+  action->deserialize(ser);
+  action->print();
+
+  if (action->isLegal(currentState)) {
+    action->execute(currentState);
+    printf("legal\n");
+  } else {
+    printf("illegal\n");
+  }
 }

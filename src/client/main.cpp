@@ -1,5 +1,6 @@
 #include <iostream> // readlink
 #include <string.h>
+#include <time.h>
 #include <unistd.h>
 
 #include "client.h"
@@ -104,8 +105,37 @@ int main(int argc, char *argv[]) {
       // -----------------------------------------------------------------------
       //                               RENDER 2
       // -----------------------------------------------------------------------
-      client::Client clt = client::Client();
-      clt.run();
+
+      // generate a random state
+      int n_row = 22, n_col = 30;
+      state::State s = state::State();
+      state::Board &b = s.getBoard();
+      std::vector<std::shared_ptr<state::Cell>> &cells = b.getCells();
+      b.resize(n_row, n_col);
+
+      srand(time(NULL));
+
+      std::shared_ptr<state::Cell> cell_ptr;
+      for (int r = 0; r < n_row; ++r) {
+        for (int c = 0; c < n_col; ++c) {
+
+          // random token
+          char tmp_str[4] = "000";
+          tmp_str[0] = '0' + (rand() % 2);  // accessiblity
+          tmp_str[1] = '1' + (rand() % 6);  // player
+          tmp_str[2] = '0' + (rand() % 10); // entity
+
+          cell_ptr = b.detokenize(std::string(tmp_str));
+          cell_ptr->setCol(c);
+          cell_ptr->setRow(r);
+          cells[c + n_col * r] = std::move(cell_ptr);
+        }
+      }
+
+      render::Render render;
+      render.init("medieval");
+      render.display_map(s);
+      render.run();
 
     } else if (arg1 == "engine") {
       // -----------------------------------------------------------------------
@@ -113,21 +143,59 @@ int main(int argc, char *argv[]) {
       // -----------------------------------------------------------------------
       std::cout << "ENGINE" << std::endl;
 
-      engine::Engine ngine;
-      ngine.init();
+      engine::Engine eng;
+      eng.init("res/map_22_30_is.txt");
+      state::Board &b = eng.getCurrentState().getBoard();
+      printf("%d %d  \n", b.getNRow(), b.getNCol());
 
-      sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
-      render::StateLayer layer(ngine.getCurrentState(), window);
-      layer.initSurfaces(ngine.getCurrentState());
-
-      while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-          if (event.type == sf::Event::Closed)
-            window.close();
+      printf("***************************************\n");
+      std::shared_ptr<state::Cell> cell;
+      state::AccessibleCell *acell;
+      for (int r = 0; r < b.getNRow(); ++r) {
+        for (int c = 0; c < b.getNCol(); ++c) {
+          cell = b.get(r, c);
+          if (cell->isAccessible()) {
+            acell = cell->castAccessible();
+            // std::cout << acell->getPlayerId();
+            std::cout << (int)acell->getEntity().getEntitySubTypeId();
+          } else {
+            std::cout << " ";
+          }
+          std::cout << " ";
+          // std::cout << if << std::endl;
         }
-        // render
-        layer.draw(window, ngine.getCurrentState());
+        std::cout << std::endl;
+      }
+      printf("***************************************\n");
+
+      render::Render render;
+      render.init("medieval");
+      render.display_map(eng.getCurrentState());
+      render.run();
+
+      Json::Value ser;
+      ser["player_id"] = 1;
+      ser["action_id"] = engine::ActionId::SOLDIER;
+      ser["r0"] = 0;
+      ser["c0"] = 0;
+      ser["r1"] = 1;
+      ser["c1"] = 1;
+      eng.processAction(ser);
+
+      if (0) {
+        sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
+        render::StateLayer layer(eng.getCurrentState(), window);
+        layer.initSurfaces(eng.getCurrentState());
+
+        while (window.isOpen()) {
+          sf::Event event;
+          while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+              window.close();
+          }
+          // render
+          layer.draw(window, eng.getCurrentState());
+        }
       }
 
     } else if (arg1 == "random_ai") {

@@ -1,16 +1,26 @@
-#include "SelectTerritoryCommand.h"
-#include "engine.h"
 #include <iostream>
 #include <unistd.h>
 
+#include "ActionSelectTerritory.h"
+
+//#include "engine.h"
+
 using namespace engine;
 
-SelectTerritoryCommand::SelectTerritoryCommand(state::Territory &target)
-    : target(target) {
-  this->commandTypeId = SELECT_TERRITORY;
-}
+ActionSelectTerritory::ActionSelectTerritory() {}
 
-void SelectTerritoryCommand::execute(state::State &state) {
+Json::Value ActionSelectTerritory::serialize() {}
+
+void ActionSelectTerritory::deserialize(Json::Value &ser) {}
+
+bool ActionSelectTerritory::isLegal(state::State &s) {}
+
+void ActionSelectTerritory::execute(state::State &s) {}
+
+void ActionSelectTerritory::print() {}
+
+/*
+void ActionSelectTerritory::execute(state::State &state) {
 
   for (auto &territory : currentPlayer.getTerritories()) {
 
@@ -29,10 +39,11 @@ void SelectTerritoryCommand::execute(state::State &state) {
   }
 }
 
-Json::Value SelectTerritoryCommand::serialize() {
+Json::Value ActionSelectTerritory::serialize() {
   Json::Value newCommand;
   newCommand["id"] = this->commandTypeId;
   newCommand["entityUid"] = target.getUid();
 
   return newCommand;
 }
+*/

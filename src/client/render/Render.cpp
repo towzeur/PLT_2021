@@ -1,5 +1,3 @@
-#include "Client.h"
-
 #include <cstdlib>
 #include <fstream>
 #include <iostream>
@@ -8,34 +6,28 @@
 #include <SFML/Graphics.hpp>
 #include <TGUI/TGUI.hpp>
 
+#include "Render.h"
+
+#include "state/AccessibleCell.h"
+#include "state/Board.h"
+#include "state/Cell.h"
 #include "state/Entity.h"
+#include "state/State.h"
+
 #include "utils/Utils.h"
 
-using namespace client;
+using namespace render;
 
-void handle_menu_click(sf::String menu_name) {
-  std::cout << "menu clicked : " << menu_name.toAnsiString() << std::endl;
-  if (menu_name == "Load") {
-  } else if (menu_name == "Save") {
-  } else if (menu_name == "Exit") {
-  } else if (menu_name == "Copy") {
-  } else if (menu_name == "Paste") {
-  } else if (menu_name == "About") {
-  }
-}
+Render::Render() {}
 
-// =============================================================================
-// CLIENT
-// =============================================================================
-
-Client::Client() {}
-
-void Client::run() {
+void Render::init(std::string configName) {
   std::cout << "HELLO WORLD" << std::endl;
   srand(time(NULL));
 
-  render::RenderConfig config = render::RenderConfig();
-  config.load("medieval");
+  running = true;
+
+  // load the config
+  config.load(configName);
 
   // ---------------------------------------------------------------------------
   //                                WINDOWS
@@ -49,35 +41,37 @@ void Client::run() {
   // Close      = 1 << 2
   // Fullscreen = 1 << 3
   // Default = Titlebar | Resize | Close
-  sf::RenderWindow window({config.window_size.x, config.window_size.y},
-                          "Hexagons", style, settings);
+  window = new sf::RenderWindow({config.window_size.x, config.window_size.y},
+                                "Hexagons", style, settings);
 
-  window.setVerticalSyncEnabled(true);
+  // set the Vsync
+  window->setVerticalSyncEnabled(true);
 
   // center the window
-  window.setPosition(sf::Vector2i(
-      (sf::VideoMode::getDesktopMode().width - window.getSize().x) / 2,
-      (sf::VideoMode::getDesktopMode().height - window.getSize().y) / 2));
+  window->setPosition(sf::Vector2i(
+      (sf::VideoMode::getDesktopMode().width - window->getSize().x) / 2,
+      (sf::VideoMode::getDesktopMode().height - window->getSize().y) / 2));
 
   // set window's icon
-  window.setIcon(config.window_icon.getSize().x, config.window_icon.getSize().y,
-                 config.window_icon.getPixelsPtr());
+  window->setIcon(config.window_icon.getSize().x,
+                  config.window_icon.getSize().y,
+                  config.window_icon.getPixelsPtr());
 
   // ---------------------------------------------------------------------------
   //                                   TGUI
   // ---------------------------------------------------------------------------
 
-  tgui::Gui gui(window);
+  // init the tgui::Gui
+  gui = new tgui::Gui(*window);
 
+  // set the theme
   const sf::String &tgui_theme =
       utils::Utils::resolveRelative("res/tgui/widgets/Black.txt");
   tgui::Theme::Ptr theme = tgui::Theme::create(tgui_theme);
 
+  // create a menu bar
   tgui::MenuBar::Ptr menu = theme->load("MenuBar");
   menu->setSize(config.window_size.x, config.window_menu_height);
-
-  // canvas_w = config.window_size.x - config.window_right_panel_width;
-  // canvas_h = config.window_size.y - config.window_menu_height;
 
   const std::string &tgui_font =
       // const sf::String &tgui_font =
@@ -101,9 +95,9 @@ void Client::run() {
   // signalNames	Name of the signal, or multiple names split by spaces
   // func	The function to connect
   // args	The arguments that should be bound to the function
-  menu->connect("MenuItemClicked", handle_menu_click);
-
-  gui.add(menu);
+  auto fp = std::bind(&Render::handle_menu, this, std::placeholders::_1);
+  menu->connect("MenuItemClicked", fp);
+  gui->add(menu);
 
   // tgui::VerticalLayout::Ptr layout = tgui::VerticalLayout::create();
   tgui::Panel::Ptr layout = tgui::Panel::create();
@@ -111,7 +105,7 @@ void Client::run() {
   layout->setSize(140.f, config.window_size.y - config.window_menu_height);
   layout->setPosition(config.window_size.x - config.window_right_panel_width,
                       config.window_menu_height);
-  gui.add(layout);
+  gui->add(layout);
 
   tgui::Label::Ptr label = theme->load("Label");
   label->setText("TEST 1");
@@ -127,22 +121,13 @@ void Client::run() {
   button->setSize(config.window_right_panel_width -
                       2 * config.window_right_panel_padding,
                   50);
-  button->setText("Fin de Tour");
-  button->connect("pressed",
-                  [=]() { std::cout << "button - end turn" << std::endl; });
+  button->setText("End of Turn");
+
+  auto fp2 = std::bind(&Render::handle_endturn, this);
+  button->connect("pressed", fp2);
   // button->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
   // button->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
   layout->add(button);
-
-  // ---------------------------------------------------------------------------
-  //                                BACKGROUND
-  // ---------------------------------------------------------------------------
-
-  render::Background bg = render::Background(&config);
-
-  // ---------------------------------------------------------------------------
-  //                                    FPS
-  // ---------------------------------------------------------------------------
 
   // ---------------------------------------------------------------------------
   //                              SOUND TEST
@@ -159,32 +144,39 @@ void Client::run() {
   // sound.play();
 
   // ---------------------------------------------------------------------------
+  //                                BACKGROUND
+  // ---------------------------------------------------------------------------
+
+  bg = new Background(&config);
+
+  // ---------------------------------------------------------------------------
   //                               HEXA MAP
   // ---------------------------------------------------------------------------
 
-  render::HexaMap hm = render::HexaMap(&config);
-  std::cout << "hexamap width " << hm.get_width() << std::endl;
-  std::cout << "hexamap height " << hm.get_height() << std::endl;
+  // render::HexaMap hm = render::HexaMap(config);
+  hm = new HexaMap(&config);
+  std::cout << "hexamap width " << hm->get_width() << std::endl;
+  std::cout << "hexamap height " << hm->get_height() << std::endl;
 
   int map_full_width = config.window_size.x - config.window_right_panel_width;
   int map_full_height = config.window_size.y - config.window_menu_height;
-  int map_offset_x = 0 + (map_full_width - hm.get_width()) / 2;
+  int map_offset_x = 0 + (map_full_width - hm->get_width()) / 2;
   int map_offset_y =
-      config.window_menu_height + (map_full_height - hm.get_height()) / 2;
-  hm.setPosition(map_offset_x, map_offset_y);
+      config.window_menu_height + (map_full_height - hm->get_height()) / 2;
+  hm->setPosition(map_offset_x, map_offset_y);
 
   // ---------------------------------------------------------------------------
   //                              ENTITTY
   // ---------------------------------------------------------------------------
 
-  render::HexaEntity he = render::HexaEntity(&config);
-  he.setPosition(map_offset_x, map_offset_y);
+  he = new HexaEntity(&config);
+  he->setPosition(map_offset_x, map_offset_y);
 
   // ---------------------------------------------------------------------------
   //                              FPS
   // ---------------------------------------------------------------------------
 
-  render::Fps fps = render::Fps(&config);
+  fps = new Fps(&config);
 
   // ---------------------------------------------------------------------------
   //                              init map
@@ -193,63 +185,70 @@ void Client::run() {
   /*
   for (int r = 0; r < config.hexamap_n_row; ++r) {
     for (int c = 0; c < config.hexamap_n_col; ++c) {
-      he.entity_set(r, c, rand() % 11);
-      hm.hex_set_color(r, c, config.hexamap_colors[rand() % 6]);
+      he->entity_set(r, c, rand() % 11);
+      hm->hex_set_color(r, c, config.hexamap_colors[rand() % 6]);
 
       if (rand() % 2) {
-        hm.hex_show(r, c);
-        he.entity_set(r, c, rand() % 10);
-        he.entity_show(r, c);
+        hm->hex_show(r, c);
+        he->entity_set(r, c, rand() % 10);
+        he->entity_show(r, c);
       } else {
-        hm.hex_hide(r, c);
-        he.entity_set(r, c, 0);
-        he.entity_hide(r, c);
+        hm->hex_hide(r, c);
+        he->entity_set(r, c, 0);
+        he->entity_hide(r, c);
       }
     }
   }
   */
+}
 
+void Render::run() {
   // ---------------------------------------------------------------------------
   //                              GAME LOOP
   // ---------------------------------------------------------------------------
   sf::Event event;
 
-  while (window.isOpen()) {
-    while (window.pollEvent(event)) {
+  while (window->isOpen() && running) {
+    while (window->pollEvent(event)) {
+
       if (event.type == sf::Event::Closed) {
-        window.close();
+        window->close();
         break;
       }
 
       if (event.type == sf::Event::Resized) {
         // update the view to the new size of the window
         sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
-        window.setView(sf::View(visibleArea));
+        window->setView(sf::View(visibleArea));
       }
+
+      // Pass the event to all the widgets
+      if (gui->handleEvent(event))
+        continue;
 
       if (event.type == sf::Event::KeyPressed) {
         if (event.key.code == sf::Keyboard::Right) {
           std::cout << "Right" << std::endl;
-          // hm.initialize(r, ++c, hexa_r);
+          // hm->initialize(r, ++c, hexa_r);
         } else if (event.key.code == sf::Keyboard::Left) {
           std::cout << "Left" << std::endl;
-          // hm.initialize(r, --c, hexa_r);
+          // hm->initialize(r, --c, hexa_r);
         } else if (event.key.code == sf::Keyboard::Up) {
           std::cout << "Up" << std::endl;
-          // hm.initialize(--r, c, hexa_r);
+          // hm->initialize(--r, c, hexa_r);
         } else if (event.key.code == sf::Keyboard::Down) {
           std::cout << "Down" << std::endl;
-          // hm.initialize(++r, c, hexa_r);
+          // hm->initialize(++r, c, hexa_r);
           //} else if (event.key.code == sf::Keyboard::Enter) {
           //  std::cout << "OK" << std::endl;
         } else if (event.key.code == sf::Keyboard::Add) {
           std::cout << "+" << std::endl;
-          // hm.initialize(r, c, ++hexa_r);
+          // hm->initialize(r, c, ++hexa_r);
         } else if (event.key.code == sf::Keyboard::Subtract) {
           std::cout << "-" << std::endl;
-          // hm.initialize(r, c, --hexa_r);
+          // hm->initialize(r, c, --hexa_r);
         }
-        // hm.update();
+        // hm->update();
       }
 
       if (event.type == sf::Event::MouseButtonPressed) {
@@ -269,35 +268,80 @@ void Client::run() {
           std::cout << event.mouseButton.y << ")" << std::endl;
           // convert pixel to position(row, col)
 
-          pos = hm.PointToCoord(event.mouseButton.x, event.mouseButton.y);
+          pos = hm->PointToCoord(event.mouseButton.x, event.mouseButton.y);
           std::cout << "=>" << pos.x << "," << pos.y << std::endl;
 
           if ((pos.x >= 0 && pos.x < config.hexamap_n_row) &&
               (pos.y >= 0 && pos.y < config.hexamap_n_col)) {
-            // hm.change_color(r_click, c_click, sf::Color(0, 0, 0));
-            hm.hex_toggle_transparency(pos.x, pos.y);
-            he.entity_toggle_transparency(pos.x, pos.y);
+            this->handle_map(pos);
           }
         }
       }
-
-      // Pass the event to all the widgets
-      gui.handleEvent(event);
     }
 
-    window.clear(); // clear the screen (not necessary)
-    // DRAW : start -------------------------------------------------------
-    window.draw(bg); // background
-    window.draw(hm); // hexa map
-    window.draw(he); // entities
-    gui.draw();
-    window.draw(fps); // fps
+    window->clear(); // clear the screen (not necessary)
+    // DRAW : start ------------------------------------------------------------
 
-    // DRAW : end   -------------------------------------------------------
-    window.display();
+    window->draw(*bg); // background
+    window->draw(*hm); // hexa map
+    window->draw(*he); // entities
+    gui->draw();
+    window->draw(*fps); // fps
 
-    he.update();
-    bg.update();
-    fps.update();
+    // DRAW : end   ------------------------------------------------------------
+    window->display();
+
+    he->update();
+    bg->update();
+    fps->update();
+  }
+}
+
+void Render::handle_map(sf::Vector2i &pos) {
+  printf("handle pos !\n");
+  hm->hex_toggle_transparency(pos.x, pos.y);
+  he->entity_toggle_transparency(pos.x, pos.y);
+}
+
+void Render::handle_menu(sf::String menu_name) {
+  std::cout << "menu clicked : " << menu_name.toAnsiString() << std::endl;
+  if (menu_name == "Load") {
+  } else if (menu_name == "Save") {
+  } else if (menu_name == "Exit") {
+    this->running = false;
+  } else if (menu_name == "Copy") {
+  } else if (menu_name == "Paste") {
+  } else if (menu_name == "About") {
+  }
+}
+
+void Render::handle_endturn() { std::cout << "button - end turn" << std::endl; }
+
+void Render::display_map(state::State &s) {
+  state::Board &b = s.getBoard();
+
+  std::shared_ptr<state::Cell> cell;
+  state::AccessibleCell *acell;
+  state::Entity entity;
+  for (int r = 0; r < config.hexamap_n_row; ++r) {
+    for (int c = 0; c < config.hexamap_n_col; ++c) {
+      cell = b.get(r, c);
+
+      if (cell->isAccessible()) { // accessible
+        acell = cell->castAccessible();
+        hm->hex_set_player(r, c, acell->getPlayerId());
+
+        printf("%d-", (int)entity.getEntityTypeId());
+
+        entity = acell->getEntity();
+        he->entity_set(r, c, entity.getEntitySubTypeId());
+        he->entity_show(r, c);
+
+      } else { // inaccessible
+        hm->hex_hide(r, c);
+        he->entity_hide(r, c);
+      }
+    }
+    printf("\n");
   }
 }

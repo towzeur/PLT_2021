@@ -1,15 +1,25 @@
+#include "ActionEndTurn.h"
+//#include "engine.h"
+
 #include <iostream>
 #include <unistd.h>
 
-#include "FinishTurnCommand.h"
-//#include "engine.h"
-#include "state/AccessibleCell.h"
-
 using namespace engine;
 
-FinishTurnCommand::FinishTurnCommand() { this->commandTypeId = FINISH_TURN; }
+ActionEndTurn::ActionEndTurn() {}
 
-void FinishTurnCommand::execute(state::State &state) {
+Json::Value ActionEndTurn::serialize() {}
+
+void ActionEndTurn::deserialize(Json::Value &ser) {}
+
+bool ActionEndTurn::isLegal(state::State &s) {}
+
+void ActionEndTurn::execute(state::State &state) {}
+
+void ActionEndTurn::print() {}
+
+/*
+void ActionEndTurn::execute(state::State &state) {
 
   std::vector<std::shared_ptr<state::Cell>> cells = state.getBoard().getCells();
 
@@ -33,9 +43,10 @@ void FinishTurnCommand::execute(state::State &state) {
   state.setTurn(state.getTurn() + 1);
 }
 
-Json::Value FinishTurnCommand::serialize() {
+Json::Value ActionEndTurn::serialize() {
   Json::Value newCommand;
   newCommand["id"] = this->commandTypeId;
 
   return newCommand;
 }
+*/

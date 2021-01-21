@@ -2,37 +2,39 @@
 
 using namespace render;
 
-Background::Background(RenderConfig &conf) : conf(conf) {
+Background::Background() {}
+
+Background::Background(RenderConfig *conf) : conf(conf) {
 
   i_frame = 0;
 
-  if (conf.background_enable) {
+  if (conf->background_enable) {
     // init the texture
     texture = sf::Texture();
     texture.setRepeated(true); // set this to fill the background
 
-    if (conf.background_animated) {
-      unsigned int width = conf.background_image.getSize().x;
-      unsigned int height = conf.background_image.getSize().y;
+    if (conf->background_animated) {
+      unsigned int width = conf->background_image.getSize().x;
+      unsigned int height = conf->background_image.getSize().y;
       nb_frames = width / height;
 
       // create frames
       frames = new sf::Image[nb_frames];
       for (int i = 0; i < nb_frames; ++i) {
         frames[i].create(height, height);
-        frames[i].copy(conf.background_image, 0, 0,
+        frames[i].copy(conf->background_image, 0, 0,
                        sf::IntRect(i * height, 0, height, height), true);
       }
 
       texture.loadFromImage(frames[i_frame]);
 
     } else { // static bg (no tileset)
-      texture.loadFromImage(conf.background_image);
+      texture.loadFromImage(conf->background_image);
     }
 
     // init the sprite
     sprite = sf::Sprite(
-        texture, sf::IntRect(0, 0, conf.window_size.x, conf.window_size.y));
+        texture, sf::IntRect(0, 0, conf->window_size.x, conf->window_size.y));
   }
 }
 
@@ -43,11 +45,11 @@ Background::~Background() {
 }
 
 void Background::update() {
-  if (!conf.background_enable)
+  if (!conf->background_enable)
     return;
-  if (conf.background_animated) {
+  if (conf->background_animated) {
 
-    if (clk.getElapsedTime().asSeconds() > (1. / conf.background_fps)) {
+    if (clk.getElapsedTime().asSeconds() > (1. / conf->background_fps)) {
       clk.restart();
 
       texture.update(frames[i_frame]);
@@ -57,10 +59,10 @@ void Background::update() {
 }
 
 void Background::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-  if (conf.background_enable) {
+  if (conf->background_enable) {
     states.transform *= getTransform();
     target.draw(sprite, states);
   } else {
-    target.clear(conf.background_color);
+    target.clear(conf->background_color);
   }
 }

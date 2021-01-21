@@ -5,19 +5,21 @@
 
 using namespace render;
 
-HexaMap::HexaMap(RenderConfig &conf) : conf(conf) {
+HexaMap::HexaMap() {}
+
+HexaMap::HexaMap(RenderConfig *conf) : conf(conf) {
 
   // Set-up
   // 8 : double quad 2*4
   m_vertices.setPrimitiveType(sf::Quads);
-  m_vertices.resize(8 * conf.hexamap_n_row * conf.hexamap_n_col);
+  m_vertices.resize(8 * conf->hexamap_n_row * conf->hexamap_n_col);
 
   // 12: 6 lines * 2 (points / line)
   m_vertices_2.setPrimitiveType(sf::Lines);
-  m_vertices_2.resize(12 * conf.hexamap_n_row * conf.hexamap_n_col);
+  m_vertices_2.resize(12 * conf->hexamap_n_row * conf->hexamap_n_col);
 
   // compute some values
-  int hexa_w_2 = conf.hexamap_hexa_r;
+  int hexa_w_2 = conf->hexamap_hexa_r;
   int hexa_h_2 = sqrt(hexa_w_2 * hexa_w_2 * 3. / 4.);
 
   /**
@@ -38,9 +40,16 @@ HexaMap::HexaMap(RenderConfig &conf) : conf(conf) {
       sf::Vector2f(+hexa_w_2 / 2, -hexa_h_2),
   };
 
+  // default color
+  sf::Color default_col;
+  if (conf->hexamap_colors.size())
+    default_col = conf->hexamap_colors[0];
+  else
+    default_col = sf::Color::White;
+
   // fill vertex array
-  for (int r = 0; r < conf.hexamap_n_row; ++r) {
-    for (int c = 0; c < conf.hexamap_n_col; ++c) {
+  for (int r = 0; r < conf->hexamap_n_row; ++r) {
+    for (int c = 0; c < conf->hexamap_n_col; ++c) {
 
       // compute the center
       int offset = ((c % 2) == 1) ? hexa_h_2 : 0;
@@ -48,30 +57,35 @@ HexaMap::HexaMap(RenderConfig &conf) : conf(conf) {
                       hexa_h_2 * (1 + r * 2) + offset);
 
       // set hexa's plain (filled) vertex
-      int idx = 8 * (r * conf.hexamap_n_col + c);
+      int idx = 8 * (r * conf->hexamap_n_col + c);
       for (int i = 0; i < 4; ++i) {
         // upper rectangle
         int i_q0 = idx + i;
         m_vertices[i_q0].position = hc + hexa_offsets[i];
-        // m_vertices[i_q0].color = col;
+        m_vertices[i_q0].color = default_col; // default : config[0]
+        m_vertices[i_q0].color.a = 0;         // default : transparent
 
         // lower rectangle
         int i_q1 = i_q0 + 4;
         m_vertices[i_q1].position = hc + hexa_offsets[(i + 3) % 6];
-        // m_vertices[i_q1].color = col;
+        m_vertices[i_q1].color = default_col; // default : config[0]
+        m_vertices[i_q1].color.a = 0;         // default : transparent
       }
 
       // set hexa's outline vertex
-      int idx_2 = 12 * (r * conf.hexamap_n_col + c);
+      int idx_2 = 12 * (r * conf->hexamap_n_col + c);
       for (int i = 0; i < 6; ++i) {
         int i0 = idx_2 + 2 * i;
         int i1 = i0 + 1;
         // start
         m_vertices_2[i0].position = hc + hexa_offsets[i];
-        m_vertices_2[i0].color = conf.hexamap_outline_color;
+        m_vertices_2[i0].color = conf->hexamap_outline_color;
+        m_vertices_2[i0].color.a = 0; // default : transparent
+
         // end
         m_vertices_2[i1].position = hc + hexa_offsets[(i + 1) % 6];
-        m_vertices_2[i1].color = conf.hexamap_outline_color;
+        m_vertices_2[i1].color = conf->hexamap_outline_color;
+        m_vertices_2[i1].color.a = 0; // default : transparent
       }
     }
   }
@@ -84,8 +98,18 @@ HexaMap::~HexaMap() {
   //  delete hexa_centers_y;
 }
 
+void HexaMap::hex_set_player(int r, int c, int player_id) {
+  sf::Color col;
+  if (player_id < conf->hexamap_colors.size()) {
+    col = sf::Color::Red; // throw error
+  }
+  col = conf->hexamap_colors[player_id];
+  hex_set_color(r, c, col);
+  hex_show(r, c);
+}
+
 void HexaMap::hex_set_color(int r, int c, sf::Color col) {
-  int idx = 8 * (r * conf.hexamap_n_col + c);
+  int idx = 8 * (r * conf->hexamap_n_col + c);
   for (int i = 0; i < 8; i++) {
     m_vertices[idx + i].color = col;
   }
@@ -93,12 +117,12 @@ void HexaMap::hex_set_color(int r, int c, sf::Color col) {
 
 void HexaMap::hex_set_transparency(int r, int c, int a) {
   // hide the plain hexa
-  int idx = 8 * (r * conf.hexamap_n_col + c);
+  int idx = 8 * (r * conf->hexamap_n_col + c);
   for (int i = 0; i < 8; i++) {
     m_vertices[idx + i].color.a = a;
   }
   // hide hexa's black outline
-  int idx_2 = 12 * (r * conf.hexamap_n_col + c);
+  int idx_2 = 12 * (r * conf->hexamap_n_col + c);
   for (int i = 0; i < 12; i++) {
     m_vertices_2[idx_2 + i].color.a = a;
   }
@@ -108,7 +132,7 @@ void HexaMap::hex_hide(int r, int c) { hex_set_transparency(r, c, 0); }
 void HexaMap::hex_show(int r, int c) { hex_set_transparency(r, c, 255); }
 
 void HexaMap::hex_toggle_transparency(int r, int c) {
-  if (m_vertices[8 * (r * conf.hexamap_n_col + c)].color.a == 0) {
+  if (m_vertices[8 * (r * conf->hexamap_n_col + c)].color.a == 0) {
     hex_show(r, c);
   } else {
     hex_hide(r, c);
@@ -139,7 +163,7 @@ sf::Vector2i HexaMap::PointToCoord(double x, double y) {
 
   // swap x and y for column-odd ; hexagon_h2=hexagon_w2; hexagon_w=>hexagon_w
   y = (y - get_hexa_h_2()) / (2 * get_hexa_h_2());
-  double t1 = x / conf.hexamap_hexa_r;
+  double t1 = x / conf->hexamap_hexa_r;
   double t2 = floor(y + t1);
   int r = floor((floor(t1 - y) + t2) / 3.f);
   int q = floor((floor(2 * y + 1) + t2) / 3.f) - r;
@@ -161,8 +185,8 @@ sf::Vector2i HexaMap::PointToCoord(double x, double y) {
  * @return int
  */
 int HexaMap::get_width() {
-  return (get_hexa_w_2() / 2.) * (conf.hexamap_n_col > 0) +
-         conf.hexamap_n_col * (get_hexa_w_2() * 3. / 2.);
+  return (get_hexa_w_2() / 2.) * (conf->hexamap_n_col > 0) +
+         conf->hexamap_n_col * (get_hexa_w_2() * 3. / 2.);
 }
 
 /**
@@ -174,14 +198,14 @@ int HexaMap::get_width() {
  * @return int
  */
 int HexaMap::get_height() {
-  return get_hexa_h_2() * (conf.hexamap_n_col > 0) +
-         (conf.hexamap_n_row * 2 * get_hexa_h_2());
+  return get_hexa_h_2() * (conf->hexamap_n_col > 0) +
+         (conf->hexamap_n_row * 2 * get_hexa_h_2());
 }
 
-int HexaMap::get_hexa_w_2() { return conf.hexamap_hexa_r; }
+int HexaMap::get_hexa_w_2() { return conf->hexamap_hexa_r; }
 
 int HexaMap::get_hexa_h_2() {
-  return sqrt(conf.hexamap_hexa_r * conf.hexamap_hexa_r * 3. / 4.);
+  return sqrt(conf->hexamap_hexa_r * conf->hexamap_hexa_r * 3. / 4.);
 }
 
 sf::Vector2f HexaMap::get_hexa_center(int r, int c) {

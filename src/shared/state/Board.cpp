@@ -89,7 +89,7 @@ void Board::resize(int nRow, int nCol) {
  *
  * @param token
  */
-std::shared_ptr<Cell> detokenize(std::string token) {
+std::shared_ptr<Cell> Board::detokenize(std::string token) {
   int a = std::stoi(token.substr(0, 1));
   int b = std::stoi(token.substr(1, 1));
   int c = std::stoi(token.substr(2, 1));
@@ -106,12 +106,13 @@ std::shared_ptr<Cell> detokenize(std::string token) {
   AccessibleCell *acell = new AccessibleCell();
   acell->setPlayerId(b);
 
-  state::Entity entity(static_cast<state::EntitySubTypeId>(c));
-  acell->setEntity(entity);
+  // state::Entity entity(static_cast<state::EntitySubTypeId>(c));
+  state::EntitySubTypeId sid = (state::EntitySubTypeId)c;
+  acell->getEntity().init(sid);
   return std::shared_ptr<Cell>(acell);
 }
 
-void tokenize(std::string token) {}
+// void Board::tokenize(std::string token) {}
 
 void Board::load(const std::string &filename) {
 
@@ -151,13 +152,12 @@ void Board::load(const std::string &filename) {
     for (c = 0; c < n_col; ++c) {
       std::getline(sstream, tmp_str, MAP_TXT_SEP);
 
-      cell_ptr = detokenize(tmp_str);
+      cell_ptr = Board::detokenize(tmp_str);
       cell_ptr->setCol(c);
       cell_ptr->setRow(r);
 
       // add it to the cells vector
-      index = c + n_col * r;
-      cells[index] = std::move(cell_ptr);
+      cells[c + n_col * r] = std::move(cell_ptr);
     }
     // std::cout << std::endl;
   }
