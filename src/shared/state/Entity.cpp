@@ -17,8 +17,9 @@ int Entity::instanceCount = 0;
 
 Entity::Entity() { this->uid = instanceCount++; }
 
-Entity::Entity(EntitySubTypeId subTypeId) {
-  this->uid = instanceCount++;
+Entity::~Entity() {}
+
+void Entity::init(EntitySubTypeId subTypeId) {
 
   this->attack = 0;
   this->defense = 0;
@@ -104,8 +105,6 @@ Entity::Entity(EntitySubTypeId subTypeId) {
     break;
   }
 }
-
-Entity::~Entity() {}
 
 int Entity::getUid() { return this->uid; }
 
