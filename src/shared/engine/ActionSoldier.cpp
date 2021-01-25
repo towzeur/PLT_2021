@@ -239,15 +239,4 @@ state::Empty(state::EntityTypeId::EMPTY, state::EmptyTypeId::VOID);
   }
 
 }
-
-Json::Value ActionSoldier::serialize() {
-
-  Json::Value newCommand;
-  newCommand["id"] = this->commandTypeId;
-  newCommand["entityUid"] = soldierTarget.getUid();
-  newCommand["targetRow"] = cellTarget.getRow();
-  newCommand["targetCol"] = cellTarget.getCol();
-
-  return newCommand;
-}
-  */
+*/

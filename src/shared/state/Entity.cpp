@@ -3,6 +3,7 @@
 
 using namespace state;
 
+/*
 #define SOLDIER_PEASANT_WAGE 2
 #define SOLDIER_SPEARMAN_WAGE 6
 #define SOLDIER_KNIGHT_WAGE 18
@@ -12,6 +13,7 @@ using namespace state;
 #define SOLDIER_SPEARMAN_STRENGTH 2
 #define SOLDIER_KNIGHT_STRENGTH 3
 #define SOLDIER_BARON_STRENGTH 4
+*/
 
 int Entity::instanceCount = 0;
 
@@ -53,7 +55,7 @@ void Entity::init(EntitySubTypeId subTypeId) {
   case FACILITY_CASTLE: {
     this->entityTypeId = state::EntityTypeId::FACILITY;
     this->entitySubTypeId = state::EntitySubTypeId::FACILITY_CASTLE;
-    this->defense = SOLDIER_SPEARMAN_STRENGTH;
+    this->defense = SoldiersStrength::SPEARMAN_STRENGTH;
     break;
   }
   case FACILITY_GRAVESTONE: {
@@ -68,35 +70,36 @@ void Entity::init(EntitySubTypeId subTypeId) {
   case SOLDIER_PEASANT: {
     this->entityTypeId = state::EntityTypeId::SOLDIER;
     this->entitySubTypeId = state::EntitySubTypeId::SOLDIER_PEASANT;
-    this->attack = SOLDIER_PEASANT_STRENGTH;
-    this->defense = SOLDIER_PEASANT_STRENGTH;
-    this->income = 1 - SOLDIER_PEASANT_WAGE;
+    this->attack = SoldiersStrength::PEASANT_STRENGTH;
+    this->defense = SoldiersStrength::PEASANT_STRENGTH;
+    this->income = 1 - SoldiersWage::PEASANT_WAGE;
     this->actionPoint = 1;
     break;
   }
   case SOLDIER_SPEARMAN: {
     this->entityTypeId = state::EntityTypeId::SOLDIER;
     this->entitySubTypeId = state::EntitySubTypeId::SOLDIER_SPEARMAN;
-    this->attack = SOLDIER_SPEARMAN_STRENGTH;
-    this->defense = SOLDIER_SPEARMAN_STRENGTH;
-    this->income = SOLDIER_SPEARMAN_WAGE + 1;
+    this->attack = SoldiersStrength::SPEARMAN_STRENGTH;
+    this->defense = SoldiersStrength::SPEARMAN_STRENGTH;
+    this->income = 1 - SoldiersWage::SPEARMAN_WAGE;
     this->actionPoint = 1;
     break;
   }
   case SOLDIER_KNIGHT: {
     this->entityTypeId = state::EntityTypeId::SOLDIER;
     this->entitySubTypeId = state::EntitySubTypeId::SOLDIER_KNIGHT;
-    this->attack = SOLDIER_KNIGHT_STRENGTH;
-    this->defense = SOLDIER_KNIGHT_STRENGTH;
-    this->income = SOLDIER_KNIGHT_WAGE + 1;
+    this->attack = SoldiersStrength::KNIGHT_STRENGTH;
+    this->defense = SoldiersStrength::KNIGHT_STRENGTH;
+    this->income = 1 - SoldiersWage::KNIGHT_WAGE;
     this->actionPoint = 1;
     break;
   }
   case SOLDIER_BARON: {
     this->entityTypeId = state::EntityTypeId::SOLDIER;
     this->entitySubTypeId = state::EntitySubTypeId::SOLDIER_BARON;
-    this->attack = SOLDIER_BARON_STRENGTH;
-    this->defense = SOLDIER_BARON_STRENGTH;
+    this->attack = SoldiersStrength::BARON_STRENGTH;
+    this->defense = SoldiersStrength::BARON_STRENGTH;
+    this->income = 1 - SoldiersWage::BARON_WAGE;
     this->actionPoint = 1;
     break;
   }
@@ -141,13 +144,13 @@ int Entity::getStrength() {
   if (this->isSoldier()) {
     switch (entitySubTypeId) {
     case EntitySubTypeId::SOLDIER_PEASANT:
-      return SOLDIER_PEASANT_STRENGTH;
+      return SoldiersStrength::PEASANT_STRENGTH;
     case EntitySubTypeId::SOLDIER_SPEARMAN:
-      return SOLDIER_SPEARMAN_STRENGTH;
+      return SoldiersStrength::SPEARMAN_STRENGTH;
     case EntitySubTypeId::SOLDIER_KNIGHT:
-      return SOLDIER_KNIGHT_STRENGTH;
+      return SoldiersStrength::KNIGHT_STRENGTH;
     case EntitySubTypeId::SOLDIER_BARON:
-      return SOLDIER_BARON_STRENGTH;
+      return SoldiersStrength::BARON_STRENGTH;
     default:
       throw std::runtime_error("getStrength unknow Soldier");
     }
@@ -157,16 +160,16 @@ int Entity::getStrength() {
 
 void Entity::setStrength(int newStrength) {
   switch (newStrength) {
-  case SOLDIER_PEASANT_STRENGTH:
+  case SoldiersStrength::PEASANT_STRENGTH:
     this->init(SOLDIER_PEASANT);
     break;
-  case SOLDIER_SPEARMAN_STRENGTH:
+  case SoldiersStrength::SPEARMAN_STRENGTH:
     this->init(SOLDIER_SPEARMAN);
     break;
-  case SOLDIER_KNIGHT_STRENGTH:
+  case SoldiersStrength::KNIGHT_STRENGTH:
     this->init(SOLDIER_KNIGHT);
     break;
-  case SOLDIER_BARON_STRENGTH:
+  case SoldiersStrength::BARON_STRENGTH:
     this->init(SOLDIER_BARON);
     break;
   default:
@@ -176,13 +179,13 @@ void Entity::setStrength(int newStrength) {
 
 bool Entity::isValidStrength(int newStrength) {
   switch (newStrength) {
-  case SOLDIER_PEASANT_STRENGTH:
+  case SoldiersStrength::PEASANT_STRENGTH:
     return true;
-  case SOLDIER_SPEARMAN_STRENGTH:
+  case SoldiersStrength::SPEARMAN_STRENGTH:
     return true;
-  case SOLDIER_KNIGHT_STRENGTH:
+  case SoldiersStrength::KNIGHT_STRENGTH:
     return true;
-  case SOLDIER_BARON_STRENGTH:
+  case SoldiersStrength::BARON_STRENGTH:
     return true;
   default:
     break;
