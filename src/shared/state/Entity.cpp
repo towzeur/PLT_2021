@@ -154,3 +154,38 @@ int Entity::getStrength() {
   }
   return 0;
 }
+
+void Entity::setStrength(int newStrength) {
+  switch (newStrength) {
+  case SOLDIER_PEASANT_STRENGTH:
+    this->init(SOLDIER_PEASANT);
+    break;
+  case SOLDIER_SPEARMAN_STRENGTH:
+    this->init(SOLDIER_SPEARMAN);
+    break;
+  case SOLDIER_KNIGHT_STRENGTH:
+    this->init(SOLDIER_KNIGHT);
+    break;
+  case SOLDIER_BARON_STRENGTH:
+    this->init(SOLDIER_BARON);
+    break;
+  default:
+    break;
+  }
+}
+
+bool Entity::isValidStrength(int newStrength) {
+  switch (newStrength) {
+  case SOLDIER_PEASANT_STRENGTH:
+    return true;
+  case SOLDIER_SPEARMAN_STRENGTH:
+    return true;
+  case SOLDIER_KNIGHT_STRENGTH:
+    return true;
+  case SOLDIER_BARON_STRENGTH:
+    return true;
+  default:
+    break;
+  }
+  return false;
+}
