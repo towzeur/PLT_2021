@@ -21,13 +21,10 @@ using namespace render;
 Render::Render() {}
 
 void Render::init(std::string configName) {
-  std::cout << "HELLO WORLD" << std::endl;
+  // std::cout << "HELLO WORLD" << std::endl;
   srand(time(NULL));
-
   running = true;
-
-  // load the config
-  config.load(configName);
+  config.load(configName); // load the config
 
   // ---------------------------------------------------------------------------
   //                                WINDOWS
@@ -115,6 +112,7 @@ void Render::init(std::string configName) {
   label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
   layout->add(label);
 
+  // btn end turn
   tgui::Button::Ptr button = theme->load("button");
   button->setPosition(10, config.window_size.y - 50 * 1.5 -
                               config.window_right_panel_padding);
@@ -123,6 +121,46 @@ void Render::init(std::string configName) {
                   50);
   button->setText("End of Turn");
 
+  // btn buy soldier
+  tgui::Button::Ptr btn_soldier = theme->load("button");
+  int btn_soldier_x = 50;
+  int btn_soldier_y = 200;
+  btn_soldier->setPosition(btn_soldier_x, btn_soldier_y);
+  btn_soldier->setSize(config.entity_width, config.entity_height);
+  btn_soldier->setText("End of Turn");
+  std::shared_ptr<tgui::ButtonRenderer> br = btn_soldier->getRenderer();
+  sf::IntRect partRect =
+      sf::IntRect(1, 7 * (config.entity_height - 1) + 1,
+                  config.entity_width - 2, config.entity_height - 2);
+
+  tgui::Texture texture(config.entity_tileset, partRect);
+  br->setNormalTexture(texture);
+  br->setHoverTexture(texture);
+  // br->setDownTexture(texture);
+  br->setFocusTexture(texture);
+  btn_soldier->connect("pressed",
+                       [&]() { this->window->setMouseCursorVisible(false); });
+  layout->add(btn_soldier);
+
+  // std::shared_ptr<const tgui::TextureData> td = texture.getData();
+  // const sf::Uint8 *pxx = texture.getData()->image->getPixelsPtr();
+  const sf::Image img = texture.getData()->texture.copyToImage();
+
+  sf::Cursor cursor;
+  if (cursor.loadFromSystem(sf::Cursor::Hand))
+    window->setMouseCursor(cursor);
+  if (cursor.loadFromPixels(img.getPixelsPtr(), img.getSize(),
+                            sf::Vector2u(0, 0))) {
+    printf("77777777777777777777\n");
+    // window->setMouseCursor(cursor);
+  }
+
+  // sf::Sprite sprite(textureCursorNormal);
+  // sf::Texture textureCursorHover;
+  // textureCursorHover.loadFromFile("CursorHover.png");
+  // window.setMouseCursorVisible(false);
+
+  // btn buy castle
   auto fp2 = std::bind(&Render::handle_endturn, this);
   button->connect("pressed", fp2);
   // button->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
@@ -155,9 +193,8 @@ void Render::init(std::string configName) {
 
   // render::HexaMap hm = render::HexaMap(config);
   hm = new HexaMap(&config);
-  std::cout << "hexamap width " << hm->get_width() << std::endl;
-  std::cout << "hexamap height " << hm->get_height() << std::endl;
-
+  // std::cout << "hexamap width " << hm->get_width() << std::endl;
+  // std::cout << "hexamap height " << hm->get_height() << std::endl;
   int map_full_width = config.window_size.x - config.window_right_panel_width;
   int map_full_height = config.window_size.y - config.window_menu_height;
   int map_offset_x = 0 + (map_full_width - hm->get_width()) / 2;
@@ -177,29 +214,6 @@ void Render::init(std::string configName) {
   // ---------------------------------------------------------------------------
 
   fps = new Fps(&config);
-
-  // ---------------------------------------------------------------------------
-  //                              init map
-  // ---------------------------------------------------------------------------
-
-  /*
-  for (int r = 0; r < config.hexamap_n_row; ++r) {
-    for (int c = 0; c < config.hexamap_n_col; ++c) {
-      he->entity_set(r, c, rand() % 11);
-      hm->hex_set_color(r, c, config.hexamap_colors[rand() % 6]);
-
-      if (rand() % 2) {
-        hm->hex_show(r, c);
-        he->entity_set(r, c, rand() % 10);
-        he->entity_show(r, c);
-      } else {
-        hm->hex_hide(r, c);
-        he->entity_set(r, c, 0);
-        he->entity_hide(r, c);
-      }
-    }
-  }
-  */
 }
 
 void Render::run() {
