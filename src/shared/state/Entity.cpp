@@ -3,20 +3,7 @@
 
 using namespace state;
 
-/*
-#define SOLDIER_PEASANT_WAGE 2
-#define SOLDIER_SPEARMAN_WAGE 6
-#define SOLDIER_KNIGHT_WAGE 18
-#define SOLDIER_BARON_WAGE 54
-
-#define SOLDIER_PEASANT_STRENGTH 1
-#define SOLDIER_SPEARMAN_STRENGTH 2
-#define SOLDIER_KNIGHT_STRENGTH 3
-#define SOLDIER_BARON_STRENGTH 4
-*/
-
 int Entity::instanceCount = 0;
-
 Entity::Entity() { this->uid = instanceCount++; }
 
 Entity::~Entity() {}
