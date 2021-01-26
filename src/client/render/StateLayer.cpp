@@ -137,15 +137,15 @@ bool StateLayer::printText(state::State &state) {
     std::vector<std::shared_ptr<state::Territory>> territories =
         players[i]->getTerritories();
     std::shared_ptr<state::Territory> selectedTerritory(new state::Territory);
-    selectedTerritory->setIncome(0);
-    selectedTerritory->setSavings(0);
-    selectedTerritory->setWages(0);
-    selectedTerritory->setBalance(0);
+    // selectedTerritory->setIncome(0);
+    // selectedTerritory->setSavings(0);
+    // selectedTerritory->setWages(0);
+    // selectedTerritory->setBalance(0);
     for (auto &t : move(territories)) {
-      if (t->isSelected()) {
-        selectedTerritory = t;
-        break;
-      }
+      // if (t->isSelected()) {
+      //  selectedTerritory = t;
+      //  break;
+      // }
     }
     sf::Text player;
     player.setPosition(window.getSize().x - 350.f + i % 2 * 200,
@@ -163,11 +163,13 @@ bool StateLayer::printText(state::State &state) {
     sf::Text playerInfo;
     playerInfo.setPosition(player.getPosition().x, player.getPosition().y + 50);
     playerInfo.setFont(font);
-    playerInfo.setString(
-        "Savings: " + std::to_string(selectedTerritory->getSavings()) +
-        "$\nIncomes: " + std::to_string(selectedTerritory->getIncome()) +
-        "$\nWages: " + std::to_string(selectedTerritory->getWages()) +
-        "$\nBalance: " + std::to_string(selectedTerritory->getBalance()) + "$");
+    //
+    // playerInfo.setString(
+    //    "Savings: " + std::to_string(selectedTerritory->getSavings()) +
+    //    "$\nIncomes: " + std::to_string(selectedTerritory->getIncome()) +
+    //    "$\nWages: " + std::to_string(selectedTerritory->getWages()) +
+    //    "$\nBalance: " + std::to_string(selectedTerritory->getBalance()) +
+    //    "$");
     playerInfo.setCharacterSize(20);
     texts.push(playerInfo);
   }
