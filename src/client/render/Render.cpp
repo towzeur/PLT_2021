@@ -21,13 +21,10 @@ using namespace render;
 Render::Render() {}
 
 void Render::init(std::string configName) {
-  std::cout << "HELLO WORLD" << std::endl;
+  // std::cout << "HELLO WORLD" << std::endl;
   srand(time(NULL));
-
   running = true;
-
-  // load the config
-  config.load(configName);
+  config.load(configName); // load the config
 
   // ---------------------------------------------------------------------------
   //                                WINDOWS
@@ -107,14 +104,43 @@ void Render::init(std::string configName) {
                       config.window_menu_height);
   gui->add(layout);
 
+  // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+  // territory information
+
+  const std::string &tgui_font_2 =
+      // const sf::String &tgui_font =
+      utils::Utils::resolveRelative("res/fonts/RobotoMono-SemiBold.ttf");
+
   tgui::Label::Ptr label = theme->load("Label");
-  label->setText("TEST 1");
-  label->setTextSize(10);
-  // label->setPosition(10, 90);
+  std::string label_string = "Savings\nIncome\nWages\nBalance";
+  label->setText(label_string);
+  label->setTextSize(14);
+  label->setPosition(config.territory_tooltips_margin_x, 90);
   label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
   label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+  label->setFont(tgui_font_2);
   layout->add(label);
 
+  tgui::Label::Ptr label_2 = theme->load("Label");
+  std::string label_string_2 = "8\n+2\n0\n10";
+  label_2->setText(label_string_2);
+  label_2->setTextSize(14);
+  label_2->setPosition(
+      config.territory_tooltips_width - config.territory_tooltips_margin_x, 90);
+  label_2->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Right);
+  label_2->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
+  label_2->setFont(tgui_font_2);
+  layout->add(label_2);
+
+  // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
+
+  // tgui::TextBox::Ptr tbox = tgui::TextBox::create();
+  // tbox->setPosition(10, 90);
+  // tbox->setTextSize(10);
+  // tbox->setText("hello");
+  // layout->add(tbox);
+
+  // btn end turn
   tgui::Button::Ptr button = theme->load("button");
   button->setPosition(10, config.window_size.y - 50 * 1.5 -
                               config.window_right_panel_padding);
@@ -123,6 +149,37 @@ void Render::init(std::string configName) {
                   50);
   button->setText("End of Turn");
 
+  // btn buy soldier
+  tgui::Button::Ptr btn_soldier = theme->load("button");
+  int btn_soldier_x = 50;
+  int btn_soldier_y = 200;
+  btn_soldier->setPosition(btn_soldier_x, btn_soldier_y);
+  btn_soldier->setSize(config.entity_width, config.entity_height);
+  btn_soldier->setText("End of Turn");
+  std::shared_ptr<tgui::ButtonRenderer> br = btn_soldier->getRenderer();
+  sf::IntRect partRect =
+      sf::IntRect(1, 7 * (config.entity_height - 1) + 1,
+                  config.entity_width - 2, config.entity_height - 2);
+
+  tgui::Texture texture(config.entity_tileset, partRect);
+  br->setNormalTexture(texture);
+  br->setHoverTexture(texture);
+  // br->setDownTexture(texture);
+  br->setFocusTexture(texture);
+  btn_soldier->connect("pressed",
+                       [&]() { this->window->setMouseCursorVisible(false); });
+  layout->add(btn_soldier);
+
+  sf::Texture t_peasant;
+  t_peasant.loadFromFile(config.entity_tileset_path, partRect);
+  sf::Image i_peasant = t_peasant.copyToImage();
+
+  // sf::Sprite sprite(textureCursorNormal);
+  // sf::Texture textureCursorHover;
+  // textureCursorHover.loadFromFile("CursorHover.png");
+  window->setMouseCursorVisible(false);
+
+  // btn buy castle
   auto fp2 = std::bind(&Render::handle_endturn, this);
   button->connect("pressed", fp2);
   // button->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
@@ -155,9 +212,8 @@ void Render::init(std::string configName) {
 
   // render::HexaMap hm = render::HexaMap(config);
   hm = new HexaMap(&config);
-  std::cout << "hexamap width " << hm->get_width() << std::endl;
-  std::cout << "hexamap height " << hm->get_height() << std::endl;
-
+  // std::cout << "hexamap width " << hm->get_width() << std::endl;
+  // std::cout << "hexamap height " << hm->get_height() << std::endl;
   int map_full_width = config.window_size.x - config.window_right_panel_width;
   int map_full_height = config.window_size.y - config.window_menu_height;
   int map_offset_x = 0 + (map_full_width - hm->get_width()) / 2;
@@ -177,29 +233,6 @@ void Render::init(std::string configName) {
   // ---------------------------------------------------------------------------
 
   fps = new Fps(&config);
-
-  // ---------------------------------------------------------------------------
-  //                              init map
-  // ---------------------------------------------------------------------------
-
-  /*
-  for (int r = 0; r < config.hexamap_n_row; ++r) {
-    for (int c = 0; c < config.hexamap_n_col; ++c) {
-      he->entity_set(r, c, rand() % 11);
-      hm->hex_set_color(r, c, config.hexamap_colors[rand() % 6]);
-
-      if (rand() % 2) {
-        hm->hex_show(r, c);
-        he->entity_set(r, c, rand() % 10);
-        he->entity_show(r, c);
-      } else {
-        hm->hex_hide(r, c);
-        he->entity_set(r, c, 0);
-        he->entity_hide(r, c);
-      }
-    }
-  }
-  */
 }
 
 void Render::run() {
@@ -207,8 +240,9 @@ void Render::run() {
   //                              GAME LOOP
   // ---------------------------------------------------------------------------
   sf::Event event;
-
   while (window->isOpen() && running) {
+
+    // events loop processing
     while (window->pollEvent(event)) {
 
       if (event.type == sf::Event::Closed) {
@@ -216,8 +250,8 @@ void Render::run() {
         break;
       }
 
+      // update the view to the new size of the window
       if (event.type == sf::Event::Resized) {
-        // update the view to the new size of the window
         sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
         window->setView(sf::View(visibleArea));
       }
@@ -226,68 +260,20 @@ void Render::run() {
       if (gui->handleEvent(event))
         continue;
 
-      if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Right) {
-          std::cout << "Right" << std::endl;
-          // hm->initialize(r, ++c, hexa_r);
-        } else if (event.key.code == sf::Keyboard::Left) {
-          std::cout << "Left" << std::endl;
-          // hm->initialize(r, --c, hexa_r);
-        } else if (event.key.code == sf::Keyboard::Up) {
-          std::cout << "Up" << std::endl;
-          // hm->initialize(--r, c, hexa_r);
-        } else if (event.key.code == sf::Keyboard::Down) {
-          std::cout << "Down" << std::endl;
-          // hm->initialize(++r, c, hexa_r);
-          //} else if (event.key.code == sf::Keyboard::Enter) {
-          //  std::cout << "OK" << std::endl;
-        } else if (event.key.code == sf::Keyboard::Add) {
-          std::cout << "+" << std::endl;
-          // hm->initialize(r, c, ++hexa_r);
-        } else if (event.key.code == sf::Keyboard::Subtract) {
-          std::cout << "-" << std::endl;
-          // hm->initialize(r, c, --hexa_r);
-        }
-        // hm->update();
-      }
+      if (event.type == sf::Event::KeyPressed)
+        this->handle_keypressed(event);
 
-      if (event.type == sf::Event::MouseButtonPressed) {
-
-        // sf::Event::MouseButtonPressed and sf::Event::MouseButtonReleased
-        //  left, right, middle (wheel), extra #1 and extra #2 (side buttons)
-        // std::cout << "[MOUSE] ";
-
-        if (event.mouseButton.button == sf::Mouse::Right) {
-          std::cout << "RIGHT (" << event.mouseButton.x << ", "
-                    << event.mouseButton.y << ")" << std::endl;
-        }
-
-        if (event.mouseButton.button == sf::Mouse::Left) {
-          sf::Vector2i pos;
-          std::cout << "LEFT (" << event.mouseButton.x << ", ";
-          std::cout << event.mouseButton.y << ")" << std::endl;
-          // convert pixel to position(row, col)
-
-          pos = hm->PointToCoord(event.mouseButton.x, event.mouseButton.y);
-          std::cout << "=>" << pos.x << "," << pos.y << std::endl;
-
-          if ((pos.x >= 0 && pos.x < config.hexamap_n_row) &&
-              (pos.y >= 0 && pos.y < config.hexamap_n_col)) {
-            this->handle_map(pos);
-          }
-        }
-      }
+      if (event.type == sf::Event::MouseButtonPressed)
+        this->handle_mousebuttonpressed(event);
     }
 
     window->clear(); // clear the screen (not necessary)
     // DRAW : start ------------------------------------------------------------
-
     window->draw(*bg); // background
     window->draw(*hm); // hexa map
     window->draw(*he); // entities
     gui->draw();
     window->draw(*fps); // fps
-
     // DRAW : end   ------------------------------------------------------------
     window->display();
 
@@ -316,6 +302,56 @@ void Render::handle_menu(sf::String menu_name) {
 }
 
 void Render::handle_endturn() { std::cout << "button - end turn" << std::endl; }
+
+void Render::handle_keypressed(sf::Event &event) {
+  if (event.type == sf::Event::KeyPressed) {
+
+    if (event.key.code == sf::Keyboard::Right) {
+      std::cout << "Right" << std::endl;
+
+    } else if (event.key.code == sf::Keyboard::Left) {
+      std::cout << "Left" << std::endl;
+
+    } else if (event.key.code == sf::Keyboard::Up) {
+      std::cout << "Up" << std::endl;
+
+    } else if (event.key.code == sf::Keyboard::Down) {
+      std::cout << "Down" << std::endl;
+
+    } else if (event.key.code == sf::Keyboard::Add) {
+      std::cout << "+" << std::endl;
+      // hm->initialize(r, c, ++hexa_r);
+    } else if (event.key.code == sf::Keyboard::Subtract) {
+      std::cout << "-" << std::endl;
+    }
+  }
+}
+
+void Render::handle_mousebuttonpressed(sf::Event &event) {
+  // sf::Event::MouseButtonPressed and sf::Event::MouseButtonReleased
+  //  left, right, middle (wheel), extra #1 and extra #2 (side buttons)
+  // std::cout << "[MOUSE] ";
+
+  if (event.mouseButton.button == sf::Mouse::Right) {
+    std::cout << "RIGHT (" << event.mouseButton.x << ", " << event.mouseButton.y
+              << ")" << std::endl;
+  }
+
+  if (event.mouseButton.button == sf::Mouse::Left) {
+    sf::Vector2i pos;
+    std::cout << "LEFT (" << event.mouseButton.x << ", ";
+    std::cout << event.mouseButton.y << ")" << std::endl;
+    // convert pixel to position(row, col)
+
+    pos = hm->PointToCoord(event.mouseButton.x, event.mouseButton.y);
+    std::cout << "=>" << pos.x << "," << pos.y << std::endl;
+
+    if ((pos.x >= 0 && pos.x < config.hexamap_n_row) &&
+        (pos.y >= 0 && pos.y < config.hexamap_n_col)) {
+      this->handle_map(pos);
+    }
+  }
+}
 
 void Render::display_map(state::State &s) {
   state::Board &b = s.getBoard();

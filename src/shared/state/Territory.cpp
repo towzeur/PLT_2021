@@ -3,53 +3,62 @@
 using namespace state;
 
 int Territory::instanceCount = 0;
-
 Territory::Territory() : savings(0) { this->uid = instanceCount++; }
 
-Territory::Territory (const Territory& territory1) {}
+Territory::Territory(const Territory &territory1) {}
 
 Territory::~Territory() {}
 
 int Territory::getUid() { return uid; }
 
-int Territory::getCapitalRow() { return capitalRow; }
+/**
+ * @brief return the territory's savings
+ *
+ * @return int
+ */
+int Territory::computeSavings() { return this->savings; }
 
-void Territory::setCapitalRow(int r) { capitalRow = r; }
-
-int Territory::getCapitalCol() { return capitalCol; }
-
-void Territory::setCapitalCol(int c) { capitalCol = c; }
-
-void Territory::setCapitalCoords(int cRow, int cCol) {
-  capitalCol = cCol;
-  capitalRow = cRow;
+/**
+ * @brief compute the total sum of Every Entity's income
+ *        Income = nb_cells - nb_trees
+ *
+ * @return int
+ */
+int Territory::computeIncome() {
+  int income = 0;
+  state::AccessibleCell *ac;
+  for (auto &cell_ptr : cells) {
+    ac = cell_ptr->castAccessible();
+    income += ac->getEntity().getIncome();
+  }
+  return income;
 }
 
-int Territory::getSavings() { return savings; }
+/**
+ * @brief compute the total sum of Soldier's wages
+ *
+ * @return int
+ */
+int Territory::computeWages() {
+  int wages = 0;
+  state::AccessibleCell *ac;
+  for (auto &cell_ptr : cells) {
+    ac = cell_ptr->castAccessible();
+    // getWage return 0 when not a soldier
+    wages += ac->getEntity().getWage();
+  }
+  return wages;
+}
 
-void Territory::setSavings(int savings) { this->savings = savings; }
-
-int Territory::getIncome() { return income; }
-
-void Territory::setIncome(int income) { this->income = income; }
-
-int Territory::getWages() { return wages; }
-
-void Territory::setWages(int wages) { this->wages = wages; }
-
-int Territory::getBalance() { return balance; }
-
-void Territory::setBalance(int balance) { this->balance = balance; }
-
-int Territory::getSize() { return size; }
-
-void Territory::setSize(int size) { this->size = size; }
-
-void Territory::setSelected(bool selected) { this->selected = selected; }
-
-bool Territory::isSelected() { return this->selected; }
-
-bool const Territory::operator== (const Territory& t1) {}
+/**
+ * @brief compute the actual balance of the territory :
+ *        balance = savings + income - wages
+ *
+ * @return int
+ */
+int Territory::computeBalance() {
+  return computeSavings() + computeIncome() - computeWages();
+}
 
 void Territory::addCell(std::shared_ptr<Cell> cell) { cells.push_back(cell); }
 

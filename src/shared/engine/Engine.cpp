@@ -76,7 +76,6 @@ void Engine::init(std::string map) {
 
         // create a territory
         std::shared_ptr<state::Territory> newTerritory(new state::Territory);
-        newTerritory->setCapitalCoords(c->getRow(), c->getCol());
         newTerritory->addCell(c);
 
         // map it to the player

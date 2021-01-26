@@ -63,37 +63,37 @@ BOOST_AUTO_TEST_CASE(TestState) {
     BOOST_CHECK_EQUAL(tr.getUid(), 0); // Second territory created: uid = 1
 
     // CapitalRow getter and setter
-    tr.setCapitalRow(5);
-    BOOST_CHECK_EQUAL(tr.getCapitalRow(), 5);
+    // tr.setCapitalRow(5);
+    // BOOST_CHECK_EQUAL(tr.getCapitalRow(), 5);
 
     // CapitalCol getter and setter
-    tr.setCapitalCol(3);
-    BOOST_CHECK_EQUAL(tr.getCapitalCol(), 3);
+    // tr.setCapitalCol(3);
+    // BOOST_CHECK_EQUAL(tr.getCapitalCol(), 3);
 
     // setCapitalCoors
-    tr.setCapitalCoords(10, 20);
-    BOOST_CHECK_EQUAL(tr.getCapitalRow(), 10);
-    BOOST_CHECK_EQUAL(tr.getCapitalCol(), 20);
+    // tr.setCapitalCoords(10, 20);
+    // BOOST_CHECK_EQUAL(tr.getCapitalRow(), 10);
+    // BOOST_CHECK_EQUAL(tr.getCapitalCol(), 20);
 
     // Savings getter and setter
-    tr.setSavings(100);
-    BOOST_CHECK_EQUAL(tr.getSavings(), 100);
+    // tr.setSavings(100);
+    // BOOST_CHECK_EQUAL(tr.getSavings(), 100);
 
     // Income getter and setter
-    tr.setIncome(50);
-    BOOST_CHECK_EQUAL(tr.getIncome(), 50);
+    // tr.setIncome(50);
+    // BOOST_CHECK_EQUAL(tr.getIncome(), 50);
 
     // Wages getter and setter
-    tr.setWages(20);
-    BOOST_CHECK_EQUAL(tr.getWages(), 20);
+    // tr.setWages(20);
+    // BOOST_CHECK_EQUAL(tr.getWages(), 20);
 
     // Balance getter and setter
-    tr.setBalance(30);
-    BOOST_CHECK_EQUAL(tr.getBalance(), 30);
+    // tr.setBalance(30);
+    // BOOST_CHECK_EQUAL(tr.getBalance(), 30);
 
     // Size getter and setter
-    tr.setSize(10);
-    BOOST_CHECK_EQUAL(tr.getSize(), 10);
+    // tr.setSize(10);
+    // BOOST_CHECK_EQUAL(tr.getSize(), 10);
   }
 
   // Player

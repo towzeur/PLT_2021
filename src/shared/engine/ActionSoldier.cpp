@@ -119,7 +119,11 @@ bool ActionSoldier::isLegalFusion(state::State &s) {
   state::AccessibleCell *ac0 = b.get(r0, c0)->castAccessible();
   state::AccessibleCell *ac1 = b.get(r1, c1)->castAccessible();
 
-  return true;
+  state::Entity &e0 = ac0->getEntity();
+  state::Entity &e1 = ac1->getEntity();
+
+  int new_strength = e0.getStrength() + e1.getStrength();
+  return state::Entity::isValidStrength(new_strength);
 }
 
 /*
@@ -235,15 +239,4 @@ state::Empty(state::EntityTypeId::EMPTY, state::EmptyTypeId::VOID);
   }
 
 }
-
-Json::Value ActionSoldier::serialize() {
-
-  Json::Value newCommand;
-  newCommand["id"] = this->commandTypeId;
-  newCommand["entityUid"] = soldierTarget.getUid();
-  newCommand["targetRow"] = cellTarget.getRow();
-  newCommand["targetCol"] = cellTarget.getCol();
-
-  return newCommand;
-}
-  */
+*/
