@@ -128,21 +128,20 @@ void Entity::reset() {
 }
 
 int Entity::getStrength() {
-  if (this->isSoldier()) {
-    switch (entitySubTypeId) {
-    case EntitySubTypeId::SOLDIER_PEASANT:
-      return SoldiersStrength::PEASANT_STRENGTH;
-    case EntitySubTypeId::SOLDIER_SPEARMAN:
-      return SoldiersStrength::SPEARMAN_STRENGTH;
-    case EntitySubTypeId::SOLDIER_KNIGHT:
-      return SoldiersStrength::KNIGHT_STRENGTH;
-    case EntitySubTypeId::SOLDIER_BARON:
-      return SoldiersStrength::BARON_STRENGTH;
-    default:
-      throw std::runtime_error("getStrength unknow Soldier");
-    }
+  if (!this->isSoldier())
+    return 0;
+  switch (entitySubTypeId) {
+  case EntitySubTypeId::SOLDIER_PEASANT:
+    return SoldiersStrength::PEASANT_STRENGTH;
+  case EntitySubTypeId::SOLDIER_SPEARMAN:
+    return SoldiersStrength::SPEARMAN_STRENGTH;
+  case EntitySubTypeId::SOLDIER_KNIGHT:
+    return SoldiersStrength::KNIGHT_STRENGTH;
+  case EntitySubTypeId::SOLDIER_BARON:
+    return SoldiersStrength::BARON_STRENGTH;
+  default:
+    throw std::runtime_error("getStrength unknow Soldier");
   }
-  return 0;
 }
 
 void Entity::setStrength(int newStrength) {
@@ -178,4 +177,22 @@ bool Entity::isValidStrength(int newStrength) {
     break;
   }
   return false;
+}
+
+int Entity::getWage() {
+  if (!this->isSoldier())
+    return 0;
+
+  switch (entitySubTypeId) {
+  case EntitySubTypeId::SOLDIER_PEASANT:
+    return SoldiersWage::PEASANT_WAGE;
+  case EntitySubTypeId::SOLDIER_SPEARMAN:
+    return SoldiersWage::SPEARMAN_WAGE;
+  case EntitySubTypeId::SOLDIER_KNIGHT:
+    return SoldiersWage::KNIGHT_WAGE;
+  case EntitySubTypeId::SOLDIER_BARON:
+    return SoldiersWage::BARON_WAGE;
+  default:
+    throw std::runtime_error("getWage unknow Soldier");
+  }
 }
