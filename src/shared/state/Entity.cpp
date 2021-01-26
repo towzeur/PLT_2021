@@ -10,11 +10,7 @@ Entity::~Entity() {}
 
 void Entity::init(EntitySubTypeId subTypeId) {
 
-  this->attack = 0;
-  this->defense = 0;
-  this->income = 1;
-  this->actionPoint = 0;
-
+  // set entityTypeId and entitySubTypeId
   switch (subTypeId) {
   case EMPTY_VOID: {
     this->entityTypeId = state::EntityTypeId::EMPTY;
@@ -24,31 +20,26 @@ void Entity::init(EntitySubTypeId subTypeId) {
   case TREE_PINE: {
     this->entityTypeId = state::EntityTypeId::TREE;
     this->entitySubTypeId = state::EntitySubTypeId::TREE_PINE;
-    this->income = -1;
     break;
   }
   case TREE_PALM: {
     this->entityTypeId = state::EntityTypeId::TREE;
     this->entitySubTypeId = state::EntitySubTypeId::TREE_PALM;
-    this->income = -1;
     break;
   }
   case FACILITY_CAPITAL: {
     this->entityTypeId = state::EntityTypeId::FACILITY;
     this->entitySubTypeId = state::EntitySubTypeId::FACILITY_CAPITAL;
-    this->defense = 1;
     break;
   }
   case FACILITY_CASTLE: {
     this->entityTypeId = state::EntityTypeId::FACILITY;
     this->entitySubTypeId = state::EntitySubTypeId::FACILITY_CASTLE;
-    this->defense = SoldiersStrength::SPEARMAN_STRENGTH;
     break;
   }
   case FACILITY_GRAVESTONE: {
     this->entityTypeId = state::EntityTypeId::FACILITY;
     this->entitySubTypeId = state::EntitySubTypeId::FACILITY_GRAVESTONE;
-    this->income = 0;
     break;
   }
     // -------------------------------------------------------------------------
@@ -57,43 +48,33 @@ void Entity::init(EntitySubTypeId subTypeId) {
   case SOLDIER_PEASANT: {
     this->entityTypeId = state::EntityTypeId::SOLDIER;
     this->entitySubTypeId = state::EntitySubTypeId::SOLDIER_PEASANT;
-    this->attack = SoldiersStrength::PEASANT_STRENGTH;
-    this->defense = SoldiersStrength::PEASANT_STRENGTH;
-    this->income = 1 - SoldiersWage::PEASANT_WAGE;
-    this->actionPoint = 1;
     break;
   }
   case SOLDIER_SPEARMAN: {
     this->entityTypeId = state::EntityTypeId::SOLDIER;
     this->entitySubTypeId = state::EntitySubTypeId::SOLDIER_SPEARMAN;
-    this->attack = SoldiersStrength::SPEARMAN_STRENGTH;
-    this->defense = SoldiersStrength::SPEARMAN_STRENGTH;
-    this->income = 1 - SoldiersWage::SPEARMAN_WAGE;
-    this->actionPoint = 1;
     break;
   }
   case SOLDIER_KNIGHT: {
     this->entityTypeId = state::EntityTypeId::SOLDIER;
     this->entitySubTypeId = state::EntitySubTypeId::SOLDIER_KNIGHT;
-    this->attack = SoldiersStrength::KNIGHT_STRENGTH;
-    this->defense = SoldiersStrength::KNIGHT_STRENGTH;
-    this->income = 1 - SoldiersWage::KNIGHT_WAGE;
-    this->actionPoint = 1;
     break;
   }
   case SOLDIER_BARON: {
     this->entityTypeId = state::EntityTypeId::SOLDIER;
     this->entitySubTypeId = state::EntitySubTypeId::SOLDIER_BARON;
-    this->attack = SoldiersStrength::BARON_STRENGTH;
-    this->defense = SoldiersStrength::BARON_STRENGTH;
-    this->income = 1 - SoldiersWage::BARON_WAGE;
-    this->actionPoint = 1;
     break;
   }
   default:
     throw std::runtime_error("Unkown entity enum value");
     break;
   }
+
+  // set action point
+  if (this->entityTypeId == state::EntityTypeId::SOLDIER)
+    this->actionPoint = 1;
+  else
+    this->actionPoint = 0;
 }
 
 int Entity::getUid() { return this->uid; }
@@ -195,4 +176,50 @@ int Entity::getWage() {
   default:
     throw std::runtime_error("getWage unknow Soldier");
   }
+}
+
+/**
+ * @brief return entity
+ *        only soldier have a strength
+ *
+ * @return int
+ */
+int Entity::getAttack() { return this->getStrength(); }
+
+/**
+ * @brief return entity's defense
+ *        soldier's defense is his strength
+ *        capital defends at the strength of a Peasant
+ *        castle defends at the strength of a  Spearman
+ *
+ * @return int
+ */
+int Entity::getDefense() {
+
+  switch (entityTypeId) {
+  case state::EntityTypeId::SOLDIER:
+    return this->getStrength();
+
+  case state::EntityTypeId::FACILITY:
+    if (entitySubTypeId == EntitySubTypeId::FACILITY_CAPITAL)
+      return 1;
+    else if (entitySubTypeId == state::EntitySubTypeId::FACILITY_CASTLE)
+      return SoldiersStrength::SPEARMAN_STRENGTH;
+    return 0;
+
+  default:
+    return 0;
+  }
+}
+
+/**
+ * @brief return the entity income
+ *        every entity generate +1 exect trees
+ *
+ * @return int
+ */
+int Entity::getIncome() {
+  if (this->isTree())
+    return 0;
+  return 1;
 }
