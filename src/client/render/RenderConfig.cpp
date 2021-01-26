@@ -75,8 +75,9 @@ void RenderConfig::load(std::string skin_name) {
   entity_width = node["width"].asInt();
   entity_height = node["height"].asInt();
   entity_frames = node["frames"].asInt();
-  tmp = utils::Utils::resolveRelative(node["tileset_path"].asString());
-  if (!entity_tileset.loadFromFile(tmp)) {
+  entity_tileset_path =
+      utils::Utils::resolveRelative(node["tileset_path"].asString());
+  if (!entity_tileset.loadFromFile(entity_tileset_path)) {
     std::cout << "[ERROR] entity_tileset_path" << std::endl;
     exit(1);
   }
