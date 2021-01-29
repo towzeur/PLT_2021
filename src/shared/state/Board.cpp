@@ -181,14 +181,27 @@ std::shared_ptr<Cell> Board::get(int r, int c) {
  */
 std::shared_ptr<Cell> Board::get(int index) { return cells[index]; }
 
-void Board::set(int r, int c, Cell *cell) {}
-
 void Board::remove(int r, int c) {}
 
+/**
+ * @brief return the number of the board's column
+ *
+ * @return int
+ */
 int Board::getNCol() { return nCol; }
 
+/**
+ * @brief return the number of the board's row
+ *
+ * @return int
+ */
 int Board::getNRow() { return nRow; }
 
+/**
+ * @brief return the size of the board : nRow * nCol
+ *
+ * @return int
+ */
 int Board::getSize() { return nRow * nCol; }
 
 /**
@@ -212,10 +225,22 @@ std::pair<int, int> Board::ind2sub(int ind) {
   return std::make_pair(r, c);
 }
 
+/**
+ * @brief return the internal cells vector
+ *
+ * @return std::vector<std::shared_ptr<Cell>>&
+ */
 std::vector<std::shared_ptr<Cell>> &Board::getCells() { return this->cells; }
 
 bool const Board::operator==(const Board &board1) {}
 
+/**
+ * @brief return up to 6 neighbors of the cell at (r, c).
+ *
+ * @param r0
+ * @param c0
+ * @return std::vector<std::shared_ptr<Cell>>
+ */
 std::vector<std::shared_ptr<Cell>> Board::getNeighbors(int r0, int c0) {
   std::vector<std::shared_ptr<state::Cell>> neighbors;
   int r1, c1;
