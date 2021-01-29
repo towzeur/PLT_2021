@@ -26,6 +26,8 @@ static const int DIRECTIONS[6][2] = {
 
 // -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+
 Board::Board() {}
 
 Board::Board(const Board &board1) : nRow(board1.nRow), nCol(board1.nCol) {}
@@ -247,9 +249,46 @@ std::vector<std::shared_ptr<Cell>> Board::getNeighbors(int r0, int c0) {
   for (int d = 0; d < 6; ++d) {
     r1 = r0 + DIRECTIONS[d][0];
     c1 = c0 + DIRECTIONS[d][1];
-    if (r1 >= 0 && r1 < nRow && c1 >= 0 & c1 < nCol) {
+    if (isValidCoords(r1, c1)) {
       neighbors.push_back(this->get(r1, c1));
     }
   }
   return neighbors;
+}
+
+/**
+ * @brief print to cout a simplified version of the board
+ *
+ */
+void Board::print() {
+  std::cout << "***************************************" << std::endl;
+  std::shared_ptr<state::Cell> cell;
+  state::AccessibleCell *acell;
+  for (int r = 0; r < getNRow(); ++r) {
+    for (int c = 0; c < getNCol(); ++c) {
+      cell = get(r, c);
+      if (cell->isAccessible()) {
+        acell = cell->castAccessible();
+        // std::cout << acell->getPlayerId();
+        std::cout << acell->getEntity().getEntitySubTypeId();
+      } else {
+        std::cout << " ";
+      }
+      std::cout << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << "***************************************" << std::endl;
+}
+
+/**
+ * @brief return true if the given coord (r, c) is within the board
+ *
+ * @param r
+ * @param c
+ * @return true
+ * @return false
+ */
+bool Board::isValidCoords(int r, int c) {
+  return ((r >= 0) && (r < nRow) && (c >= 0) && (c < nCol));
 }
