@@ -155,7 +155,6 @@ void Render::init(std::string configName) {
   int btn_soldier_y = 200;
   btn_soldier->setPosition(btn_soldier_x, btn_soldier_y);
   btn_soldier->setSize(config.entity_width, config.entity_height);
-  btn_soldier->setText("End of Turn");
   std::shared_ptr<tgui::ButtonRenderer> br = btn_soldier->getRenderer();
   sf::IntRect partRect =
       sf::IntRect(1, 7 * (config.entity_height - 1) + 1,
@@ -359,6 +358,7 @@ void Render::display_map(state::State &s) {
   std::shared_ptr<state::Cell> cell;
   state::AccessibleCell *acell;
   state::Entity entity;
+
   for (int r = 0; r < config.hexamap_n_row; ++r) {
     for (int c = 0; c < config.hexamap_n_col; ++c) {
       cell = b.get(r, c);
@@ -367,7 +367,7 @@ void Render::display_map(state::State &s) {
         acell = cell->castAccessible();
         hm->hex_set_player(r, c, acell->getPlayerId());
 
-        printf("%d-", (int)entity.getEntityTypeId());
+        std::cout << entity.getEntityTypeId() << " ";
 
         entity = acell->getEntity();
         he->entity_set(r, c, entity.getEntitySubTypeId());
