@@ -14,6 +14,16 @@ Territory::~Territory() {}
 int Territory::getUid() { return uid; }
 
 /**
+ * @brief
+ *
+ * @return int
+ */
+void Territory::init() {
+  cells.clear();
+  savings = INITIAL_SAVINGS;
+}
+
+/**
  * @brief return the territory's savings
  *
  * @return int
@@ -52,7 +62,7 @@ int Territory::computeWages() {
   return wages;
 }
 
-/**²²
+/**
  * @brief compute the actual balance of the territory :
  *        balance = savings + income - wages
  *
@@ -62,6 +72,12 @@ int Territory::computeBalance() {
   return computeSavings() + computeIncome() - computeWages();
 }
 
+/**
+ * @brief add a cell to the territory.
+ *        this method set the cell's territory_id
+ *
+ * @param cell
+ */
 void Territory::addCell(std::shared_ptr<Cell> cell) {
   if (!cell->isAccessible())
     throw std::runtime_error("addCell : adding an Inaccesible cell !");
@@ -70,4 +86,9 @@ void Territory::addCell(std::shared_ptr<Cell> cell) {
   acell->setTerritoryId(this->getUid());
 }
 
+/**
+ * @brief return the internal cells vector
+ *
+ * @return std::vector<std::shared_ptr<Cell>>
+ */
 std::vector<std::shared_ptr<Cell>> Territory::getCells() { return cells; }
