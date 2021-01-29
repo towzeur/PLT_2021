@@ -13,17 +13,6 @@
 
 using namespace engine;
 
-//   NW N NE
-//   W  .  E
-//   SW S SE
-static const int DIRECTIONS[6][2] = {
-    {-1, +1}, // NE
-    {-1, 0},  // N
-    {-1, -1}, // NW
-    {0, -1},  // SW
-    {1, 0},   // S
-    {0, 1}    // SE
-};
 // -----------------------------------------------------------------------------
 
 bool compare_player_id(std::shared_ptr<state::Cell> cell, int player_id) {
@@ -129,9 +118,9 @@ void Engine::processAction(Json::Value &ser) {
 }
 
 /**
- * @brief
+ * @brief DFS from cell0
  *
- * @param c0
+ * @param cell0
  * @param f
  * @return std::vector<std::shared_ptr<state::Cell>>
  */
@@ -155,13 +144,15 @@ Engine::propagate(std::shared_ptr<state::Cell> cell0,
 
   // exploration loop
   while (!OPEN.empty()) {
+
     index = int(OPEN.back()); // take the last element
     OPEN.pop_back();          // remove it from OPEN
-    if (!CLOSE[index]) {
-      // add it to the current list
+    if (!CLOSE[index]) {      // not already explored
+
+      CLOSE[index] = true;                               // add it to CLOSE
       std::pair<int, int> coords = board.ind2sub(index); // (r0, c0)
       std::shared_ptr<state::Cell> cell = board.get(index);
-      out.push_back(cell);
+      out.push_back(cell); // add it to the current list
 
       // explore his neighbors (up to 6)
       for (auto &cell1 : board.getNeighbors(coords.first, coords.second)) {
@@ -169,7 +160,6 @@ Engine::propagate(std::shared_ptr<state::Cell> cell0,
         if (!CLOSE[index1] && f(cell1))
           OPEN.push_back(index1);
       }
-      CLOSE[index] = true; // add it to CLOSE
     }
   }
 
