@@ -12,6 +12,18 @@ using namespace state;
 
 #define MAP_TXT_SEP ','
 
+//   NW N NE
+//   W  .  E
+//   SW S SE
+static const int DIRECTIONS[6][2] = {
+    {-1, +1}, // NE
+    {-1, 0},  // N
+    {-1, -1}, // NW
+    {0, -1},  // SW
+    {1, 0},   // S
+    {0, 1}    // SE
+};
+
 // -----------------------------------------------------------------------------
 
 Board::Board() {}
@@ -157,9 +169,17 @@ void Board::load(const std::string &filename) {
  * @return std::shared_ptr<Cell>
  */
 std::shared_ptr<Cell> Board::get(int r, int c) {
-  int index = r * nCol + c;
+  int index = sub2ind(r, c);
   return cells[index];
 }
+
+/**
+ * @brief return the cells at the given linear index
+ *
+ * @param index
+ * @return std::shared_ptr<Cell>
+ */
+std::shared_ptr<Cell> Board::get(int index) { return cells[index]; }
 
 void Board::set(int r, int c, Cell *cell) {}
 
@@ -169,6 +189,40 @@ int Board::getNCol() { return nCol; }
 
 int Board::getNRow() { return nRow; }
 
+/**
+ * @brief linearize sub=(r, c) to ind
+ *
+ * @param r
+ * @param c
+ * @return int
+ */
+int Board::sub2ind(int r, int c) { return r * nCol + c; }
+
+/**
+ * @brief de-linearize ind to (r, c)
+ *
+ * @param ind
+ * @return std::pair<int, int>
+ */
+std::pair<int, int> Board::ind2sub(int ind) {
+  int r = ind / nCol;
+  int c = ind % nCol;
+  return std::make_pair(r, c);
+}
+
 std::vector<std::shared_ptr<Cell>> &Board::getCells() { return this->cells; }
 
 bool const Board::operator==(const Board &board1) {}
+
+std::vector<std::shared_ptr<Cell>> Board::getNeighbors(int r0, int c0) {
+  std::vector<std::shared_ptr<state::Cell>> neighbors;
+  int r1, c1;
+  for (int d = 0; d < 6; ++d) {
+    r1 = r0 + DIRECTIONS[d][0];
+    c1 = c0 + DIRECTIONS[d][1];
+    if (r1 >= 0 && r1 < nRow && c1 >= 0 & c1 < nCol) {
+      neighbors.push_back(this->get(r1, c1));
+    }
+  }
+  return neighbors;
+}
