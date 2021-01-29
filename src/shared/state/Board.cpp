@@ -189,6 +189,8 @@ int Board::getNCol() { return nCol; }
 
 int Board::getNRow() { return nRow; }
 
+int Board::getSize() { return nRow * nCol; }
+
 /**
  * @brief linearize sub=(r, c) to ind
  *
