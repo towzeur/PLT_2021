@@ -22,7 +22,7 @@ bool compare_player_id(std::shared_ptr<state::Cell> cell, int player_id) {
   // convert it to Accessible cell
   state::AccessibleCell *acell = cell->castAccessible();
   if (acell->getPlayerId() == player_id) {
-    printf("TEAM JBZZ\n");
+    // printf("TEAM JBZZ\n");
     return true;
   }
   return false;
@@ -51,38 +51,47 @@ void Engine::init(std::string map) {
   }
 
   // Init Territories
-  std::shared_ptr<state::Player> p;
-  std::shared_ptr<state::Territory> newTerritory;
-  for (auto &c : board.getCells()) { // loop through cell
+  for (auto &c : board.getCells()) {
 
     if (c->isAccessible()) {
       state::AccessibleCell *ac = (state::AccessibleCell *)c.get();
       int sid = ac->getEntity().getEntitySubTypeId();
-
-      // capital and not the neutral player
-      if (sid == state::EntitySubTypeId::FACILITY_CAPITAL &&
-          ac->getPlayerId() != 0) {
-        p = currentState.getPlayer(ac->getPlayerId());
-
-        newTerritory = p->createTerritory();
-        newTerritory->addCell(c);
-        ac->setTerritoryId(newTerritory->getUid());
-
-        // propagate it
-        std::function<bool(std::shared_ptr<state::Cell>)> f1 =
-            std::bind(&compare_player_id, std::placeholders::_1, p->getUid());
-        std::vector<std::shared_ptr<state::Cell>> t_cells =
-            this->propagate(c, f1);
-        printf("[TERRITORY] %d \n", t_cells.size());
-
-        for (auto &t_cell : t_cells) {
-          printf("(%d, %d)", t_cell->getRow(), t_cell->getCol());
-        }
-
-        // acell->setTerritoryId(territory_id); // set the cell territory
+      if (sid == state::EntitySubTypeId::FACILITY_CAPITAL) {
+        initTerritory(c);
       }
     }
   }
+}
+
+/**
+ * @brief form a territory from a capital and the current board
+ *
+ * @param cell
+ * @return int
+ */
+int Engine::initTerritory(std::shared_ptr<state::Cell> cell) {
+  // retrieve the accessible cell and player
+  state::AccessibleCell *ac = (state::AccessibleCell *)cell.get();
+  std::shared_ptr<state::Player> p = currentState.getPlayer(ac->getPlayerId());
+
+  // create a new territory
+  std::shared_ptr<state::Territory> t = p->createTerritory();
+
+  // propagate it
+  std::function<bool(std::shared_ptr<state::Cell>)> f1 =
+      std::bind(&compare_player_id, std::placeholders::_1, p->getUid());
+  std::vector<std::shared_ptr<state::Cell>> t_cells = this->propagate(cell, f1);
+
+  printf("[TERRITORY] %d \n", t_cells.size());
+  for (auto &t_cell : t_cells) {
+    printf("(%d, %d)", t_cell->getRow(), t_cell->getCol());
+
+    t->addCell(cell);
+  }
+  std::cout << std::endl;
+
+  // ac->setTerritoryId(newTerritory->getUid());
+  // t->addCell(cell);
 }
 
 state::State &Engine::getCurrentState() { return this->currentState; }
