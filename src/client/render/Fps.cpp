@@ -9,11 +9,10 @@ Fps::Fps(RenderConfig *conf) : conf(conf) {
   text.setFont(conf->fps_font);
   text.setString("60");
   text.setCharacterSize(30); // in pixel !
-  text.setFillColor(sf::Color::Yellow);
+
   // text.setStyle(sf::Text::Bold | sf::Text::Underlined);
 
-  // update it the first time
-  update();
+  text.setColor(sf::Color::Transparent);
 }
 
 void Fps::update() {
@@ -25,6 +24,8 @@ void Fps::update() {
     int x = conf->window_size.x - w - conf->window_right_panel_padding;
     int y = 0; // conf->window_menu_height;
     text.setPosition(x, y);
+
+    text.setColor(sf::Color::Yellow);
 
     clk.restart();
     frames = 0;
