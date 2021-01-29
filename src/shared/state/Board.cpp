@@ -137,7 +137,7 @@ void Board::load(const std::string &filename) {
   // std::cout << n_row << " " << n_col << std::endl;
 
   // read each line
-  int r = 0, c = 0, index;
+  int r = 0, c = 0;
   std::shared_ptr<state::Cell> cell_ptr;
 
   for (r = 0; r < n_row; ++r) {
@@ -153,7 +153,7 @@ void Board::load(const std::string &filename) {
       cell_ptr->setRow(r);
 
       // add it to the cells vector
-      cells[c + n_col * r] = std::move(cell_ptr);
+      cells[sub2ind(r, c)] = std::move(cell_ptr);
     }
     // std::cout << std::endl;
   }
