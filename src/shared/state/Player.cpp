@@ -2,8 +2,7 @@
 
 using namespace state;
 
-int Player::instanceCount = 1;
-
+int Player::instanceCount = 0;
 Player::Player() { this->uid = instanceCount++; }
 
 Player::~Player() {}
@@ -20,8 +19,14 @@ PlayerStatus Player::getStatus() { return status; }
 
 void Player::setStatus(PlayerStatus status) { this->status = status; }
 
-void Player::addTerritory(std::shared_ptr<Territory> territory) {
-  this->territories.push_back(territory);
+/**
+ * @brief create a territory and return it
+ *
+ */
+std::shared_ptr<state::Territory> Player::createTerritory() {
+  std::shared_ptr<state::Territory> newTerritory(new state::Territory);
+  this->territories.push_back(newTerritory);
+  return newTerritory;
 }
 
 std::vector<std::shared_ptr<Territory>> Player::getTerritories() {
