@@ -24,6 +24,22 @@ static const int DIRECTIONS[6][2] = {
     {1, 0},   // S
     {0, 1}    // SE
 };
+// -----------------------------------------------------------------------------
+
+bool compare_player_id(std::shared_ptr<state::Cell> cell, int player_id) {
+  // skip if not accessible
+  if (!cell->isAccessible())
+    return false;
+  // convert it to Accessible cell
+  state::AccessibleCell *acell = cell->castAccessible();
+  if (acell->getPlayerId() == player_id) {
+    printf("TEAM JBZZ\n");
+    return true;
+  }
+  return false;
+}
+
+// -----------------------------------------------------------------------------
 
 Engine::Engine() {}
 
@@ -37,129 +53,47 @@ void Engine::init(std::string map) {
   std::string rpath_map = utils::Utils::resolveRelative(map);
   board.load(rpath_map);
 
-  // set the turn
-  this->currentState.setTurn(1);
-
-  // add the neutral player
-  std::shared_ptr<state::Player> p(new state::Player);
-  p->setName("NEUTRAL");
-  p->setStatus(state::PlayerStatus::NEUTRAL);
-  this->currentState.addPlayer(p);
+  currentState.init();
 
   // add the players
   std::string names[] = {"Badisse", "Nico", "Hicham", "Kaan"};
   for (auto &name : names) {
-    std::shared_ptr<state::Player> p(new state::Player);
-    p->setName(name);
-    p->setStatus(state::PlayerStatus::PLAYING);
-    this->currentState.addPlayer(p);
+    this->currentState.addPlayer(name);
   }
 
-  printf("DEBUG : !!!!\n");
-
-  // get all the players
-  std::vector<std::shared_ptr<state::Player>> players =
-      this->currentState.getPlayers();
-
   // Init Territories
+  std::shared_ptr<state::Player> p;
+  std::shared_ptr<state::Territory> newTerritory;
   for (auto &c : board.getCells()) { // loop through cell
 
     if (c->isAccessible()) {
       state::AccessibleCell *ac = (state::AccessibleCell *)c.get();
       int sid = ac->getEntity().getEntitySubTypeId();
-      if (sid == state::EntitySubTypeId::FACILITY_CAPITAL) { // detect capital
 
-        // retrieve the player
-        if (ac->getPlayerId() == 0)
-          continue; // neutral player
-        std::shared_ptr<state::Player> p = players[ac->getPlayerId()];
+      // capital and not the neutral player
+      if (sid == state::EntitySubTypeId::FACILITY_CAPITAL &&
+          ac->getPlayerId() != 0) {
+        p = currentState.getPlayer(ac->getPlayerId());
 
-        // create a territory
-        std::shared_ptr<state::Territory> newTerritory(new state::Territory);
+        newTerritory = p->createTerritory();
         newTerritory->addCell(c);
-
-        // map it to the player
-        p->addTerritory(newTerritory);
         ac->setTerritoryId(newTerritory->getUid());
 
         // propagate it
-        this->propagateTerritory(c);
-      }
-    }
-  }
-}
+        std::function<bool(std::shared_ptr<state::Cell>)> f1 =
+            std::bind(&compare_player_id, std::placeholders::_1, p->getUid());
+        std::vector<std::shared_ptr<state::Cell>> t_cells =
+            this->propagate(c, f1);
+        printf("[TERRITORY] %d \n", t_cells.size());
 
-int Engine::propagateTerritory(std::shared_ptr<state::Cell> c0) {
-  printf("propagate\n");
-
-  if (!c0->isAccessible())
-    return -1;
-
-  state::AccessibleCell *ac0 = (state::AccessibleCell *)c0.get();
-  const int territory_id = ac0->getTerritoryId();
-  const int player_id = ac0->getPlayerId();
-
-  state::Board &board = this->currentState.getBoard();
-  int n_row = board.getNRow(), n_col = board.getNCol();
-  // printf("[DEBUG] (%d,%d)\n", n_row, n_col);
-
-  // open and close for the tree search
-  std::vector<int> OPEN;
-  bool *CLOSE = new bool[n_row * n_col];
-  for (int i = 0; i < n_row * n_col; i++)
-    CLOSE[i] = false;
-
-  OPEN.push_back(c0->getRow() * n_col + c0->getCol()); // add the first elt
-  while (!OPEN.empty()) {                              // exploration loop
-
-    int index = OPEN.back(); // take the first element
-
-    if (!CLOSE[index]) { // not already explored
-      int r0 = index / n_col, c0 = index % n_col;
-
-      // explore his neighbor
-      int r1, c1, index1;
-      for (int d = 0; d < 6; ++d) {
-        // generate his coords
-        r1 = r0 + DIRECTIONS[d][0];
-        c1 = c0 + DIRECTIONS[d][1];
-        index1 = r1 * n_col + c1;
-
-        // check if the pos is within the grid
-        if ((r1 < 0 || r1 >= n_row) || (c1 < 0 || c1 >= n_col))
-          continue;
-        // skip if the cell is already explored
-        if (CLOSE[index1])
-          continue;
-        // retrieve the cell
-        std::shared_ptr<state::Cell> cell = board.get(r1, c1);
-        if (!cell->isAccessible()) // skip if not accessible
-          continue;
-
-        // convert it to Accessible cell
-        state::AccessibleCell *acell = (state::AccessibleCell *)cell.get();
-
-        if (acell->getPlayerId() == player_id) { // BINGO
-
-          acell->setTerritoryId(territory_id); // set the cell territory
-          // add it to the territory vector
-
-          OPEN.push_back(index1); // add the new node
+        for (auto &t_cell : t_cells) {
+          printf("(%d, %d)", t_cell->getRow(), t_cell->getCol());
         }
 
-        // std::shared_ptr<state::AccessibleCell> acell(cell);
+        // acell->setTerritoryId(territory_id); // set the cell territory
       }
     }
-
-    OPEN.pop_back();     // remove it from OPEN
-    CLOSE[index] = true; // add it to CLOSE
   }
-
-  return 0;
-}
-
-void Engine::setCurrentState(state::State currentState) {
-  this->currentState = currentState;
 }
 
 state::State &Engine::getCurrentState() { return this->currentState; }
@@ -192,4 +126,52 @@ void Engine::processAction(Json::Value &ser) {
   } else {
     printf("illegal\n");
   }
+}
+
+/**
+ * @brief
+ *
+ * @param c0
+ * @param f
+ * @return std::vector<std::shared_ptr<state::Cell>>
+ */
+std::vector<std::shared_ptr<state::Cell>>
+Engine::propagate(std::shared_ptr<state::Cell> cell0,
+                  std::function<bool(std::shared_ptr<state::Cell>)> f) {
+  printf("propagate\n");
+  std::vector<std::shared_ptr<state::Cell>> out;
+  state::Board &board = this->currentState.getBoard();
+  const int n_row = board.getNRow(), n_col = board.getNCol();
+
+  // open and close for the tree search
+  std::vector<int> OPEN;
+  bool *CLOSE = new bool[n_row * n_col];
+  for (int i = 0; i < n_row * n_col; i++)
+    CLOSE[i] = false;
+
+  // add the first elt
+  int index = board.sub2ind(cell0->getRow(), cell0->getCol());
+  OPEN.push_back(index);
+
+  // exploration loop
+  while (!OPEN.empty()) {
+    index = int(OPEN.back()); // take the last element
+    OPEN.pop_back();          // remove it from OPEN
+    if (!CLOSE[index]) {
+      // add it to the current list
+      std::pair<int, int> coords = board.ind2sub(index); // (r0, c0)
+      std::shared_ptr<state::Cell> cell = board.get(index);
+      out.push_back(cell);
+
+      // explore his neighbors (up to 6)
+      for (auto &cell1 : board.getNeighbors(coords.first, coords.second)) {
+        int index1 = board.sub2ind(cell1->getRow(), cell1->getCol());
+        if (!CLOSE[index1] && f(cell1))
+          OPEN.push_back(index1);
+      }
+      CLOSE[index] = true; // add it to CLOSE
+    }
+  }
+
+  return out;
 }

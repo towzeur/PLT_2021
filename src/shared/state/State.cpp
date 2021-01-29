@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "State.h"
 
 using namespace state;
@@ -9,6 +11,19 @@ State::State(const State &state1) {}
 State::~State() {}
 
 void State::operator=(const State &state1) {}
+
+/**
+ * @brief init the state
+ *
+ */
+void State::init() {
+  setTurn(1);
+
+  // add the neutral player
+  players.clear();
+  std::shared_ptr<state::Player> p = addPlayer("NEUTRAL");
+  p->setStatus(PlayerStatus::NEUTRAL);
+}
 
 void State::setEnableCache(bool ec) {}
 
@@ -36,9 +51,30 @@ void State::setBoard(Board &board) { this->board = board; }
 
 std::vector<std::shared_ptr<Player>> State::getPlayers() { return players; }
 
-std::shared_ptr<Player> State::getPlayer(int playerId) { players[playerId]; }
+std::shared_ptr<Player> State::getPlayer(int playerId) {
+  try {
+    return players.at(playerId);
+  } catch (std::out_of_range const &exc) {
+    // std::cout << exc.what() << '\n';
+    throw std::runtime_error("getPlayer : unknown playerId !");
+  }
+}
 
-void State::addPlayer(std::shared_ptr<Player> p) { players.push_back(move(p)); }
+void State::addPlayer(std::shared_ptr<Player> p) { players.push_back(p); }
+
+/**
+ * @brief create and return a player with the given name
+ *
+ * @param player_name
+ * @return std::shared_ptr<Player>
+ */
+std::shared_ptr<Player> State::addPlayer(std::string player_name) {
+  std::shared_ptr<state::Player> p(new state::Player);
+  p->setName(player_name);
+  p->setStatus(PlayerStatus::PLAYING);
+  this->addPlayer(p);
+  return p;
+}
 
 Territory getTerritorySelected() {}
 

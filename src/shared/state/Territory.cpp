@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "Territory.h"
 
 using namespace state;
@@ -50,7 +52,7 @@ int Territory::computeWages() {
   return wages;
 }
 
-/**
+/**²²
  * @brief compute the actual balance of the territory :
  *        balance = savings + income - wages
  *
@@ -60,6 +62,12 @@ int Territory::computeBalance() {
   return computeSavings() + computeIncome() - computeWages();
 }
 
-void Territory::addCell(std::shared_ptr<Cell> cell) { cells.push_back(cell); }
+void Territory::addCell(std::shared_ptr<Cell> cell) {
+  if (!cell->isAccessible())
+    throw std::runtime_error("addCell : adding an Inaccesible cell !");
+  cells.push_back(cell);
+  state::AccessibleCell *acell = (state::AccessibleCell *)cell.get();
+  acell->setTerritoryId(this->getUid());
+}
 
 std::vector<std::shared_ptr<Cell>> Territory::getCells() { return cells; }
