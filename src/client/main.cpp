@@ -182,22 +182,6 @@ int main(int argc, char *argv[]) {
       ser["c1"] = 1;
       eng.processAction(ser);
 
-      if (0) {
-        sf::RenderWindow window(sf::VideoMode(1900, 1080, 32), "SLAY - RENDER");
-        render::StateLayer layer(eng.getCurrentState(), window);
-        layer.initSurfaces(eng.getCurrentState());
-
-        while (window.isOpen()) {
-          sf::Event event;
-          while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed)
-              window.close();
-          }
-          // render
-          layer.draw(window, eng.getCurrentState());
-        }
-      }
-
     } else if (arg1 == "random_ai") {
 
     } else if (arg1 == "heuristic_ai") {
