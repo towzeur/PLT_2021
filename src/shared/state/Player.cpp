@@ -32,3 +32,11 @@ std::shared_ptr<state::Territory> Player::createTerritory() {
 std::vector<std::shared_ptr<Territory>> Player::getTerritories() {
   return territories;
 }
+
+std::shared_ptr<Territory> Player::findTerritory(int territory_id) {
+  for (auto &territory : territories) {
+    if (territory->getUid() == territory_id)
+      return territory;
+  }
+  return nullptr;
+}
