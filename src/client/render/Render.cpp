@@ -14,6 +14,7 @@
 #include "state/Entity.h"
 #include "state/State.h"
 
+#include "engine.h"
 #include "utils/Utils.h"
 
 using namespace render;
@@ -286,6 +287,12 @@ void Render::handle_map(sf::Vector2i &pos) {
   printf("handle pos !\n");
   hm->hex_toggle_transparency(pos.x, pos.y);
   he->entity_toggle_transparency(pos.x, pos.y);
+
+  engine::ActionSelectTerritory action(0, pos.x, pos.y);
+  Json::Value ser = action.serialize();
+  std::cout << ser << std::endl;
+
+  toEngine(ser);
 }
 
 void Render::handle_menu(sf::String menu_name) {
@@ -380,4 +387,17 @@ void Render::display_map(state::State &s) {
     }
     printf("\n");
   }
+}
+
+/**
+ * @brief
+ *
+ * @param eng
+ */
+void Render::bind(engine::Engine &e) { this->eng = &e; }
+
+void Render::toEngine(Json::Value &ser) {
+  if (!eng)
+    return;
+  eng->processAction(ser);
 }
