@@ -141,12 +141,12 @@ bool StateLayer::printText(state::State &state) {
     // selectedTerritory->setSavings(0);
     // selectedTerritory->setWages(0);
     // selectedTerritory->setBalance(0);
-    for (auto &t : move(territories)) {
-      // if (t->isSelected()) {
-      //  selectedTerritory = t;
-      //  break;
-      // }
-    }
+    // for (auto &t : move(territories)) {
+    // if (t->isSelected()) {
+    //  selectedTerritory = t;
+    //  break;
+    // }
+    //}
     sf::Text player;
     player.setPosition(window.getSize().x - 350.f + i % 2 * 200,
                        ((int)i / 2) * 200.f + 50);
