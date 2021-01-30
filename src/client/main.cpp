@@ -8,7 +8,15 @@
 #include "render.h"
 #include "state.h"
 
-/* -------------------------------------------------------------------------- */
+// -----------------------------------------------------------------------------
+//   ######   ##           ###     ##    ##
+//  ##    ##  ##          ## ##     ##  ##
+//  ##        ##         ##   ##     ####
+//   ######   ##        ##     ##     ##
+//        ##  ##        #########     ##
+//  ##    ##  ##        ##     ##     ##
+//   ######   ########  ##     ##     ##
+// -----------------------------------------------------------------------------
 
 const char *HELP_MESSAGE = R"V0G0N(
 usage: client <command> [<args>]
@@ -144,34 +152,10 @@ int main(int argc, char *argv[]) {
       std::cout << "ENGINE" << std::endl;
 
       engine::Engine eng;
-      eng.init("res/map_22_30_is.txt");
       state::Board &b = eng.getCurrentState().getBoard();
-      printf("%d %d  \n", b.getNRow(), b.getNCol());
 
-      printf("***************************************\n");
-      std::shared_ptr<state::Cell> cell;
-      state::AccessibleCell *acell;
-      for (int r = 0; r < b.getNRow(); ++r) {
-        for (int c = 0; c < b.getNCol(); ++c) {
-          cell = b.get(r, c);
-          if (cell->isAccessible()) {
-            acell = cell->castAccessible();
-            // std::cout << acell->getPlayerId();
-            std::cout << (int)acell->getEntity().getEntitySubTypeId();
-          } else {
-            std::cout << " ";
-          }
-          std::cout << " ";
-          // std::cout << if << std::endl;
-        }
-        std::cout << std::endl;
-      }
-      printf("***************************************\n");
-
-      render::Render render;
-      render.init("medieval");
-      render.display_map(eng.getCurrentState());
-      render.run();
+      eng.init("res/map_22_30_is.txt");
+      b.print();
 
       Json::Value ser;
       ser["player_id"] = 1;
@@ -181,6 +165,19 @@ int main(int argc, char *argv[]) {
       ser["r1"] = 1;
       ser["c1"] = 1;
       eng.processAction(ser);
+
+      Json::Value ser1;
+      ser1["player_id"] = 1;
+      ser1["action_id"] = engine::ActionId::SELECT_TERRITORY;
+      ser1["r0"] = 0;
+      ser1["c0"] = 0;
+      eng.processAction(ser1);
+
+      render::Render render;
+      render.init("medieval");
+      render.bind(eng);
+      render.display_map(eng.getCurrentState());
+      render.run();
 
     } else if (arg1 == "random_ai") {
 
