@@ -92,3 +92,10 @@ void Territory::addCell(std::shared_ptr<Cell> cell) {
  * @return std::vector<std::shared_ptr<Cell>>
  */
 std::vector<std::shared_ptr<Cell>> Territory::getCells() { return cells; }
+
+/**
+ * @brief return the territory size
+ *
+ * @return int
+ */
+int Territory::getSize() { return (int)cells.size(); }
