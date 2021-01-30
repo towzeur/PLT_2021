@@ -262,6 +262,8 @@ std::vector<std::shared_ptr<Cell>> Board::getNeighbors(int r0, int c0) {
  */
 void Board::print() {
   std::cout << "***************************************" << std::endl;
+  std::cout << getNRow() << "x" << getNCol();
+  std::cout << std::endl;
   std::shared_ptr<state::Cell> cell;
   state::AccessibleCell *acell;
   for (int r = 0; r < getNRow(); ++r) {
@@ -272,7 +274,7 @@ void Board::print() {
         // std::cout << acell->getPlayerId();
         std::cout << acell->getEntity().getEntitySubTypeId();
       } else {
-        std::cout << " ";
+        std::cout << "_";
       }
       std::cout << " ";
     }
