@@ -6,7 +6,8 @@
     "icon_path": "res/icons/220x220w.png",
     "menu_height": 24,
     "right_panel_width": 140,
-    "right_panel_padding": 10
+    "right_panel_padding": 10,
+    "right_panel_font": "res/fonts/RobotoMono-SemiBold.ttf"
   },
   "entity": {
     "width": 20,
