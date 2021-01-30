@@ -8,6 +8,8 @@ using namespace engine;
 
 Action::Action() {}
 
+Action::Action(int pId, ActionId aId) : player_id(pId), action_id(aId) {}
+
 Action *Action::getAction(ActionId a_id) {
   switch (a_id) {
   case engine::ActionId::SOLDIER:
