@@ -100,7 +100,7 @@ HexaMap::~HexaMap() {
 
 void HexaMap::hex_set_player(int r, int c, int player_id) {
   sf::Color col;
-  if (player_id < conf->hexamap_colors.size()) {
+  if (player_id < (int)conf->hexamap_colors.size()) {
     col = sf::Color::Red; // throw error
   }
   col = conf->hexamap_colors[player_id];
