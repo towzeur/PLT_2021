@@ -763,7 +763,8 @@ void print_include_stdlib(struct stdlib_includes *si, char *name) {
       print("#include <json/json.h>\n");
       si->jsoncpp = 1;
     }
-    if (!si->tgui && (strstr(name, "tgui::") == name)) {
+    if (!si->tgui && ((strstr(name, "tgui::") == name) ||
+                      (strstr(name, "std::shared_ptr<tgui::") == name))) {
       print("#include <TGUI/TGUI.hpp>\n");
       si->tgui = 1;
     }
