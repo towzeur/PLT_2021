@@ -76,6 +76,7 @@ int Engine::initTerritory(std::shared_ptr<state::Cell> cell) {
 
   // create a new territory
   std::shared_ptr<state::Territory> t = p->createTerritory();
+  t->init();
 
   // propagate it
   std::function<bool(std::shared_ptr<state::Cell>)> f1 =
@@ -84,9 +85,8 @@ int Engine::initTerritory(std::shared_ptr<state::Cell> cell) {
 
   printf("[TERRITORY] %d \n", t_cells.size());
   for (auto &t_cell : t_cells) {
-    printf("(%d, %d)", t_cell->getRow(), t_cell->getCol());
-
-    t->addCell(cell);
+    printf("(%d, %d)", t_cell->getRow(), t_cell->getCol()); // DEBUG
+    t->addCell(t_cell);
   }
   std::cout << std::endl;
 
@@ -119,8 +119,8 @@ void Engine::processAction(Json::Value &ser) {
   action->print();
 
   if (action->isLegal(currentState)) {
-    action->execute(currentState);
     printf("legal\n");
+    action->execute(currentState);
   } else {
     printf("illegal\n");
   }
@@ -173,4 +173,21 @@ Engine::propagate(std::shared_ptr<state::Cell> cell0,
   }
 
   return out;
+}
+
+std::shared_ptr<state::Territory> Engine::findTerritory(int r, int c) {
+  state::Board &board = this->currentState.getBoard();
+  std::shared_ptr<state::Cell> cell = board.get(r, c);
+  if (cell->isAccessible()) {
+    state::AccessibleCell *acell = cell->castAccessible();
+    std::shared_ptr<state::Player> player =
+        currentState.getPlayer(acell->getPlayerId());
+
+    for (auto &territory : player->getTerritories()) {
+      if (territory->getUid() == acell->getTerritoryId()) {
+        return territory;
+      }
+    }
+  }
+  return nullptr;
 }
