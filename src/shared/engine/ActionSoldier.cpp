@@ -29,7 +29,7 @@ void ActionSoldier::deserialize(Json::Value &ser) {
   this->c1 = ser["c1"].asInt();
 }
 
-void ActionSoldier::execute(state::State &state) {}
+Json::Value ActionSoldier::execute(state::State &state) {}
 
 void ActionSoldier::print() {
   printf("[ActionSoldier] player_id=%d : (%d, %d) => (%d, %d) \n", player_id,
@@ -47,8 +47,8 @@ bool ActionSoldier::isLegal(state::State &s) {
 
   // check that the two position are within the map
   // and that it's not two time the same cell
-  if ((r0 < 0) || (r0 >= n_row) || (c0 < 0) || (c0 >= n_col) || (r1 < 0) ||
-      (r1 >= n_row) || (c1 < 0) || (c1 >= n_col) || (r0 == r1 && c0 == c1))
+  if ((r0 == r1 && c0 == c1) || !(b.isValidCoords(r0, c0)) ||
+      !(b.isValidCoords(r1, c1)))
     return false;
 
   // retrieve the two cell
@@ -100,6 +100,10 @@ bool ActionSoldier::isLegalMove(state::State &s) {
 
 bool ActionSoldier::isLegalAttack(state::State &s) {
   this->sub_action_id = ActionSoldierId::ATTACK;
+
+  state::Board &b = s.getBoard();
+  state::AccessibleCell *ac0 = b.get(r0, c0)->castAccessible();
+  state::AccessibleCell *ac1 = b.get(r1, c1)->castAccessible();
 }
 
 /**
