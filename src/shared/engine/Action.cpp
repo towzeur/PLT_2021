@@ -35,6 +35,6 @@ void Action::deserialize(Json::Value &ser) {}
 
 bool Action::isLegal(state::State &s) { return false; }
 
-void Action::execute(state::State &s) {}
+Json::Value Action::execute(state::State &s) {}
 
 void Action::print() {}
