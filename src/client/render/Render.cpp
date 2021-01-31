@@ -25,7 +25,12 @@ void Render::init(std::string configName) {
   // std::cout << "HELLO WORLD" << std::endl;
   srand(time(NULL));
   running = true;
-  config.load(configName); // load the config
+
+  // ---------------------------------------------------------------------------
+  //                                CONFIG
+  // ---------------------------------------------------------------------------
+  config = std::make_shared<RenderConfig>();
+  config->load(configName); // load the config
 
   // ---------------------------------------------------------------------------
   //                                WINDOWS
@@ -39,7 +44,7 @@ void Render::init(std::string configName) {
   // Close      = 1 << 2
   // Fullscreen = 1 << 3
   // Default = Titlebar | Resize | Close
-  window = new sf::RenderWindow({config.window_size.x, config.window_size.y},
+  window = new sf::RenderWindow({config->window_size.x, config->window_size.y},
                                 "Hexagons", style, settings);
 
   // set the Vsync
@@ -51,9 +56,9 @@ void Render::init(std::string configName) {
       (sf::VideoMode::getDesktopMode().height - window->getSize().y) / 2));
 
   // set window's icon
-  window->setIcon(config.window_icon.getSize().x,
-                  config.window_icon.getSize().y,
-                  config.window_icon.getPixelsPtr());
+  window->setIcon(config->window_icon.getSize().x,
+                  config->window_icon.getSize().y,
+                  config->window_icon.getPixelsPtr());
 
   // ---------------------------------------------------------------------------
   //                                   TGUI
@@ -65,11 +70,11 @@ void Render::init(std::string configName) {
   // set the theme
   const sf::String &tgui_theme =
       utils::Utils::resolveRelative("res/tgui/widgets/Black.txt");
-  tgui::Theme::Ptr theme = tgui::Theme::create(tgui_theme);
+  theme = tgui::Theme::create(tgui_theme); // tgui::Theme::Ptr
 
   // create a menu bar
   tgui::MenuBar::Ptr menu = theme->load("MenuBar");
-  menu->setSize(config.window_size.x, config.window_menu_height);
+  menu->setSize(config->window_size.x, config->window_menu_height);
 
   const std::string &tgui_font =
       // const sf::String &tgui_font =
@@ -97,94 +102,9 @@ void Render::init(std::string configName) {
   menu->connect("MenuItemClicked", fp);
   gui->add(menu);
 
-  // tgui::VerticalLayout::Ptr layout = tgui::VerticalLayout::create();
-  tgui::Panel::Ptr layout = tgui::Panel::create();
-  layout->setBackgroundColor(sf::Color(0, 0, 0, 150));
-  layout->setSize(140.f, config.window_size.y - config.window_menu_height);
-  layout->setPosition(config.window_size.x - config.window_right_panel_width,
-                      config.window_menu_height);
-  gui->add(layout);
-
-  // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-  // territory information
-
-  const std::string &tgui_font_2 =
-      // const sf::String &tgui_font =
-      utils::Utils::resolveRelative("res/fonts/RobotoMono-SemiBold.ttf");
-
-  tgui::Label::Ptr label = theme->load("Label");
-  std::string label_string = "Savings\nIncome\nWages\nBalance";
-  label->setText(label_string);
-  label->setTextSize(14);
-  label->setPosition(config.territory_tooltips_margin_x, 90);
-  label->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
-  label->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
-  label->setFont(tgui_font_2);
-  layout->add(label);
-
-  tgui::Label::Ptr label_2 = theme->load("Label");
-  std::string label_string_2 = "8\n+2\n0\n10";
-  label_2->setText(label_string_2);
-  label_2->setTextSize(14);
-  label_2->setPosition(
-      config.territory_tooltips_width - config.territory_tooltips_margin_x, 90);
-  label_2->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Right);
-  label_2->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
-  label_2->setFont(tgui_font_2);
-  layout->add(label_2);
-
-  // *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-
-
-  // tgui::TextBox::Ptr tbox = tgui::TextBox::create();
-  // tbox->setPosition(10, 90);
-  // tbox->setTextSize(10);
-  // tbox->setText("hello");
-  // layout->add(tbox);
-
-  // btn end turn
-  tgui::Button::Ptr button = theme->load("button");
-  button->setPosition(10, config.window_size.y - 50 * 1.5 -
-                              config.window_right_panel_padding);
-  button->setSize(config.window_right_panel_width -
-                      2 * config.window_right_panel_padding,
-                  50);
-  button->setText("End of Turn");
-
-  // btn buy soldier
-  tgui::Button::Ptr btn_soldier = theme->load("button");
-  int btn_soldier_x = 50;
-  int btn_soldier_y = 200;
-  btn_soldier->setPosition(btn_soldier_x, btn_soldier_y);
-  btn_soldier->setSize(config.entity_width, config.entity_height);
-  std::shared_ptr<tgui::ButtonRenderer> br = btn_soldier->getRenderer();
-  sf::IntRect partRect =
-      sf::IntRect(1, 7 * (config.entity_height - 1) + 1,
-                  config.entity_width - 2, config.entity_height - 2);
-
-  tgui::Texture texture(config.entity_tileset, partRect);
-  br->setNormalTexture(texture);
-  br->setHoverTexture(texture);
-  // br->setDownTexture(texture);
-  br->setFocusTexture(texture);
-  btn_soldier->connect("pressed",
-                       [&]() { this->window->setMouseCursorVisible(false); });
-  layout->add(btn_soldier);
-
-  sf::Texture t_peasant;
-  t_peasant.loadFromFile(config.entity_tileset_path, partRect);
-  sf::Image i_peasant = t_peasant.copyToImage();
-
-  // sf::Sprite sprite(textureCursorNormal);
-  // sf::Texture textureCursorHover;
-  // textureCursorHover.loadFromFile("CursorHover.png");
-  window->setMouseCursorVisible(false);
-
-  // btn buy castle
-  auto fp2 = std::bind(&Render::handle_endturn, this);
-  button->connect("pressed", fp2);
-  // button->setHorizontalAlignment(tgui::Label::HorizontalAlignment::Left);
-  // button->setVerticalAlignment(tgui::Label::VerticalAlignment::Center);
-  layout->add(button);
+  // RightPanel rpanel(this);
+  rpanel = std::make_shared<RightPanel>(this);
+  rpanel->init();
 
   // ---------------------------------------------------------------------------
   //                              SOUND TEST
@@ -204,37 +124,41 @@ void Render::init(std::string configName) {
   //                                BACKGROUND
   // ---------------------------------------------------------------------------
 
-  bg = new Background(&config);
+  bg = new Background(config.get());
 
   // ---------------------------------------------------------------------------
   //                               HEXA MAP
   // ---------------------------------------------------------------------------
 
   // render::HexaMap hm = render::HexaMap(config);
-  hm = new HexaMap(&config);
+  hm = new HexaMap(config.get());
   // std::cout << "hexamap width " << hm->get_width() << std::endl;
   // std::cout << "hexamap height " << hm->get_height() << std::endl;
-  int map_full_width = config.window_size.x - config.window_right_panel_width;
-  int map_full_height = config.window_size.y - config.window_menu_height;
+  int map_full_width = config->window_size.x - config->window_right_panel_width;
+  int map_full_height = config->window_size.y - config->window_menu_height;
   int map_offset_x = 0 + (map_full_width - hm->get_width()) / 2;
   int map_offset_y =
-      config.window_menu_height + (map_full_height - hm->get_height()) / 2;
+      config->window_menu_height + (map_full_height - hm->get_height()) / 2;
   hm->setPosition(map_offset_x, map_offset_y);
 
   // ---------------------------------------------------------------------------
   //                              ENTITTY
   // ---------------------------------------------------------------------------
 
-  he = new HexaEntity(&config);
+  he = new HexaEntity(config.get());
   he->setPosition(map_offset_x, map_offset_y);
 
   // ---------------------------------------------------------------------------
   //                              FPS
   // ---------------------------------------------------------------------------
 
-  fps = new Fps(&config);
+  fps = new Fps(config.get());
 }
 
+/**
+ * @brief run the Render (while loop)
+ *
+ */
 void Render::run() {
   // ---------------------------------------------------------------------------
   //                              GAME LOOP
@@ -310,26 +234,36 @@ void Render::handle_menu(sf::String menu_name) {
 void Render::handle_endturn() { std::cout << "button - end turn" << std::endl; }
 
 void Render::handle_keypressed(sf::Event &event) {
-  if (event.type == sf::Event::KeyPressed) {
+  if (event.type != sf::Event::KeyPressed)
+    return;
 
-    if (event.key.code == sf::Keyboard::Right) {
-      std::cout << "Right" << std::endl;
+  switch (event.key.code) {
+  case sf::Keyboard::Right:
+    std::cout << "Right" << std::endl;
+    break;
 
-    } else if (event.key.code == sf::Keyboard::Left) {
-      std::cout << "Left" << std::endl;
+  case sf::Keyboard::Left:
+    std::cout << "Left" << std::endl;
+    break;
 
-    } else if (event.key.code == sf::Keyboard::Up) {
-      std::cout << "Up" << std::endl;
+  case sf::Keyboard::Up:
+    std::cout << "Up" << std::endl;
+    break;
 
-    } else if (event.key.code == sf::Keyboard::Down) {
-      std::cout << "Down" << std::endl;
+  case sf::Keyboard::Down:
+    std::cout << "Down" << std::endl;
+    break;
 
-    } else if (event.key.code == sf::Keyboard::Add) {
-      std::cout << "+" << std::endl;
-      // hm->initialize(r, c, ++hexa_r);
-    } else if (event.key.code == sf::Keyboard::Subtract) {
-      std::cout << "-" << std::endl;
-    }
+  case sf::Keyboard::Add:
+    std::cout << "+" << std::endl;
+    break;
+
+  case sf::Keyboard::Subtract:
+    std::cout << "-" << std::endl;
+    break;
+
+  default:
+    break;
   }
 }
 
@@ -352,8 +286,8 @@ void Render::handle_mousebuttonpressed(sf::Event &event) {
     pos = hm->PointToCoord(event.mouseButton.x, event.mouseButton.y);
     std::cout << "=>" << pos.x << "," << pos.y << std::endl;
 
-    if ((pos.x >= 0 && pos.x < config.hexamap_n_row) &&
-        (pos.y >= 0 && pos.y < config.hexamap_n_col)) {
+    if ((pos.x >= 0 && pos.x < config->hexamap_n_row) &&
+        (pos.y >= 0 && pos.y < config->hexamap_n_col)) {
       this->handle_map(pos);
     }
   }
@@ -361,22 +295,18 @@ void Render::handle_mousebuttonpressed(sf::Event &event) {
 
 void Render::display_map(state::State &s) {
   state::Board &b = s.getBoard();
-
   std::shared_ptr<state::Cell> cell;
   state::AccessibleCell *acell;
-  state::Entity entity;
 
-  for (int r = 0; r < config.hexamap_n_row; ++r) {
-    for (int c = 0; c < config.hexamap_n_col; ++c) {
+  for (int r = 0; r < config->hexamap_n_row; ++r) {
+    for (int c = 0; c < config->hexamap_n_col; ++c) {
       cell = b.get(r, c);
 
       if (cell->isAccessible()) { // accessible
         acell = cell->castAccessible();
+        state::Entity &entity = acell->getEntity();
+        // std::cout << entity.getEntityTypeId() << " ";
         hm->hex_set_player(r, c, acell->getPlayerId());
-
-        std::cout << entity.getEntityTypeId() << " ";
-
-        entity = acell->getEntity();
         he->entity_set(r, c, entity.getEntitySubTypeId());
         he->entity_show(r, c);
 
@@ -385,14 +315,14 @@ void Render::display_map(state::State &s) {
         he->entity_hide(r, c);
       }
     }
-    printf("\n");
+    // std::cout << std::endl;
   }
 }
 
 /**
  * @brief
  *
- * @param eng
+ * @param e
  */
 void Render::bind(engine::Engine &e) { this->eng = &e; }
 
@@ -401,3 +331,11 @@ void Render::toEngine(Json::Value &ser) {
     return;
   eng->processAction(ser);
 }
+
+tgui::Gui *Render::getGui() { return gui; }
+
+tgui::Theme::Ptr Render::getTheme() { return theme; }
+
+std::shared_ptr<RenderConfig> Render::getConfig() { return config; }
+
+std::shared_ptr<RightPanel> Render::getPanel() { return rpanel; }
